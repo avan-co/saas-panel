@@ -2,10 +2,20 @@
 
 namespace Config;
 
+use App\Libraries\Installer;
 use CodeIgniter\Config\BaseConfig;
 
 class App extends BaseConfig
 {
+    public function __construct()
+    {
+        parent::__construct();
+
+        if (Installer::shouldOverrideBaseUrl($this->baseURL)) {
+            $this->baseURL = Installer::detectBaseUrl();
+        }
+    }
+
     /**
      * --------------------------------------------------------------------------
      * Base Site URL
@@ -15,6 +25,8 @@ class App extends BaseConfig
      * WITH a trailing slash:
      *
      * E.g., http://example.com/
+     *
+     * On web requests, auto-corrected when host differs (e.g. cPanel vs localhost).
      */
     public string $baseURL = 'http://localhost:8080/';
 

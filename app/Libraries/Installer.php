@@ -171,12 +171,48 @@ ENV;
 
     public static function detectBaseUrl(): string
     {
-        $scheme = (! empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') ? 'https' : 'http';
-        $host   = $_SERVER['HTTP_HOST'] ?? 'localhost';
-        $script = $_SERVER['SCRIPT_NAME'] ?? '';
+        $scheme = 'http';
+
+        if (
+            (! empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off')
+            || (isset($_SERVER['HTTP_X_FORWARDED_PROTO']) && strtolower($_SERVER['HTTP_X_FORWARDED_PROTO']) === 'https')
+            || (isset($_SERVER['HTTP_X_FORWARDED_SSL']) && $_SERVER['HTTP_X_FORWARDED_SSL'] === 'on')
+        ) {
+            $scheme = 'https';
+        }
+
+        $host = $_SERVER['HTTP_HOST'] ?? 'localhost';
+
+        $script = str_replace('\\', '/', $_SERVER['SCRIPT_NAME'] ?? '/index.php');
         $base   = rtrim(str_replace(basename($script), '', $script), '/');
 
+        if ($base === '/') {
+            $base = '';
+        }
+
         return $scheme . '://' . $host . $base . '/';
+    }
+
+    public static function shouldOverrideBaseUrl(string $configuredBaseUrl): bool
+    {
+        if (is_cli() || ! isset($_SERVER['HTTP_HOST'])) {
+            return false;
+        }
+
+        $configuredHost = parse_url($configuredBaseUrl, PHP_URL_HOST);
+
+        if (! is_string($configuredHost) || $configuredHost === '') {
+            return true;
+        }
+
+        $configuredHost = strtolower($configuredHost);
+        $currentHost    = strtolower(explode(':', $_SERVER['HTTP_HOST'])[0]);
+
+        if (in_array($configuredHost, ['localhost', '127.0.0.1'], true)) {
+            return $currentHost !== $configuredHost;
+        }
+
+        return $currentHost !== '' && $configuredHost !== $currentHost;
     }
 
     private static function escapeEnvValue(string $value): string
