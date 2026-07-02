@@ -33,15 +33,15 @@ class Installer
         $envExists = is_file($envPath);
 
         return [
-            ['key' => 'php', 'label' => 'PHP >= 8.1 (فعلی: ' . PHP_VERSION . ')', 'passed' => version_compare(PHP_VERSION, '8.1.0', '>=')],
-            ['key' => 'vendor', 'label' => 'پکیج‌های PHP (vendor)', 'passed' => is_file(ROOTPATH . 'vendor/autoload.php')],
-            ['key' => 'mysqli', 'label' => 'افزونه mysqli', 'passed' => extension_loaded('mysqli')],
-            ['key' => 'mbstring', 'label' => 'افزونه mbstring', 'passed' => extension_loaded('mbstring')],
-            ['key' => 'intl', 'label' => 'افزونه intl', 'passed' => extension_loaded('intl')],
-            ['key' => 'json', 'label' => 'افزونه json', 'passed' => extension_loaded('json')],
-            ['key' => 'curl', 'label' => 'افزونه curl', 'passed' => extension_loaded('curl')],
-            ['key' => 'writable', 'label' => 'پوشه writable/ قابل نوشتن', 'passed' => is_writable(WRITEPATH)],
-            ['key' => 'env', 'label' => 'فایل .env قابل نوشتن', 'passed' => ! $envExists || is_writable($envPath)],
+            ['key' => 'php', 'label' => lang('Install.req_php', [PHP_VERSION]), 'passed' => version_compare(PHP_VERSION, '8.1.0', '>=')],
+            ['key' => 'vendor', 'label' => lang('Install.req_vendor'), 'passed' => is_file(ROOTPATH . 'vendor/autoload.php')],
+            ['key' => 'mysqli', 'label' => lang('Install.req_mysqli'), 'passed' => extension_loaded('mysqli')],
+            ['key' => 'mbstring', 'label' => lang('Install.req_mbstring'), 'passed' => extension_loaded('mbstring')],
+            ['key' => 'intl', 'label' => lang('Install.req_intl'), 'passed' => extension_loaded('intl')],
+            ['key' => 'json', 'label' => lang('Install.req_json'), 'passed' => extension_loaded('json')],
+            ['key' => 'curl', 'label' => lang('Install.req_curl'), 'passed' => extension_loaded('curl')],
+            ['key' => 'writable', 'label' => lang('Install.req_writable'), 'passed' => is_writable(WRITEPATH)],
+            ['key' => 'env', 'label' => lang('Install.req_env'), 'passed' => ! $envExists || is_writable($envPath)],
         ];
     }
 

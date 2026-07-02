@@ -14,6 +14,7 @@ class InstallFilter implements FilterInterface
         $uri           = service('uri');
         $firstSegment  = $uri->getSegment(1) ?? '';
         $isInstallPath = $firstSegment === 'install';
+        $isLocalePath  = $firstSegment === 'locale';
 
         if (Installer::isInstalled()) {
             if ($isInstallPath) {
@@ -23,7 +24,7 @@ class InstallFilter implements FilterInterface
             return;
         }
 
-        if (! $isInstallPath) {
+        if (! $isInstallPath && ! $isLocalePath) {
             return redirect()->to('/install');
         }
     }

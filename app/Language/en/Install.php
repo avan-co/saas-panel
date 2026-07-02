@@ -39,4 +39,14 @@ return [
     'env_write_failed'     => 'Failed to write .env file. Check folder permissions.',
     'migration_failed'     => 'Migration failed:',
     'seed_failed'          => 'Initial data setup failed:',
+
+    'req_php'              => 'PHP >= 8.1 (current: {0})',
+    'req_vendor'           => 'PHP packages (vendor)',
+    'req_mysqli'           => 'mysqli extension',
+    'req_mbstring'         => 'mbstring extension',
+    'req_intl'             => 'intl extension',
+    'req_json'             => 'json extension',
+    'req_curl'             => 'curl extension',
+    'req_writable'         => 'writable/ folder is writable',
+    'req_env'              => '.env file is writable',
 ];

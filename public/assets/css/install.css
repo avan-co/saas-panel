@@ -1,13 +1,36 @@
-/* Web Installer */
+/* BizPanel Web Installer — self-contained styles */
+
+:root {
+    --bg: #ffffff;
+    --bg-secondary: #f8fafc;
+    --card: #ffffff;
+    --border: #e2e8f0;
+    --text: #0f172a;
+    --text-muted: #64748b;
+    --accent: #3b82f6;
+    --accent-2: #8b5cf6;
+    --accent-soft: rgba(59, 130, 246, 0.1);
+    --success: #10b981;
+    --error: #ef4444;
+    --shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+    --radius: 8px;
+    --font: 'Inter', system-ui, sans-serif;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
 
 .install-body {
     min-height: 100vh;
     display: flex;
     align-items: center;
     justify-content: center;
-    background: var(--bg-secondary, #f8fafc);
-    font-family: 'Vazirmatn', system-ui, sans-serif;
+    background: var(--bg-secondary);
+    color: var(--text);
+    font-family: var(--font);
+    line-height: 1.5;
 }
+
+.install-body.rtl { font-family: 'Vazirmatn', 'Inter', system-ui, sans-serif; }
 
 .install-wrapper {
     width: 100%;
@@ -16,11 +39,11 @@
 }
 
 .install-card {
-    background: #fff;
-    border: 1px solid #e2e8f0;
+    background: var(--card);
+    border: 1px solid var(--border);
     border-radius: 16px;
     padding: 32px;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+    box-shadow: var(--shadow);
 }
 
 .install-header {
@@ -28,16 +51,51 @@
     margin-bottom: 24px;
 }
 
+.brand-icon {
+    width: 48px;
+    height: 48px;
+    border-radius: 12px;
+    background: linear-gradient(135deg, var(--accent), var(--accent-2));
+    color: #fff;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: 16px;
+    margin-bottom: 12px;
+}
+
 .install-header h1 {
     font-size: 22px;
-    margin: 8px 0 4px;
+    margin: 0 0 4px;
 }
 
 .install-header p {
-    color: #64748b;
+    color: var(--text-muted);
     font-size: 14px;
 }
 
+.install-locale {
+    margin-top: 12px;
+    font-size: 13px;
+}
+
+.install-locale a {
+    color: var(--text-muted);
+    text-decoration: none;
+    padding: 0 6px;
+}
+
+.install-locale a.active {
+    color: var(--accent);
+    font-weight: 600;
+}
+
+.install-locale span {
+    color: var(--border);
+}
+
+/* Steps */
 .install-steps {
     display: flex;
     gap: 4px;
@@ -50,12 +108,18 @@
     flex: 1;
     min-width: 70px;
     text-align: center;
-    opacity: 0.4;
+    opacity: 0.35;
 }
 
 .install-step.active { opacity: 1; }
+
+.install-step.completed .step-num {
+    background: rgba(16, 185, 129, 0.15);
+    color: var(--success);
+}
+
 .install-step.current .step-num {
-    background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+    background: linear-gradient(135deg, var(--accent), var(--accent-2));
     color: #fff;
 }
 
@@ -66,7 +130,7 @@
     align-items: center;
     justify-content: center;
     border-radius: 50%;
-    background: #e2e8f0;
+    background: var(--border);
     font-size: 12px;
     font-weight: 600;
     margin-bottom: 4px;
@@ -75,12 +139,27 @@
 .step-label {
     display: block;
     font-size: 10px;
-    color: #64748b;
+    color: var(--text-muted);
     line-height: 1.2;
 }
 
+/* Alerts */
+.alert {
+    padding: 12px 16px;
+    border-radius: var(--radius);
+    margin-bottom: 16px;
+    font-size: 14px;
+}
+
+.alert-error {
+    background: rgba(239, 68, 68, 0.1);
+    color: var(--error);
+    border: 1px solid rgba(239, 68, 68, 0.2);
+}
+
+/* Content */
 .install-help {
-    color: #64748b;
+    color: var(--text-muted);
     font-size: 14px;
     margin-bottom: 20px;
 }
@@ -95,7 +174,7 @@
     align-items: center;
     gap: 10px;
     padding: 10px 12px;
-    border-radius: 8px;
+    border-radius: var(--radius);
     margin-bottom: 6px;
     font-size: 14px;
 }
@@ -104,10 +183,11 @@
 .requirements-list li.failed { background: rgba(239, 68, 68, 0.08); }
 
 .req-icon { font-weight: 700; }
-.requirements-list li.passed .req-icon { color: #10b981; }
-.requirements-list li.failed .req-icon { color: #ef4444; }
-.req-status { margin-inline-start: auto; font-size: 12px; color: #64748b; }
+.requirements-list li.passed .req-icon { color: var(--success); }
+.requirements-list li.failed .req-icon { color: var(--error); }
+.req-status { margin-inline-start: auto; font-size: 12px; color: var(--text-muted); }
 
+/* Forms */
 .install-form .form-group { margin-bottom: 16px; }
 
 .install-form label {
@@ -115,7 +195,7 @@
     font-size: 13px;
     font-weight: 500;
     margin-bottom: 6px;
-    color: #64748b;
+    color: var(--text-muted);
 }
 
 .install-form input[type="text"],
@@ -125,16 +205,18 @@
 .install-form input[type="number"] {
     width: 100%;
     padding: 10px 14px;
-    border: 1px solid #e2e8f0;
-    border-radius: 8px;
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
     font-size: 14px;
     font-family: inherit;
+    background: var(--bg-secondary);
+    color: var(--text);
 }
 
 .install-form input:focus {
     outline: none;
-    border-color: #3b82f6;
-    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+    border-color: var(--accent);
+    box-shadow: 0 0 0 3px var(--accent-soft);
 }
 
 .form-row {
@@ -148,8 +230,49 @@
     align-items: center;
     gap: 8px;
     font-size: 14px;
-    color: #0f172a;
+    color: var(--text);
     cursor: pointer;
+}
+
+/* Buttons */
+.btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 10px 20px;
+    border-radius: var(--radius);
+    font-size: 14px;
+    font-weight: 500;
+    font-family: inherit;
+    cursor: pointer;
+    border: none;
+    text-decoration: none;
+    transition: all 0.15s;
+}
+
+.btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.btn-primary {
+    background: linear-gradient(135deg, var(--accent), var(--accent-2));
+    color: #fff;
+}
+
+.btn-primary:hover:not(:disabled) {
+    opacity: 0.9;
+    transform: translateY(-1px);
+}
+
+.btn-secondary {
+    background: var(--bg-secondary);
+    color: var(--text);
+    border: 1px solid var(--border);
+}
+
+.btn-secondary:hover {
+    background: var(--border);
 }
 
 .install-actions {
@@ -159,12 +282,7 @@
     margin-top: 24px;
 }
 
-.btn-secondary {
-    background: #f1f5f9;
-    color: #0f172a;
-    border: 1px solid #e2e8f0;
-}
-
+/* Processing */
 .install-processing {
     text-align: center;
     padding: 32px 0;
@@ -173,8 +291,8 @@
 .spinner {
     width: 40px;
     height: 40px;
-    border: 3px solid #e2e8f0;
-    border-top-color: #3b82f6;
+    border: 3px solid var(--border);
+    border-top-color: var(--accent);
     border-radius: 50%;
     margin: 0 auto 20px;
     animation: spin 0.8s linear infinite;
@@ -182,22 +300,9 @@
 
 @keyframes spin { to { transform: rotate(360deg); } }
 
-.install-complete { text-align: center; padding: 24px 0; }
-
-.complete-icon {
-    width: 56px;
-    height: 56px;
-    border-radius: 50%;
-    background: rgba(16, 185, 129, 0.15);
-    color: #10b981;
-    font-size: 28px;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    margin-bottom: 16px;
-}
-
 @media (max-width: 600px) {
     .form-row { grid-template-columns: 1fr; }
     .step-label { display: none; }
+    .install-actions { flex-direction: column-reverse; }
+    .install-actions .btn { width: 100%; }
 }

@@ -185,8 +185,10 @@ class Install extends Controller
 
     protected function render(string $bodyView, array $data = []): string
     {
-        $data['body'] = view('install/bodies/' . $bodyView, $data);
+        $viewOptions = ['debug' => false];
 
-        return view('install/shell', $data);
+        $data['body'] = view('install/bodies/' . $bodyView, $data, $viewOptions);
+
+        return view('install/shell', $data, $viewOptions);
     }
 }

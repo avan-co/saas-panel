@@ -64,9 +64,7 @@ class Filters extends BaseFilters
             'install',
             'locale',
         ],
-        'after' => [
-            'toolbar',
-        ],
+        'after' => [],
     ];
 
     /**
@@ -82,7 +80,9 @@ class Filters extends BaseFilters
         'before' => [
             'csrf',
         ],
-        'after' => [],
+        'after' => [
+            'toolbar' => ['except' => ['install', 'install/*']],
+        ],
     ];
 
     /**

@@ -39,4 +39,14 @@ return [
     'env_write_failed'     => 'نوشتن فایل .env ناموفق بود. مجوز پوشه را بررسی کنید.',
     'migration_failed'     => 'اجرای migration ناموفق بود:',
     'seed_failed'          => 'ایجاد داده‌های اولیه ناموفق بود:',
+
+    'req_php'              => 'PHP >= 8.1 (فعلی: {0})',
+    'req_vendor'           => 'پکیج‌های PHP (vendor)',
+    'req_mysqli'           => 'افزونه mysqli',
+    'req_mbstring'         => 'افزونه mbstring',
+    'req_intl'             => 'افزونه intl',
+    'req_json'             => 'افزونه json',
+    'req_curl'             => 'افزونه curl',
+    'req_writable'         => 'پوشه writable/ قابل نوشتن',
+    'req_env'              => 'فایل .env قابل نوشتن',
 ];
