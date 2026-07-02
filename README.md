@@ -5,55 +5,119 @@
 ## نصب — فقط ۳ قدم
 
 ```
-Git Clone  →  Document Root = public/  →  باز کردن /install
+Git Clone  →  Pull  →  باز کردن /install
 ```
 
 همه‌چیز (دیتابیس، تنظیمات، حساب مدیر) از طریق **نصاب وب** انجام می‌شود.  
 نیازی به Terminal، composer یا اسکریپت دستی نیست.
 
+> **فایل `db.php` یا تنظیم دستی دیتابیس لازم نیست.**  
+> در مرحله نصب، اطلاعات MySQL را وارد می‌کنید و برنامه خودش `.env` را می‌سازد.
+
 ---
 
-### ۱. Git Clone در cPanel
+### مثال: portal.avan-co.ir روی cPanel
 
-cPanel → **Git Version Control** → Clone ریپو
+| مورد | مقدار |
+|------|--------|
+| دامنه | `https://portal.avan-co.ir` |
+| مسیر پروژه | `/home/h325207/public_html/portal` |
+| Document Root (هاستینگ) | همان `/home/h325207/public_html/portal` |
+| آدرس نصاب | `https://portal.avan-co.ir/install` |
 
-مسیر معمول:
+ریپو شامل `index.php` و `.htaccess` در **ریشه پروژه** است تا وقتی Document Root روی `portal/` است (نه `portal/public`)، برنامه درست کار کند.
+
+اگر cPanel اجازه می‌دهد Document Root را عوض کنید، بهترین حالت:
+
 ```
-/home/username/saas-panel/
+/home/h325207/public_html/portal/public
 ```
 
-### ۲. Document Root
+---
 
-cPanel → **Domains** → Document Root:
+### ۱. Git Clone + Pull در cPanel
+
+cPanel → **Git Version Control** → Clone ریپو:
 
 ```
-/home/username/saas-panel/public
+https://github.com/avan-co/saas-panel.git
 ```
 
-### ۳. دیتابیس MySQL (خالی)
+مسیر:
+
+```
+/home/h325207/public_html/portal
+```
+
+بعد از هر تغییر: **Pull** (دکمه Deploy لازم نیست).
+
+---
+
+### ۲. دیتابیس MySQL (خالی)
 
 cPanel → **MySQL Databases**:
-- یک دیتابیس بسازید
-- کاربر MySQL بسازید و به دیتابیس وصل کنید
 
-### ۴. نصاب وب
+1. دیتابیس بسازید — مثلاً `h325207_portal` (پیشوند cPanel خودکار اضافه می‌شود)
+2. کاربر MySQL بسازید — مثلاً `h325207_portal`
+3. کاربر را به دیتابیس وصل کنید → **All Privileges**
 
-در مرورگر:
+در نصاب وب این مقادیر را وارد کنید:
+
+| فیلد | مقدار معمول cPanel |
+|------|---------------------|
+| هاست | `localhost` |
+| پورت | `3306` |
+| نام دیتابیس | `h325207_portal` (نام کامل از cPanel) |
+| نام کاربری | `h325207_portal` (نام کامل از cPanel) |
+| رمز | همان رمزی که در cPanel ساختید |
+
+charset پیش‌فرض: `utf8mb4` (نیازی به تنظیم دستی نیست).
+
+---
+
+### ۳. PHP
+
+cPanel → **Select PHP Version**:
+
+- PHP **8.2** یا **8.3**
+- افزونه‌ها: `mysqli`, `mbstring`, `intl`, `json`, `curl`
+
+---
+
+### ۴. مجوزها
+
+File Manager → پوشه `writable/` → Permissions → **755**
+
+---
+
+### ۵. نصاب وب
 
 ```
-https://yourdomain.com/install
+https://portal.avan-co.ir/install
 ```
 
 | مرحله | کار |
 |--------|-----|
-| ۱ | بررسی پیش‌نیازها (PHP، vendor، افزونه‌ها) |
-| ۲ | اطلاعات MySQL — hostname معمولاً `localhost` |
-| ۳ | آدرس سایت + حساب مدیر + داده نمونه (اختیاری) |
-| ۴ | نصب خودکار — جداول، مدیر، آماده ورود |
+| ۱ | بررسی پیش‌نیازها |
+| ۲ | اطلاعات MySQL (`localhost` / `3306`) |
+| ۳ | آدرس سایت: `https://portal.avan-co.ir/` + حساب مدیر |
+| ۴ | نصب خودکار |
 
-بعد از نصب → `/login`
+بعد از نصب → `https://portal.avan-co.ir/login`
 
 > `writable/installed.lock` دسترسی به `/install` را می‌بندد.
+
+---
+
+### عیب‌یابی cPanel
+
+| مشکل | راه‌حل |
+|------|--------|
+| **503** | PHP را 8.2+ کنید؛ Pull بزنید؛ Error Log را در cPanel ببینید |
+| **404 روی /install** | Pull کنید؛ مطمئن شوید `index.php` و `.htaccess` در ریشه `portal/` هستند |
+| **صفحه لیست پوشه‌ها** | `index.php` در ریشه نیست — Pull بزنید |
+| **خطای اتصال DB** | نام کامل دیتابیس/کاربر با پیشوند `h325207_` را از cPanel کپی کنید |
+| **localhost:8080** | فقط برای توسعه لوکال است — روی هاست از دامنه استفاده کنید |
 
 ---
 
