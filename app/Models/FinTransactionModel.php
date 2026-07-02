@@ -9,8 +9,8 @@ class FinTransactionModel extends Model
     protected $table         = 'fin_transactions';
     protected $primaryKey    = 'id';
     protected $allowedFields = [
-        'tenant_id', 'account_id', 'category_id', 'type',
-        'amount', 'description', 'reference', 'txn_date',
+        'tenant_id', 'account_id', 'transfer_to_account_id', 'category_id', 'project_id',
+        'type', 'amount', 'description', 'contact_name', 'reference', 'txn_date',
     ];
     protected $useTimestamps = true;
 
@@ -45,6 +45,56 @@ class FinTransactionModel extends Model
         }
 
         return $summary;
+    }
+
+    public function averageMonthlyExpense(int $tenantId, int $months = 3): float
+    {
+        $start = date('Y-m-d', strtotime('-' . $months . ' months'));
+        $row   = $this->selectSum('amount', 'total')
+            ->where('tenant_id', $tenantId)
+            ->where('type', 'expense')
+            ->where('txn_date >=', $start)
+            ->first();
+
+        $total = (float) ($row['total'] ?? 0);
+
+        return $months > 0 ? $total / $months : 0.0;
+    }
+
+    public function categorySpendInMonth(int $tenantId, int $categoryId, int $year, int $month): float
+    {
+        $start = sprintf('%04d-%02d-01', $year, $month);
+        $end   = date('Y-m-t', strtotime($start));
+        $row   = $this->selectSum('amount', 'total')
+            ->where('tenant_id', $tenantId)
+            ->where('category_id', $categoryId)
+            ->where('type', 'expense')
+            ->where('txn_date >=', $start)
+            ->where('txn_date <=', $end)
+            ->first();
+
+        return (float) ($row['total'] ?? 0);
+    }
+
+    public function dailyCashflow(int $tenantId, int $days = 30): array
+    {
+        $start = date('Y-m-d', strtotime('-' . ($days - 1) . ' days'));
+        $rows  = $this->select('txn_date, type, SUM(amount) AS total')
+            ->where('tenant_id', $tenantId)
+            ->where('txn_date >=', $start)
+            ->groupBy(['txn_date', 'type'])
+            ->orderBy('txn_date', 'ASC')
+            ->findAll();
+
+        $map = [];
+
+        foreach ($rows as $row) {
+            $date = $row['txn_date'];
+            $map[$date] ??= ['income' => 0.0, 'expense' => 0.0];
+            $map[$date][$row['type']] = (float) $row['total'];
+        }
+
+        return $map;
     }
 
     public function findForTenant(int $id, int $tenantId): ?array

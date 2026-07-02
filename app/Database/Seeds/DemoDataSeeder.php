@@ -102,11 +102,22 @@ class DemoDataSeeder extends Seeder
         }
 
         $categories = [
-            ['name' => 'فروش', 'type' => 'income', 'color' => '#10b981', 'sort_order' => 1],
-            ['name' => 'خدمات', 'type' => 'income', 'color' => '#3b82f6', 'sort_order' => 2],
-            ['name' => 'حقوق', 'type' => 'expense', 'color' => '#f59e0b', 'sort_order' => 3],
-            ['name' => 'اجاره', 'type' => 'expense', 'color' => '#ef4444', 'sort_order' => 4],
-            ['name' => 'متفرقه', 'type' => 'expense', 'color' => '#64748b', 'sort_order' => 5],
+            ['name' => 'فروش دستگاه', 'type' => 'income', 'color' => '#10b981', 'sort_order' => 1],
+            ['name' => 'پیش‌پرداخت مشتری', 'type' => 'income', 'color' => '#22c55e', 'sort_order' => 2],
+            ['name' => 'درآمد خدمات', 'type' => 'income', 'color' => '#3b82f6', 'sort_order' => 3],
+            ['name' => 'سرمایه‌گذاری سهامداران', 'type' => 'income', 'color' => '#8b5cf6', 'sort_order' => 4],
+            ['name' => 'حقوق', 'type' => 'expense', 'color' => '#f59e0b', 'sort_order' => 10],
+            ['name' => 'بیمه', 'type' => 'expense', 'color' => '#eab308', 'sort_order' => 11],
+            ['name' => 'مالیات', 'type' => 'expense', 'color' => '#f97316', 'sort_order' => 12],
+            ['name' => 'قطعات', 'type' => 'expense', 'color' => '#64748b', 'sort_order' => 13],
+            ['name' => 'خرید مواد اولیه', 'type' => 'expense', 'color' => '#78716c', 'sort_order' => 14],
+            ['name' => 'تبلیغات', 'type' => 'expense', 'color' => '#ec4899', 'sort_order' => 15],
+            ['name' => 'اجاره', 'type' => 'expense', 'color' => '#ef4444', 'sort_order' => 16],
+            ['name' => 'ماشین‌کاری', 'type' => 'expense', 'color' => '#06b6d4', 'sort_order' => 17],
+            ['name' => 'برش لیزر', 'type' => 'expense', 'color' => '#14b8a6', 'sort_order' => 18],
+            ['name' => 'چاپ سه‌بعدی', 'type' => 'expense', 'color' => '#a855f7', 'sort_order' => 19],
+            ['name' => 'R&D', 'type' => 'expense', 'color' => '#6366f1', 'sort_order' => 20],
+            ['name' => 'هزینه اداری', 'type' => 'expense', 'color' => '#94a3b8', 'sort_order' => 21],
         ];
 
         $catIds = [];
@@ -144,11 +155,11 @@ class DemoDataSeeder extends Seeder
         ]);
 
         $txns = [
-            ['type' => 'income', 'amount' => 12450000, 'cat' => 'فروش', 'desc' => 'فروش ماه جاری', 'days' => 2],
+            ['type' => 'income', 'amount' => 12450000, 'cat' => 'فروش دستگاه', 'desc' => 'فروش ماه جاری', 'days' => 2],
             ['type' => 'expense', 'amount' => 3100000, 'cat' => 'حقوق', 'desc' => 'پرداخت حقوق پرسنل', 'days' => 5],
             ['type' => 'expense', 'amount' => 1800000, 'cat' => 'اجاره', 'desc' => 'اجاره محل', 'days' => 8],
-            ['type' => 'income', 'amount' => 5200000, 'cat' => 'خدمات', 'desc' => 'درآمد خدمات', 'days' => 12],
-            ['type' => 'expense', 'amount' => 450000, 'cat' => 'متفرقه', 'desc' => 'هزینه اداری', 'days' => 15],
+            ['type' => 'income', 'amount' => 5200000, 'cat' => 'درآمد خدمات', 'desc' => 'درآمد خدمات', 'days' => 12],
+            ['type' => 'expense', 'amount' => 450000, 'cat' => 'هزینه اداری', 'desc' => 'هزینه اداری', 'days' => 15],
         ];
 
         foreach ($txns as $txn) {

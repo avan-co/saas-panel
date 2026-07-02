@@ -2,15 +2,7 @@
 
 <?= $this->section('content') ?>
 <div class="page-module page-finance">
-<?= $this->include('partials/breadcrumb') ?>
-
-<?php
-$moduleTabs = [
-    ['key' => 'overview', 'label' => lang('Finance.overview'), 'url' => site_url('module/finance')],
-    ['key' => 'transactions', 'label' => lang('Finance.transactions'), 'url' => site_url('module/finance/transactions')],
-];
-echo $this->include('partials/module_tabs');
-?>
+<?= $this->include('partials/module_subnav') ?>
 
 <div class="page-header">
     <div class="page-header-text">
@@ -33,6 +25,7 @@ echo $this->include('partials/module_tabs');
                 <thead>
                     <tr>
                         <th><?= esc(lang('Finance.date')) ?></th>
+                        <th><?= esc(lang('Finance.type')) ?></th>
                         <th><?= esc(lang('Finance.description')) ?></th>
                         <th><?= esc(lang('Finance.account')) ?></th>
                         <th><?= esc(lang('Finance.category')) ?></th>
@@ -43,7 +36,10 @@ echo $this->include('partials/module_tabs');
                 <tbody>
                     <?php foreach ($transactions as $txn): ?>
                         <tr>
-                            <td class="text-muted"><?= esc($txn['txn_date']) ?></td>
+                            <td class="text-muted"><?= esc(jalali_date($txn['txn_date'])) ?></td>
+                            <td>
+                                <span class="badge badge-<?= esc($txn['type']) ?>"><?= esc(lang('Finance.type_' . $txn['type'])) ?></span>
+                            </td>
                             <td><?= esc($txn['description'] ?? '—') ?></td>
                             <td><?= esc($txn['account_name'] ?? '—') ?></td>
                             <td>
@@ -55,8 +51,8 @@ echo $this->include('partials/module_tabs');
                                     —
                                 <?php endif; ?>
                             </td>
-                            <td class="amount-cell <?= $txn['type'] === 'income' ? 'positive' : 'negative' ?>">
-                                <?= $txn['type'] === 'income' ? '+' : '−' ?><?= esc($fmt((float) $txn['amount'])) ?>
+                            <td class="amount-cell <?= $txn['type'] === 'income' ? 'positive' : ($txn['type'] === 'transfer' ? '' : 'negative') ?>">
+                                <?php if ($txn['type'] === 'income'): ?>+<?php elseif ($txn['type'] !== 'transfer'): ?>−<?php endif; ?><?= esc($fmt((float) $txn['amount'])) ?>
                             </td>
                             <td class="table-actions">
                                 <a href="<?= site_url('module/finance/transactions/' . $txn['id'] . '/edit') ?>" class="btn btn-ghost btn-sm"><?= esc(lang('App.edit')) ?></a>

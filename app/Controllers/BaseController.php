@@ -9,7 +9,7 @@ use Psr\Log\LoggerInterface;
 
 abstract class BaseController extends Controller
 {
-    protected $helpers = ['url', 'form'];
+    protected $helpers = ['url', 'form', 'date'];
 
     public function initController(RequestInterface $request, ResponseInterface $response, LoggerInterface $logger)
     {
@@ -42,6 +42,11 @@ abstract class BaseController extends Controller
             } else {
                 $shared['userTenants'] = [];
             }
+        }
+
+        if (session('user_id')) {
+            $shared['notificationCount'] = model(\App\Models\NotificationModel::class)
+                ->unreadCount((int) session('user_id'));
         }
 
         return view($view, array_merge($shared, $data));

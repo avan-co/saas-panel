@@ -33,7 +33,30 @@ $routes->group('', ['filter' => 'auth'], static function ($routes) {
         $routes->get('transactions/(:num)/edit', 'Finance::editTransaction/$1');
         $routes->post('transactions/(:num)/update', 'Finance::updateTransaction/$1');
         $routes->post('transactions/(:num)/delete', 'Finance::deleteTransaction/$1');
+        $routes->get('accounts', 'FinanceAccounts::index');
+        $routes->get('accounts/new', 'FinanceAccounts::create');
+        $routes->post('accounts/store', 'FinanceAccounts::store');
+        $routes->get('accounts/(:num)/edit', 'FinanceAccounts::edit/$1');
+        $routes->post('accounts/(:num)/update', 'FinanceAccounts::update/$1');
+        $routes->post('accounts/(:num)/delete', 'FinanceAccounts::delete/$1');
+        $routes->get('categories', 'FinanceCategories::index');
+        $routes->get('categories/new', 'FinanceCategories::create');
+        $routes->post('categories/store', 'FinanceCategories::store');
+        $routes->get('categories/(:num)/edit', 'FinanceCategories::edit/$1');
+        $routes->post('categories/(:num)/update', 'FinanceCategories::update/$1');
+        $routes->post('categories/(:num)/delete', 'FinanceCategories::delete/$1');
+        $routes->get('budgets', 'FinanceBudgets::index');
+        $routes->post('budgets/store', 'FinanceBudgets::store');
+        $routes->post('budgets/(:num)/delete', 'FinanceBudgets::delete/$1');
+        $routes->get('reminders', 'FinanceReminders::index');
+        $routes->post('reminders/store', 'FinanceReminders::store');
+        $routes->post('reminders/(:num)/paid', 'FinanceReminders::markPaid/$1');
+        $routes->get('reports', 'FinanceReports::index');
     });
+
+    $routes->get('notifications', 'Notifications::index');
+    $routes->get('notifications/dropdown', 'Notifications::dropdown');
+    $routes->post('notifications/(:num)/read', 'Notifications::markRead/$1');
 
     $routes->get('module/payroll', 'Payroll::index', ['filter' => 'tenant']);
     $routes->get('module/payroll/employees/new', 'Payroll::createEmployee', ['filter' => 'tenant']);
@@ -65,6 +88,8 @@ $routes->group('', ['filter' => 'auth'], static function ($routes) {
 
     $routes->get('module/settings', 'Settings::index', ['filter' => 'tenant']);
     $routes->post('module/settings', 'Settings::update', ['filter' => 'tenant']);
+    $routes->get('module/settings/users', 'TenantUsers::index', ['filter' => 'tenant']);
+    $routes->post('module/settings/users/store', 'TenantUsers::store', ['filter' => 'tenant']);
 
     $routes->get('module/(:segment)', 'ModulePage::show/$1', ['filter' => 'tenant']);
 

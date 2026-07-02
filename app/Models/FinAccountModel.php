@@ -27,4 +27,27 @@ class FinAccountModel extends Model
 
         return (float) ($row['total'] ?? 0);
     }
+
+    public function findForTenant(int $id, int $tenantId): ?array
+    {
+        $row = $this->where('id', $id)->where('tenant_id', $tenantId)->first();
+
+        return $row ?: null;
+    }
+
+    public function balancesByType(int $tenantId): array
+    {
+        $rows = $this->select('type, SUM(balance) AS total')
+            ->where('tenant_id', $tenantId)
+            ->groupBy('type')
+            ->findAll();
+
+        $map = [];
+
+        foreach ($rows as $row) {
+            $map[$row['type']] = (float) $row['total'];
+        }
+
+        return $map;
+    }
 }

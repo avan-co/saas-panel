@@ -40,9 +40,23 @@
                 </button>
             </div>
 
-            <button class="icon-btn" type="button" title="<?= esc(lang('App.notifications')) ?>">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9M13.73 21a2 2 0 0 1-3.46 0"/></svg>
-            </button>
+            <div class="notification-menu" id="notificationMenu">
+                <button class="icon-btn notification-btn" type="button" title="<?= esc(lang('App.notifications')) ?>" id="notificationBtn">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+                    <?php if (! empty($notificationCount) && $notificationCount > 0): ?>
+                        <span class="notification-badge"><?= (int) $notificationCount > 9 ? '9+' : (int) $notificationCount ?></span>
+                    <?php endif; ?>
+                </button>
+                <div class="notification-dropdown" id="notificationDropdown">
+                    <div class="notification-dropdown-header">
+                        <span><?= esc(lang('App.notifications')) ?></span>
+                        <a href="<?= site_url('notifications') ?>"><?= esc(lang('Notifications.view_all')) ?></a>
+                    </div>
+                    <div class="notification-dropdown-body" id="notificationDropdownBody">
+                        <div class="notification-loading text-muted"><?= esc(lang('Notifications.empty')) ?></div>
+                    </div>
+                </div>
+            </div>
 
             <div class="user-menu">
                 <button class="user-btn" type="button">

@@ -96,4 +96,70 @@
             document.body.classList.remove('sidebar-mobile-open', 'sidebar-backdrop-open');
         });
     }
+
+    if (typeof jalaliDatepicker !== 'undefined') {
+        jalaliDatepicker.startWatch({
+            selector: '.jalali-date',
+            autoHide: true,
+            hideAfterChange: true,
+            showTodayBtn: true,
+            showEmptyBtn: true,
+            separatorChars: { date: '/' },
+        });
+    }
+
+    var typeSelect = document.getElementById('type');
+    var transferGroup = document.getElementById('transferToGroup');
+    var categoryGroup = document.getElementById('categoryGroup');
+
+    function syncTxnTypeFields() {
+        if (!typeSelect) return;
+        var isTransfer = typeSelect.value === 'transfer';
+        if (transferGroup) transferGroup.style.display = isTransfer ? '' : 'none';
+        if (categoryGroup) categoryGroup.style.display = isTransfer ? 'none' : '';
+    }
+
+    if (typeSelect) {
+        typeSelect.addEventListener('change', syncTxnTypeFields);
+        syncTxnTypeFields();
+    }
+
+    var notificationBtn = document.getElementById('notificationBtn');
+    var notificationMenu = document.getElementById('notificationMenu');
+    var notificationBody = document.getElementById('notificationDropdownBody');
+    var notificationsLoaded = false;
+
+    if (notificationBtn && notificationMenu) {
+        notificationMenu.addEventListener('click', function (e) {
+            e.stopPropagation();
+        });
+
+        notificationBtn.addEventListener('click', function (e) {
+            e.stopPropagation();
+            notificationMenu.classList.toggle('open');
+
+            if (notificationMenu.classList.contains('open') && !notificationsLoaded && notificationBody) {
+                notificationsLoaded = true;
+                fetch('/notifications/dropdown', { credentials: 'same-origin' })
+                    .then(function (r) { return r.json(); })
+                    .then(function (data) {
+                        if (!data.items || data.items.length === 0) {
+                            notificationBody.innerHTML = '<div class="notification-empty text-muted">' + (document.documentElement.lang === 'fa' ? 'اعلان جدیدی ندارید.' : 'No new notifications.') + '</div>';
+                            return;
+                        }
+                        notificationBody.innerHTML = data.items.map(function (item) {
+                            var link = item.link ? '<a href="' + item.link + '" class="notification-link">' + item.title + '</a>' : '<span>' + item.title + '</span>';
+                            return '<div class="notification-dropdown-item">' + link + '</div>';
+                        }).join('');
+                    })
+                    .catch(function () {
+                        notificationBody.innerHTML = '<div class="notification-empty text-muted">—</div>';
+                    });
+            }
+        });
+    }
+
+    document.addEventListener('click', function () {
+        if (notificationMenu) notificationMenu.classList.remove('open');
+    });
 })();
