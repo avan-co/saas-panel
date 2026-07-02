@@ -108,7 +108,19 @@
                     <input type="number" id="amount" name="amount" min="1" step="1" value="<?= esc(old('amount', $transaction['amount'] ?? '')) ?>" required>
                 </div>
                 <div class="form-group">
-                    <label for="contact_name"><?= esc(lang('Finance.contact')) ?></label>
+                    <label for="contact_id"><?= esc(lang('Finance.contact')) ?></label>
+                    <select id="contact_id" name="contact_id">
+                        <option value="">—</option>
+                        <?php foreach ($contacts ?? [] as $contact): ?>
+                            <option value="<?= $contact['id'] ?>" <?= (string) old('contact_id', $transaction['contact_id'] ?? '') === (string) $contact['id'] ? 'selected' : '' ?>><?= esc($contact['name']) ?></option>
+                        <?php endforeach; ?>
+                    </select>
+                </div>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="contact_name"><?= esc(lang('Finance.contact_name_optional')) ?></label>
                     <input type="text" id="contact_name" name="contact_name" value="<?= esc(old('contact_name', $transaction['contact_name'] ?? '')) ?>" maxlength="120">
                 </div>
             </div>

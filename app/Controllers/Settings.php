@@ -40,6 +40,9 @@ class Settings extends BaseController
             'timezone'          => 'required|max_length[60]',
             'currency'          => 'required|max_length[10]',
             'fiscal_year_start' => 'required|integer|greater_than[0]|less_than[13]',
+            'economic_code'     => 'permit_empty|max_length[20]',
+            'national_id'       => 'permit_empty|max_length[20]',
+            'approval_threshold'=> 'permit_empty|decimal',
         ];
 
         if (! $this->validate($rules)) {
@@ -51,6 +54,10 @@ class Settings extends BaseController
             'timezone'          => (string) $this->request->getPost('timezone'),
             'currency'          => (string) $this->request->getPost('currency'),
             'fiscal_year_start' => (int) $this->request->getPost('fiscal_year_start'),
+            'economic_code'     => (string) $this->request->getPost('economic_code'),
+            'national_id'       => (string) $this->request->getPost('national_id'),
+            'vat_registered'    => $this->request->getPost('vat_registered') ? 1 : 0,
+            'approval_threshold'=> (float) ($this->request->getPost('approval_threshold') ?: 10000000),
         ]);
 
         return redirect()->to('/module/settings')->with('success', lang('Settings.saved'));

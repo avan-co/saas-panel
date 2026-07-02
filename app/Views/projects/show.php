@@ -5,6 +5,7 @@
 <div class="page-header">
     <div class="page-header-text"><h2 class="page-heading"><?= esc($project['name']) ?></h2><p class="page-subheading"><?= esc($project['code']) ?> — <?= esc($project['client_name'] ?? '') ?></p></div>
     <a href="<?= site_url('module/projects/' . $project['id'] . '/edit') ?>" class="btn btn-secondary"><?= esc(lang('App.edit')) ?></a>
+    <a href="<?= site_url('module/projects/' . $project['id'] . '/tasks') ?>" class="btn btn-primary"><?= esc(lang('Projects.tasks')) ?></a>
 </div>
 <?php $fmt = static fn (float $n): string => number_format($n, 0, '.', ','); ?>
 <div class="kpi-grid kpi-grid-4" style="margin-bottom:20px">

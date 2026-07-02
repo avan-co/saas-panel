@@ -112,7 +112,14 @@ class FinanceChecks extends BaseController
             return redirect()->back()->withInput()->with('errors', $this->validator->getErrors());
         }
 
-        $model->update($id, $this->payload((int) $tenant['id']));
+        $tenantId = (int) $tenant['id'];
+        $payload  = $this->payload($tenantId);
+        $prev     = $check;
+        $model->update($id, $payload);
+
+        if ($prev['status'] !== 'cleared' && $payload['status'] === 'cleared') {
+            $this->recordCheckTransaction($tenantId, $payload, $tenant);
+        }
 
         return redirect()->to('/module/finance/checks')->with('success', lang('Finance.check_updated'));
     }
@@ -162,5 +169,30 @@ class FinanceChecks extends BaseController
             'status'       => (string) $this->request->getPost('status'),
             'note'         => (string) $this->request->getPost('note'),
         ];
+    }
+
+    protected function recordCheckTransaction(int $tenantId, array $check, array $tenant): void
+    {
+        $accounts = model(\App\Models\FinAccountModel::class)->getForTenant($tenantId);
+
+        if ($accounts === []) {
+            return;
+        }
+
+        $type = $check['direction'] === 'received' ? 'income' : 'expense';
+
+        try {
+            service('financeTxn')->create($tenantId, [
+                'tenant_id'  => $tenantId,
+                'account_id' => (int) $accounts[0]['id'],
+                'contact_id' => $check['contact_id'] ?? null,
+                'type'       => $type,
+                'amount'     => (float) $check['amount'],
+                'description'=> 'چک ' . $check['check_number'],
+                'txn_date'   => $check['due_date'],
+            ], $tenant);
+        } catch (\Throwable) {
+            // period lock or approval — check status already updated
+        }
     }
 }

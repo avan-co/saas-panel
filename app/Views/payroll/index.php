@@ -9,6 +9,7 @@
         <h2 class="page-heading"><?= esc(lang('Payroll.title')) ?></h2>
     </div>
     <a href="<?= site_url('module/payroll/employees/new') ?>" class="btn btn-primary"><?= esc(lang('Payroll.new_employee')) ?></a>
+    <a href="<?= site_url('module/payroll/runs') ?>" class="btn btn-secondary"><?= esc(lang('Payroll.payroll_runs')) ?></a>
 </div>
 
 <?php $fmt = static fn (float $n): string => number_format($n, 0, '.', ','); ?>

@@ -62,6 +62,27 @@
                 </select>
             </div>
 
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="economic_code"><?= esc(lang('Settings.economic_code')) ?></label>
+                    <input type="text" id="economic_code" name="economic_code" value="<?= esc(old('economic_code', $tenant['economic_code'] ?? '')) ?>" dir="ltr">
+                </div>
+                <div class="form-group">
+                    <label for="national_id"><?= esc(lang('Settings.national_id')) ?></label>
+                    <input type="text" id="national_id" name="national_id" value="<?= esc(old('national_id', $tenant['national_id'] ?? '')) ?>" dir="ltr">
+                </div>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="approval_threshold"><?= esc(lang('Settings.approval_threshold')) ?></label>
+                    <input type="number" id="approval_threshold" name="approval_threshold" value="<?= esc(old('approval_threshold', $tenant['approval_threshold'] ?? 10000000)) ?>">
+                </div>
+                <div class="form-group">
+                    <label><input type="checkbox" name="vat_registered" value="1" <?= ! empty($tenant['vat_registered']) ? 'checked' : '' ?>> <?= esc(lang('Settings.vat_registered')) ?></label>
+                </div>
+            </div>
+
             <div class="settings-meta">
                 <div class="settings-meta-row">
                     <span class="text-muted"><?= esc(lang('Settings.plan')) ?></span>

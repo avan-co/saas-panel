@@ -19,4 +19,11 @@ class PayrollRunModel extends Model
             ->limit($limit)
             ->findAll();
     }
+
+    public function findForTenant(int $id, int $tenantId): ?array
+    {
+        $row = $this->where('id', $id)->where('tenant_id', $tenantId)->first();
+
+        return $row ?: null;
+    }
 }

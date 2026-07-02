@@ -49,4 +49,94 @@ class Services extends BaseService
 
         return new \App\Libraries\UploadService();
     }
+
+    public static function audit(bool $getShared = true)
+    {
+        if ($getShared) {
+            return static::getSharedInstance('audit');
+        }
+
+        return new \App\Libraries\AuditLogger();
+    }
+
+    public static function periodLock(bool $getShared = true)
+    {
+        if ($getShared) {
+            return static::getSharedInstance('periodLock');
+        }
+
+        return new \App\Libraries\PeriodLockService();
+    }
+
+    public static function journal(bool $getShared = true)
+    {
+        if ($getShared) {
+            return static::getSharedInstance('journal');
+        }
+
+        return new \App\Libraries\JournalService();
+    }
+
+    public static function financeTxn(bool $getShared = true)
+    {
+        if ($getShared) {
+            return static::getSharedInstance('financeTxn');
+        }
+
+        return new \App\Libraries\FinanceTransactionService();
+    }
+
+    public static function webhook(bool $getShared = true)
+    {
+        if ($getShared) {
+            return static::getSharedInstance('webhook');
+        }
+
+        return new \App\Libraries\WebhookDispatcher();
+    }
+
+    public static function export(bool $getShared = true)
+    {
+        if ($getShared) {
+            return static::getSharedInstance('export');
+        }
+
+        return new \App\Libraries\ExportService();
+    }
+
+    public static function forecast(bool $getShared = true)
+    {
+        if ($getShared) {
+            return static::getSharedInstance('forecast');
+        }
+
+        return new \App\Libraries\ForecastService();
+    }
+
+    public static function modian(bool $getShared = true)
+    {
+        if ($getShared) {
+            return static::getSharedInstance('modian');
+        }
+
+        return new \App\Libraries\ModianService();
+    }
+
+    public static function payrollCalc(bool $getShared = true)
+    {
+        if ($getShared) {
+            return static::getSharedInstance('payrollCalc');
+        }
+
+        return new \App\Libraries\PayrollCalculator();
+    }
+
+    public static function insights(bool $getShared = true)
+    {
+        if ($getShared) {
+            return static::getSharedInstance('insights');
+        }
+
+        return new \App\Libraries\InsightEngine();
+    }
 }

@@ -129,6 +129,7 @@ class FinanceLoans extends BaseController
             return $tenant === null ? $this->moduleDeniedRedirect() : $this->permissionDeniedRedirect();
         }
 
+        helper('date');
         $model = model(FinLoanModel::class);
         $loan  = $model->findForTenant($id, (int) $tenant['id']);
 
@@ -136,7 +137,27 @@ class FinanceLoans extends BaseController
             return redirect()->to('/module/finance/loans')->with('error', lang('App.not_found'));
         }
 
-        $paid = (int) $loan['paid_installments'] + 1;
+        $tenantId  = (int) $tenant['id'];
+        $accountId = (int) ($this->request->getPost('account_id') ?: 0);
+        $accounts  = model(\App\Models\FinAccountModel::class)->getForTenant($tenantId);
+        $accountId = $accountId > 0 ? $accountId : (int) ($accounts[0]['id'] ?? 0);
+
+        if ($accountId > 0) {
+            try {
+                service('financeTxn')->create($tenantId, [
+                    'tenant_id'  => $tenantId,
+                    'account_id' => $accountId,
+                    'type'       => 'expense',
+                    'amount'     => (float) $loan['installment_amount'],
+                    'description'=> 'قسط وام ' . $loan['bank'],
+                    'txn_date'   => date('Y-m-d'),
+                ], $tenant);
+            } catch (\Throwable $e) {
+                return redirect()->back()->with('error', $e->getMessage());
+            }
+        }
+
+        $paid   = (int) $loan['paid_installments'] + 1;
         $status = $paid >= (int) $loan['total_installments'] ? 'paid' : 'active';
 
         $model->update($id, ['paid_installments' => $paid, 'status' => $status]);

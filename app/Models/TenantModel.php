@@ -13,6 +13,7 @@ class TenantModel extends Model
     protected $allowedFields    = [
         'name', 'slug', 'owner_id', 'status', 'plan',
         'timezone', 'currency', 'fiscal_year_start',
+        'economic_code', 'national_id', 'vat_registered', 'approval_threshold',
     ];
     protected $useTimestamps = true;
 

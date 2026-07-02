@@ -2,6 +2,7 @@
 
 namespace App\Controllers;
 
+use App\Controllers\Concerns\ChecksPermission;
 use App\Controllers\Concerns\HasTenantModule;
 use App\Models\PayrollEmployeeModel;
 use App\Models\PayrollRunModel;
@@ -9,13 +10,14 @@ use App\Models\PayrollRunModel;
 class Payroll extends BaseController
 {
     use HasTenantModule;
+    use ChecksPermission;
 
     public function index()
     {
         $tenant = $this->requireModule('payroll');
 
-        if ($tenant === null) {
-            return $this->moduleDeniedRedirect();
+        if ($tenant === null || ! $this->requirePermission('payroll.view')) {
+            return $tenant === null ? $this->moduleDeniedRedirect() : $this->permissionDeniedRedirect();
         }
 
         $tenantId = (int) $tenant['id'];
@@ -37,8 +39,8 @@ class Payroll extends BaseController
     {
         $tenant = $this->requireModule('payroll');
 
-        if ($tenant === null) {
-            return $this->moduleDeniedRedirect();
+        if ($tenant === null || ! $this->requirePermission('payroll.employees')) {
+            return $tenant === null ? $this->moduleDeniedRedirect() : $this->permissionDeniedRedirect();
         }
 
         return $this->render('payroll/form', [
@@ -52,8 +54,8 @@ class Payroll extends BaseController
     {
         $tenant = $this->requireModule('payroll');
 
-        if ($tenant === null) {
-            return $this->moduleDeniedRedirect();
+        if ($tenant === null || ! $this->requirePermission('payroll.employees')) {
+            return $tenant === null ? $this->moduleDeniedRedirect() : $this->permissionDeniedRedirect();
         }
 
         $rules = $this->employeeRules();
@@ -71,8 +73,8 @@ class Payroll extends BaseController
     {
         $tenant = $this->requireModule('payroll');
 
-        if ($tenant === null) {
-            return $this->moduleDeniedRedirect();
+        if ($tenant === null || ! $this->requirePermission('payroll.employees')) {
+            return $tenant === null ? $this->moduleDeniedRedirect() : $this->permissionDeniedRedirect();
         }
 
         $employee = model(PayrollEmployeeModel::class)->findForTenant($id, (int) $tenant['id']);
@@ -92,8 +94,8 @@ class Payroll extends BaseController
     {
         $tenant = $this->requireModule('payroll');
 
-        if ($tenant === null) {
-            return $this->moduleDeniedRedirect();
+        if ($tenant === null || ! $this->requirePermission('payroll.employees')) {
+            return $tenant === null ? $this->moduleDeniedRedirect() : $this->permissionDeniedRedirect();
         }
 
         $employeeModel = model(PayrollEmployeeModel::class);
@@ -118,8 +120,8 @@ class Payroll extends BaseController
     {
         $tenant = $this->requireModule('payroll');
 
-        if ($tenant === null) {
-            return $this->moduleDeniedRedirect();
+        if ($tenant === null || ! $this->requirePermission('payroll.employees')) {
+            return $tenant === null ? $this->moduleDeniedRedirect() : $this->permissionDeniedRedirect();
         }
 
         $employeeModel = model(PayrollEmployeeModel::class);
@@ -141,21 +143,29 @@ class Payroll extends BaseController
             'job_title'   => 'permit_empty|max_length[120]',
             'base_salary' => 'required|decimal|greater_than[0]',
             'status'      => 'required|in_list[active,inactive]',
-            'hired_at'    => 'permit_empty|valid_date[Y-m-d]',
+            'hired_at'    => 'permit_empty',
+            'national_id' => 'permit_empty|max_length[20]',
+            'insurance_number' => 'permit_empty|max_length[20]',
         ];
     }
 
     protected function employeePayload(int $tenantId): array
     {
+        helper('date');
         $hiredAt = $this->request->getPost('hired_at');
+        $hiredAt = $hiredAt ? (parse_jalali_input((string) $hiredAt) ?? (string) $hiredAt) : null;
 
         return [
-            'tenant_id'   => $tenantId,
-            'name'        => (string) $this->request->getPost('name'),
-            'job_title'   => (string) $this->request->getPost('job_title'),
-            'base_salary' => (float) $this->request->getPost('base_salary'),
-            'status'      => (string) $this->request->getPost('status'),
-            'hired_at'    => $hiredAt !== '' && $hiredAt !== null ? (string) $hiredAt : null,
+            'tenant_id'        => $tenantId,
+            'name'             => (string) $this->request->getPost('name'),
+            'national_id'      => (string) $this->request->getPost('national_id'),
+            'insurance_number' => (string) $this->request->getPost('insurance_number'),
+            'marital_status'   => (string) ($this->request->getPost('marital_status') ?: 'single'),
+            'children_count'   => (int) ($this->request->getPost('children_count') ?: 0),
+            'job_title'        => (string) $this->request->getPost('job_title'),
+            'base_salary'      => (float) $this->request->getPost('base_salary'),
+            'status'           => (string) $this->request->getPost('status'),
+            'hired_at'         => $hiredAt,
         ];
     }
 

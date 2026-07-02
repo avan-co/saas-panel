@@ -190,6 +190,10 @@ CODE=$(curl_code "$BASE/module/finance/reminders")
 assert_code "finance reminders" "200" "$CODE"
 CODE=$(curl_code "$BASE/module/finance/reports")
 assert_code "finance reports" "200" "$CODE"
+CODE=$(curl_code "$BASE/module/finance/approvals")
+assert_code "finance approvals" "200" "$CODE"
+CODE=$(curl_code "$BASE/module/finance/forecast")
+assert_code "finance forecast" "200" "$CODE"
 HTML=$(curl_get "$BASE/module/finance")
 assert_contains "ceo dashboard" "$HTML" "ceo-kpi-grid"
 
@@ -232,6 +236,22 @@ assert_contains "new employee form" "$HTML" 'name="base_salary"'
 echo "--- 26. Settings page ---"
 HTML=$(curl_get "$BASE/module/settings")
 assert_contains "settings page" "$HTML" "page-settings"
+CODE=$(curl_code "$BASE/module/settings/integrations")
+assert_code "settings integrations" "200" "$CODE"
+CODE=$(curl_code "$BASE/module/settings/audit")
+assert_code "settings audit" "200" "$CODE"
+CODE=$(curl_code "$BASE/module/settings/period-locks")
+assert_code "settings period locks" "200" "$CODE"
+
+echo "--- 26b. Payroll runs ---"
+CODE=$(curl_code "$BASE/module/payroll/runs")
+assert_code "payroll runs" "200" "$CODE"
+
+echo "--- 26c. Project tasks ---"
+curl_get "$BASE/tenant/switch/3" > /dev/null
+CODE=$(curl_code "$BASE/module/projects/1/tasks")
+assert_code "project tasks" "200" "$CODE"
+curl_get "$BASE/tenant/switch/1" > /dev/null
 
 echo "--- 27. Logout ---"
 curl_get "$BASE/logout" > /dev/null

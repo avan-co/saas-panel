@@ -17,6 +17,10 @@
     </div>
 </div>
 <div class="form-row">
+    <div class="form-group"><label><?= esc(lang('Finance.tax_id')) ?></label><input type="text" name="tax_id" value="<?= esc(old('tax_id', $contact['tax_id'] ?? '')) ?>" dir="ltr"></div>
+    <div class="form-group"><label><?= esc(lang('Finance.balance')) ?></label><input type="number" name="balance" value="<?= esc(old('balance', $contact['balance'] ?? 0)) ?>"></div>
+</div>
+<div class="form-row">
     <div class="form-group"><label><?= esc(lang('Finance.phone')) ?></label><input type="text" name="phone" value="<?= esc(old('phone', $contact['phone'] ?? '')) ?>"></div>
     <div class="form-group"><label><?= esc(lang('Finance.email')) ?></label><input type="email" name="email" value="<?= esc(old('email', $contact['email'] ?? '')) ?>" dir="ltr"></div>
 </div>

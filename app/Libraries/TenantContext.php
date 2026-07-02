@@ -59,6 +59,12 @@ class TenantContext
         return $this->tenant;
     }
 
+    public function setTenant(array $tenant): void
+    {
+        $this->tenant  = $tenant;
+        $this->modules = $this->moduleModel->getForTenant((int) $tenant['id']);
+    }
+
     public function getModules(): array
     {
         return $this->modules;

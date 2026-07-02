@@ -3,6 +3,7 @@
 namespace Config;
 
 use CodeIgniter\Config\Filters as BaseFilters;
+use App\Filters\ApiKeyFilter;
 use App\Filters\AuthFilter;
 use App\Filters\InstallFilter;
 use App\Filters\LocaleFilter;
@@ -35,6 +36,7 @@ class Filters extends BaseFilters
         'tenant'         => TenantFilter::class,
         'locale'         => LocaleFilter::class,
         'platformadmin'  => PlatformAdminFilter::class,
+        'apikey'         => ApiKeyFilter::class,
         'csrf'          => CSRF::class,
         'toolbar'       => DebugToolbar::class,
         'honeypot'      => Honeypot::class,
@@ -78,7 +80,7 @@ class Filters extends BaseFilters
      */
     public array $globals = [
         'before' => [
-            'csrf',
+            'csrf' => ['except' => ['api/v1/*']],
         ],
         'after' => [
             'toolbar' => ['except' => ['install', 'install/*']],

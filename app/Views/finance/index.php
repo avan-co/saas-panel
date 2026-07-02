@@ -14,6 +14,16 @@
 
 <?php $fmt = static fn (float $n): string => number_format($n, 0, '.', ','); ?>
 
+<?php if (! empty($insights)): ?>
+<div class="insights-panel" style="margin-bottom:20px">
+    <?php foreach ($insights as $insight): ?>
+    <div class="alert alert-<?= $insight['type'] === 'critical' ? 'error' : 'warning' ?>">
+        <strong><?= esc($insight['title']) ?></strong> — <?= esc($insight['body']) ?>
+    </div>
+    <?php endforeach; ?>
+</div>
+<?php endif; ?>
+
 <div class="kpi-grid kpi-grid-4 ceo-kpi-grid">
     <div class="kpi-card kpi-card-accent">
         <span class="kpi-label"><?= esc(lang('Finance.total_liquidity')) ?></span>

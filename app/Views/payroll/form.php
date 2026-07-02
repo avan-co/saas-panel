@@ -47,6 +47,17 @@
 
             <div class="form-row">
                 <div class="form-group">
+                    <label for="national_id"><?= esc(lang('Payroll.national_id')) ?></label>
+                    <input type="text" id="national_id" name="national_id" value="<?= esc(old('national_id', $employee['national_id'] ?? '')) ?>" maxlength="20" dir="ltr">
+                </div>
+                <div class="form-group">
+                    <label for="insurance_number"><?= esc(lang('Payroll.insurance_number')) ?></label>
+                    <input type="text" id="insurance_number" name="insurance_number" value="<?= esc(old('insurance_number', $employee['insurance_number'] ?? '')) ?>" maxlength="20" dir="ltr">
+                </div>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group">
                     <label for="status"><?= esc(lang('App.status')) ?></label>
                     <select id="status" name="status" required>
                         <option value="active" <?= old('status', $employee['status'] ?? 'active') === 'active' ? 'selected' : '' ?>><?= esc(lang('Payroll.status_active')) ?></option>
@@ -55,7 +66,7 @@
                 </div>
                 <div class="form-group">
                     <label for="hired_at"><?= esc(lang('Payroll.hired_at')) ?></label>
-                    <input type="date" id="hired_at" name="hired_at" value="<?= esc(old('hired_at', $employee['hired_at'] ?? '')) ?>">
+                    <input type="text" id="hired_at" name="hired_at" class="jalali-date" value="<?= esc(old('hired_at', ! empty($employee['hired_at']) ? jalali_date($employee['hired_at']) : '')) ?>">
                 </div>
             </div>
 

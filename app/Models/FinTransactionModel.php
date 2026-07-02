@@ -11,6 +11,7 @@ class FinTransactionModel extends Model
     protected $allowedFields = [
         'tenant_id', 'account_id', 'transfer_to_account_id', 'category_id', 'project_id',
         'type', 'amount', 'description', 'contact_name', 'contact_id', 'invoice_id', 'reference', 'txn_date',
+        'approval_status', 'approved_by', 'approved_at',
     ];
     protected $useTimestamps = true;
 

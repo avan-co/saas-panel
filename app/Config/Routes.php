@@ -52,6 +52,13 @@ $routes->group('', ['filter' => 'auth'], static function ($routes) {
         $routes->post('reminders/store', 'FinanceReminders::store');
         $routes->post('reminders/(:num)/paid', 'FinanceReminders::markPaid/$1');
         $routes->get('reports', 'FinanceReports::index');
+        $routes->get('reports/export/transactions', 'FinanceReports::exportTransactions');
+        $routes->get('reports/export/journal', 'FinanceReports::exportJournal');
+        $routes->get('approvals', 'FinanceApprovals::index');
+        $routes->post('approvals/(:num)/approve', 'FinanceApprovals::approve/$1');
+        $routes->post('approvals/(:num)/reject', 'FinanceApprovals::reject/$1');
+        $routes->get('forecast', 'FinanceForecast::index');
+        $routes->post('forecast/scenario', 'FinanceForecast::scenario');
         $routes->get('contacts', 'FinanceContacts::index');
         $routes->get('contacts/new', 'FinanceContacts::create');
         $routes->post('contacts/store', 'FinanceContacts::store');
@@ -65,6 +72,8 @@ $routes->group('', ['filter' => 'auth'], static function ($routes) {
         $routes->get('invoices/(:num)/edit', 'FinanceInvoices::edit/$1');
         $routes->post('invoices/(:num)/update', 'FinanceInvoices::update/$1');
         $routes->post('invoices/(:num)/delete', 'FinanceInvoices::delete/$1');
+        $routes->post('invoices/(:num)/pay', 'FinanceInvoices::pay/$1');
+        $routes->post('invoices/(:num)/modian', 'FinanceInvoices::submitModian/$1');
         $routes->get('invoices/files/(:num)/download', 'FinanceInvoices::download/$1');
         $routes->get('checks', 'FinanceChecks::index');
         $routes->get('checks/new', 'FinanceChecks::create');
@@ -99,6 +108,12 @@ $routes->group('', ['filter' => 'auth'], static function ($routes) {
     $routes->get('module/payroll/employees/(:num)/edit', 'Payroll::editEmployee/$1', ['filter' => 'tenant']);
     $routes->post('module/payroll/employees/(:num)/update', 'Payroll::updateEmployee/$1', ['filter' => 'tenant']);
     $routes->post('module/payroll/employees/(:num)/delete', 'Payroll::deleteEmployee/$1', ['filter' => 'tenant']);
+    $routes->get('module/payroll/runs', 'PayrollRuns::index', ['filter' => 'tenant']);
+    $routes->get('module/payroll/runs/new', 'PayrollRuns::create', ['filter' => 'tenant']);
+    $routes->post('module/payroll/runs/store', 'PayrollRuns::store', ['filter' => 'tenant']);
+    $routes->get('module/payroll/runs/(:num)', 'PayrollRuns::show/$1', ['filter' => 'tenant']);
+    $routes->post('module/payroll/runs/(:num)/approve', 'PayrollRuns::approve/$1', ['filter' => 'tenant']);
+    $routes->get('module/payroll/runs/(:num)/dsk', 'PayrollRuns::exportDsk/$1', ['filter' => 'tenant']);
 
     $routes->get('module/insurance', 'Insurance::index', ['filter' => 'tenant']);
     $routes->get('module/insurance/new', 'Insurance::create', ['filter' => 'tenant']);
@@ -121,12 +136,24 @@ $routes->group('', ['filter' => 'auth'], static function ($routes) {
     $routes->get('module/projects/(:num)/edit', 'Projects::edit/$1', ['filter' => 'tenant']);
     $routes->post('module/projects/(:num)/update', 'Projects::update/$1', ['filter' => 'tenant']);
     $routes->post('module/projects/(:num)/delete', 'Projects::delete/$1', ['filter' => 'tenant']);
+    $routes->get('module/projects/(:num)/tasks', 'ProjectTasks::index/$1', ['filter' => 'tenant']);
+    $routes->post('module/projects/(:num)/tasks/store', 'ProjectTasks::store/$1', ['filter' => 'tenant']);
+    $routes->post('module/projects/(:num)/tasks/(:num)/status', 'ProjectTasks::updateStatus/$1/$2', ['filter' => 'tenant']);
+    $routes->post('module/projects/(:num)/tasks/(:num)/delete', 'ProjectTasks::delete/$1/$2', ['filter' => 'tenant']);
 
     $routes->get('module/settings', 'Settings::index', ['filter' => 'tenant']);
     $routes->post('module/settings', 'Settings::update', ['filter' => 'tenant']);
     $routes->get('module/settings/users', 'TenantUsers::index', ['filter' => 'tenant']);
     $routes->post('module/settings/users/store', 'TenantUsers::store', ['filter' => 'tenant']);
     $routes->post('module/settings/users/(:num)/update', 'TenantUsers::update/$1', ['filter' => 'tenant']);
+    $routes->get('module/settings/integrations', 'SettingsIntegrations::index', ['filter' => 'tenant']);
+    $routes->post('module/settings/integrations/api-keys', 'SettingsIntegrations::storeApiKey', ['filter' => 'tenant']);
+    $routes->post('module/settings/integrations/api-keys/(:num)/delete', 'SettingsIntegrations::deleteApiKey/$1', ['filter' => 'tenant']);
+    $routes->post('module/settings/integrations/webhooks', 'SettingsIntegrations::storeWebhook', ['filter' => 'tenant']);
+    $routes->post('module/settings/integrations/webhooks/(:num)/delete', 'SettingsIntegrations::deleteWebhook/$1', ['filter' => 'tenant']);
+    $routes->get('module/settings/audit', 'SettingsAudit::index', ['filter' => 'tenant']);
+    $routes->get('module/settings/period-locks', 'SettingsPeriodLock::index', ['filter' => 'tenant']);
+    $routes->post('module/settings/period-locks', 'SettingsPeriodLock::lock', ['filter' => 'tenant']);
 
     $routes->get('module/(:segment)', 'ModulePage::show/$1', ['filter' => 'tenant']);
 
@@ -138,4 +165,10 @@ $routes->group('', ['filter' => 'auth'], static function ($routes) {
         $routes->get('users', 'Platform\Users::index');
         $routes->post('users/(:num)/toggle-admin', 'Platform\Users::toggleAdmin/$1');
     });
+});
+
+$routes->group('api/v1', ['filter' => 'apikey'], static function ($routes) {
+    $routes->get('transactions', 'Api\V1\Transactions::index');
+    $routes->post('transactions', 'Api\V1\Transactions::store');
+    $routes->get('transactions/(:num)', 'Api\V1\Transactions::show/$1');
 });
