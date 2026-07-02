@@ -24,6 +24,12 @@ $routes->get('theme/(:segment)', 'Preferences::theme/$1');
 $routes->group('', ['filter' => 'auth'], static function ($routes) {
     $routes->get('dashboard', 'Dashboard::index', ['filter' => 'tenant']);
     $routes->get('tenant/switch/(:num)', 'Tenant::switch/$1');
+
+    $routes->group('module/finance', ['filter' => 'tenant'], static function ($routes) {
+        $routes->get('/', 'Finance::index');
+        $routes->get('transactions', 'Finance::transactions');
+    });
+
     $routes->get('module/(:segment)', 'ModulePage::show/$1', ['filter' => 'tenant']);
 
     $routes->group('platform', ['filter' => 'platformadmin'], static function ($routes) {

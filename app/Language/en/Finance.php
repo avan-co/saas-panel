@@ -1,0 +1,28 @@
+<?php
+
+return [
+    'title'           => 'Finance',
+    'overview'        => 'Overview',
+    'transactions'    => 'Transactions',
+    'accounts'        => 'Accounts',
+    'categories'      => 'Categories',
+    'reports'         => 'Reports',
+
+    'total_balance'   => 'Total balance',
+    'month_income'    => 'Income (month)',
+    'month_expense'   => 'Expenses (month)',
+    'month_net'       => 'Net (month)',
+    'recent_txn'      => 'Recent transactions',
+    'view_all'        => 'View all',
+    'no_transactions' => 'No transactions yet.',
+    'account'         => 'Account',
+    'category'        => 'Category',
+    'amount'          => 'Amount',
+    'date'            => 'Date',
+    'description'     => 'Description',
+    'type_income'     => 'Income',
+    'type_expense'    => 'Expense',
+    'type_transfer'   => 'Transfer',
+    'cashflow_hint'   => 'Cash flow — last 30 days',
+    'accounts_card'   => 'Bank & cash accounts',
+];

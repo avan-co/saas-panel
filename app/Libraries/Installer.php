@@ -88,7 +88,8 @@ class Installer
 
     public static function writeEnvFile(array $data): bool
     {
-        $baseURL       = self::escapeEnvValue($data['baseURL']);
+        $baseURL       = self::normalizeBaseUrl($data['baseURL']);
+        $baseURL       = self::escapeEnvValue($baseURL);
         $hostname      = self::escapeEnvValue($data['hostname']);
         $database      = self::escapeEnvValue($data['database']);
         $username      = self::escapeEnvValue($data['username']);
@@ -190,13 +191,38 @@ ENV;
             $base = '';
         }
 
-        return $scheme . '://' . $host . $base . '/';
+        if (str_ends_with($base, '/public')) {
+            $base = substr($base, 0, -7);
+        }
+
+        return self::normalizeBaseUrl($scheme . '://' . $host . $base . '/');
+    }
+
+    public static function normalizeBaseUrl(string $url): string
+    {
+        $url = trim($url);
+
+        if ($url === '') {
+            return $url;
+        }
+
+        $url = rtrim($url, '/') . '/';
+        $url = preg_replace('#^(https?://[^/]+)/public(/|$)#i', '$1/', $url) ?? $url;
+
+        return rtrim($url, '/') . '/';
     }
 
     public static function shouldOverrideBaseUrl(string $configuredBaseUrl): bool
     {
         if (is_cli() || ! isset($_SERVER['HTTP_HOST'])) {
             return false;
+        }
+
+        $configuredBaseUrl = self::normalizeBaseUrl($configuredBaseUrl);
+        $configuredPath    = parse_url($configuredBaseUrl, PHP_URL_PATH) ?? '/';
+
+        if (str_contains($configuredPath, '/public')) {
+            return true;
         }
 
         $configuredHost = parse_url($configuredBaseUrl, PHP_URL_HOST);

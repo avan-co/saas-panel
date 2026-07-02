@@ -112,6 +112,7 @@ class Install extends Controller
         }
 
         $baseURL = rtrim((string) $this->request->getPost('baseURL'), '/') . '/';
+        $baseURL = Installer::normalizeBaseUrl($baseURL);
 
         session()->set('install_app', [
             'baseURL'    => $baseURL,

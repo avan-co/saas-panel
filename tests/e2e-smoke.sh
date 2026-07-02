@@ -93,6 +93,9 @@ rm -f "$COOKIE_JAR"
 
 mysql -u bizpanel -pbizpanel bizpanel_test -e "
   SET FOREIGN_KEY_CHECKS=0;
+  TRUNCATE fin_transactions;
+  TRUNCATE fin_accounts;
+  TRUNCATE fin_categories;
   TRUNCATE tenant_modules;
   TRUNCATE tenant_memberships;
   TRUNCATE tenants;
@@ -100,6 +103,10 @@ mysql -u bizpanel -pbizpanel bizpanel_test -e "
   TRUNCATE modules;
   TRUNCATE migrations;
   SET FOREIGN_KEY_CHECKS=1;
+" 2>/dev/null || true
+
+mysql -u bizpanel -pbizpanel bizpanel_test -e "
+  DROP TABLE IF EXISTS fin_transactions, fin_accounts, fin_categories;
 " 2>/dev/null || true
 
 echo "--- 1. Install: requirements ---"
@@ -163,9 +170,9 @@ echo "--- 10. Platform admin ---"
 CODE=$(curl_code "$BASE/platform/tenants")
 assert_code "platform tenants" "200" "$CODE"
 
-echo "--- 11. Module page ---"
+echo "--- 11. Finance module ---"
 HTML=$(curl_get "$BASE/module/finance")
-assert_contains "finance module" "$HTML" "coming-soon"
+assert_contains "finance module" "$HTML" "page-finance"
 
 echo "--- 12. Tenant switch ---"
 # demo seeder creates tenants; switch to tenant 1

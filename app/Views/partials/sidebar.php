@@ -26,7 +26,8 @@ $currentPath = uri_string();
             $code = $module['code'];
             $url  = $code === 'dashboard' ? site_url('dashboard') : site_url('module/' . $code);
             $active = ($code === 'dashboard' && $currentPath === 'dashboard')
-                || str_starts_with($currentPath, 'module/' . $code);
+                || ($code === 'finance' && str_starts_with($currentPath, 'module/finance'))
+                || ($code !== 'dashboard' && $code !== 'finance' && str_starts_with($currentPath, 'module/' . $code));
             $icon = $moduleIcons[$code] ?? $moduleIcons['dashboard'];
             ?>
             <a href="<?= $url ?>" class="nav-item <?= $active ? 'active' : '' ?>" title="<?= esc(lang('App.menu.' . $code)) ?>">
