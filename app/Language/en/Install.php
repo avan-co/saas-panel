@@ -19,6 +19,7 @@ return [
     'setup_help'         => 'Set your site URL and platform admin account.',
     'process_help'       => 'Please wait, automatic installation is in progress...',
     'complete_help'      => 'Platform installed successfully. You can sign in now.',
+    'demo_accounts_help' => 'Super admin is the email you entered. Agency test users: admin@agency.local / manager@agency.local / dev1@agency.local / viewer@agency.local — password for all: password',
     'reinstall_warning'  => 'Reinstall: completing setup will drop all existing database tables and recreate everything from scratch.',
     'reset_failed'       => 'Database reset failed:',
 
@@ -32,7 +33,7 @@ return [
     'admin_email'        => 'Admin email',
     'admin_password'     => 'Admin password',
     'admin_password_confirm' => 'Confirm password',
-    'seed_demo'          => 'Create sample data (3 demo businesses)',
+    'seed_demo'          => 'Create sample data (3 demo businesses + test users)',
 
     'passed'             => 'OK',
     'failed'             => 'Failed',

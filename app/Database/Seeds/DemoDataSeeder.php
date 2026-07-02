@@ -3,7 +3,6 @@
 namespace App\Database\Seeds;
 
 use CodeIgniter\Database\Seeder;
-use CodeIgniter\I18n\Time;
 
 class DemoDataSeeder extends Seeder
 {
@@ -26,7 +25,7 @@ class DemoDataSeeder extends Seeder
             return;
         }
 
-        $now = Time::now()->toDateTimeString();
+        $now = date('Y-m-d H:i:s');
 
         $tenants = [
             ['name' => 'رستوران نمونه', 'slug' => 'restaurant-demo', 'plan' => 'pro'],

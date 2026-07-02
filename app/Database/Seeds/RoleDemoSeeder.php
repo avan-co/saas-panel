@@ -3,7 +3,6 @@
 namespace App\Database\Seeds;
 
 use CodeIgniter\Database\Seeder;
-use CodeIgniter\I18n\Time;
 
 class RoleDemoSeeder extends Seeder
 {
@@ -20,7 +19,7 @@ class RoleDemoSeeder extends Seeder
         }
 
         $tenantId = (int) $tenant['id'];
-        $now      = Time::now()->toDateTimeString();
+        $now      = date('Y-m-d H:i:s');
         $userModel = model(\App\Models\UserModel::class);
 
         $users = [

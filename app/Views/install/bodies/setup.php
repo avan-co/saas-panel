@@ -16,12 +16,12 @@
 
     <div class="form-group">
         <label for="admin_name"><?= esc(lang('Install.admin_name')) ?></label>
-        <input type="text" id="admin_name" name="admin_name" value="<?= esc(old('admin_name')) ?>" required>
+        <input type="text" id="admin_name" name="admin_name" value="<?= esc(old('admin_name', 'مدیر پلتفرم')) ?>" required>
     </div>
 
     <div class="form-group">
         <label for="admin_email"><?= esc(lang('Install.admin_email')) ?></label>
-        <input type="email" id="admin_email" name="admin_email" value="<?= esc(old('admin_email')) ?>" required dir="ltr">
+        <input type="email" id="admin_email" name="admin_email" value="<?= esc(old('admin_email', 'admin@demo.local')) ?>" required dir="ltr">
     </div>
 
     <div class="form-row">
