@@ -25,4 +25,7 @@ return [
     'type_transfer'   => 'Transfer',
     'cashflow_hint'   => 'Cash flow — last 30 days',
     'accounts_card'   => 'Bank & cash accounts',
+    'new_transaction' => 'New transaction',
+    'saved'           => 'Transaction saved successfully.',
+    'save_transaction'=> 'Save transaction',
 ];

@@ -25,4 +25,7 @@ return [
     'type_transfer'   => 'انتقال',
     'cashflow_hint'   => 'جریان نقدی ۳۰ روز اخیر',
     'accounts_card'   => 'حساب‌های بانکی و صندوق',
+    'new_transaction' => 'تراکنش جدید',
+    'saved'           => 'تراکنش با موفقیت ثبت شد.',
+    'save_transaction'=> 'ثبت تراکنش',
 ];

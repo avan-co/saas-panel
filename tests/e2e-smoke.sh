@@ -91,23 +91,7 @@ rm -f /workspace/writable/installed.lock
 rm -f /workspace/.env
 rm -f "$COOKIE_JAR"
 
-mysql -u bizpanel -pbizpanel bizpanel_test -e "
-  SET FOREIGN_KEY_CHECKS=0;
-  TRUNCATE fin_transactions;
-  TRUNCATE fin_accounts;
-  TRUNCATE fin_categories;
-  TRUNCATE tenant_modules;
-  TRUNCATE tenant_memberships;
-  TRUNCATE tenants;
-  TRUNCATE users;
-  TRUNCATE modules;
-  TRUNCATE migrations;
-  SET FOREIGN_KEY_CHECKS=1;
-" 2>/dev/null || true
-
-mysql -u bizpanel -pbizpanel bizpanel_test -e "
-  DROP TABLE IF EXISTS fin_transactions, fin_accounts, fin_categories;
-" 2>/dev/null || true
+mysql -u bizpanel -pbizpanel -e "DROP DATABASE IF EXISTS bizpanel_test; CREATE DATABASE bizpanel_test;" 2>/dev/null || true
 
 echo "--- 1. Install: requirements ---"
 HTML=$(curl_get "$BASE/install")
@@ -174,17 +158,37 @@ echo "--- 11. Finance module ---"
 HTML=$(curl_get "$BASE/module/finance")
 assert_contains "finance module" "$HTML" "page-finance"
 
-echo "--- 12. Tenant switch ---"
-# demo seeder creates tenants; switch to tenant 1
+echo "--- 12. Tenant switch (restaurant demo) ---"
 CODE=$(curl_code "$BASE/tenant/switch/1")
 assert_code "tenant switch" "302" "$CODE"
 
-echo "--- 13. Logout ---"
+echo "--- 13. Payroll module ---"
+HTML=$(curl_get "$BASE/module/payroll")
+assert_contains "payroll module" "$HTML" "page-payroll"
+
+echo "--- 14. Insurance module ---"
+HTML=$(curl_get "$BASE/module/insurance")
+assert_contains "insurance module" "$HTML" "page-insurance"
+
+echo "--- 15. Tax module ---"
+HTML=$(curl_get "$BASE/module/tax")
+assert_contains "tax module" "$HTML" "page-tax"
+
+echo "--- 16. Finance transactions form ---"
+HTML=$(curl_get "$BASE/module/finance/transactions/new")
+assert_contains "new transaction form" "$HTML" 'name="amount"'
+
+echo "--- 17. Projects module (agency tenant) ---"
+curl_get "$BASE/tenant/switch/3" > /dev/null
+HTML=$(curl_get "$BASE/module/projects")
+assert_contains "projects module" "$HTML" "page-projects"
+
+echo "--- 18. Logout ---"
 curl_get "$BASE/logout" > /dev/null
 CODE=$(curl_code "$BASE/dashboard")
 assert_code "dashboard requires auth" "302" "$CODE"
 
-echo "--- 14. Root redirect ---"
+echo "--- 19. Root redirect ---"
 CODE=$(curl_code "$BASE/")
 assert_code "home redirect" "302" "$CODE"
 

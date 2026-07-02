@@ -28,7 +28,14 @@ $routes->group('', ['filter' => 'auth'], static function ($routes) {
     $routes->group('module/finance', ['filter' => 'tenant'], static function ($routes) {
         $routes->get('/', 'Finance::index');
         $routes->get('transactions', 'Finance::transactions');
+        $routes->get('transactions/new', 'Finance::createTransaction');
+        $routes->post('transactions/store', 'Finance::storeTransaction');
     });
+
+    $routes->get('module/payroll', 'Payroll::index', ['filter' => 'tenant']);
+    $routes->get('module/insurance', 'Insurance::index', ['filter' => 'tenant']);
+    $routes->get('module/tax', 'Tax::index', ['filter' => 'tenant']);
+    $routes->get('module/projects', 'Projects::index', ['filter' => 'tenant']);
 
     $routes->get('module/(:segment)', 'ModulePage::show/$1', ['filter' => 'tenant']);
 

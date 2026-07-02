@@ -80,6 +80,18 @@ class DemoDataSeeder extends Seeder
             if (in_array('finance', $enabledCodes, true)) {
                 $this->seedFinanceDemo((int) $tenantId, $now);
             }
+            if (in_array('payroll', $enabledCodes, true)) {
+                $this->seedPayrollDemo((int) $tenantId, $now);
+            }
+            if (in_array('insurance', $enabledCodes, true)) {
+                $this->seedInsuranceDemo((int) $tenantId, $now);
+            }
+            if (in_array('tax', $enabledCodes, true)) {
+                $this->seedTaxDemo((int) $tenantId, $now);
+            }
+            if (in_array('projects', $enabledCodes, true)) {
+                $this->seedProjectsDemo((int) $tenantId, $now);
+            }
         }
     }
 
@@ -149,6 +161,134 @@ class DemoDataSeeder extends Seeder
                 'description' => $txn['desc'],
                 'reference'   => null,
                 'txn_date'    => date('Y-m-d', strtotime('-' . $txn['days'] . ' days')),
+                'created_at'  => $now,
+                'updated_at'  => $now,
+            ]);
+        }
+    }
+
+    public function seedPayrollDemo(int $tenantId, string $now): void
+    {
+        if ($this->db->table('payroll_employees')->where('tenant_id', $tenantId)->countAllResults() > 0) {
+            return;
+        }
+
+        $employees = [
+            ['name' => 'علی رضایی', 'job_title' => 'مدیر فروش', 'base_salary' => 45000000],
+            ['name' => 'مریم احمدی', 'job_title' => 'حسابدار', 'base_salary' => 38000000],
+            ['name' => 'حسین کریمی', 'job_title' => 'پشتیبانی', 'base_salary' => 28000000],
+        ];
+
+        foreach ($employees as $emp) {
+            $this->db->table('payroll_employees')->insert([
+                'tenant_id'   => $tenantId,
+                'name'        => $emp['name'],
+                'job_title'   => $emp['job_title'],
+                'base_salary' => $emp['base_salary'],
+                'status'      => 'active',
+                'hired_at'    => date('Y-m-d', strtotime('-1 year')),
+                'created_at'  => $now,
+                'updated_at'  => $now,
+            ]);
+        }
+
+        $this->db->table('payroll_runs')->insert([
+            'tenant_id'      => $tenantId,
+            'period_year'    => (int) date('Y'),
+            'period_month'   => (int) date('m'),
+            'total_amount'   => 111000000,
+            'employee_count' => 3,
+            'status'         => 'paid',
+            'paid_at'        => date('Y-m-d'),
+            'created_at'     => $now,
+            'updated_at'     => $now,
+        ]);
+    }
+
+    public function seedInsuranceDemo(int $tenantId, string $now): void
+    {
+        if ($this->db->table('insurance_policies')->where('tenant_id', $tenantId)->countAllResults() > 0) {
+            return;
+        }
+
+        $policies = [
+            ['policy_number' => 'SOC-1404-001', 'provider' => 'تأمین اجتماعی', 'type' => 'social', 'premium' => 8500000],
+            ['policy_number' => 'HLT-1404-012', 'provider' => 'بیمه ایران', 'type' => 'health', 'premium' => 3200000],
+        ];
+
+        foreach ($policies as $p) {
+            $this->db->table('insurance_policies')->insert([
+                'tenant_id'     => $tenantId,
+                'policy_number' => $p['policy_number'],
+                'provider'      => $p['provider'],
+                'type'          => $p['type'],
+                'premium'       => $p['premium'],
+                'start_date'    => date('Y-01-01'),
+                'end_date'      => date('Y-12-31'),
+                'status'        => 'active',
+                'created_at'    => $now,
+                'updated_at'    => $now,
+            ]);
+        }
+    }
+
+    public function seedTaxDemo(int $tenantId, string $now): void
+    {
+        if ($this->db->table('tax_periods')->where('tenant_id', $tenantId)->countAllResults() > 0) {
+            return;
+        }
+
+        $year = (int) date('Y');
+        $q    = (int) ceil((int) date('m') / 3);
+
+        $this->db->table('tax_periods')->insert([
+            'tenant_id'      => $tenantId,
+            'period_year'    => $year,
+            'period_quarter' => $q,
+            'taxable_income' => 185000000,
+            'tax_amount'     => 9250000,
+            'status'         => 'pending',
+            'due_date'       => date('Y-m-d', strtotime('+30 days')),
+            'created_at'     => $now,
+            'updated_at'     => $now,
+        ]);
+
+        $this->db->table('tax_periods')->insert([
+            'tenant_id'      => $tenantId,
+            'period_year'    => $year,
+            'period_quarter' => max(1, $q - 1),
+            'taxable_income' => 162000000,
+            'tax_amount'     => 8100000,
+            'status'         => 'paid',
+            'due_date'       => date('Y-m-d', strtotime('-15 days')),
+            'created_at'     => $now,
+            'updated_at'     => $now,
+        ]);
+    }
+
+    public function seedProjectsDemo(int $tenantId, string $now): void
+    {
+        if ($this->db->table('projects')->where('tenant_id', $tenantId)->countAllResults() > 0) {
+            return;
+        }
+
+        $projects = [
+            ['name' => 'طراحی سایت فروشگاه', 'code' => 'PRJ-001', 'client' => 'فروشگاه نمونه', 'budget' => 120000000, 'progress' => 75, 'status' => 'active'],
+            ['name' => 'سیستم انبارداری', 'code' => 'PRJ-002', 'client' => 'انبار مرکزی', 'budget' => 85000000, 'progress' => 40, 'status' => 'active'],
+            ['name' => 'مشاوره مالی', 'code' => 'PRJ-003', 'client' => 'شرکت آلفا', 'budget' => 45000000, 'progress' => 100, 'status' => 'completed'],
+        ];
+
+        foreach ($projects as $p) {
+            $this->db->table('projects')->insert([
+                'tenant_id'   => $tenantId,
+                'name'        => $p['name'],
+                'code'        => $p['code'],
+                'client_name' => $p['client'],
+                'status'      => $p['status'],
+                'budget'      => $p['budget'],
+                'progress'    => $p['progress'],
+                'start_date'  => date('Y-m-d', strtotime('-60 days')),
+                'end_date'    => date('Y-m-d', strtotime('+90 days')),
                 'created_at'  => $now,
                 'updated_at'  => $now,
             ]);

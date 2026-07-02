@@ -423,6 +423,7 @@ body.sidebar-expanded .nav-label { opacity: 1; }
     justify-content: space-between;
     gap: 16px;
     margin-bottom: 24px;
+    flex-wrap: wrap;
 }
 
 .page-header-dashboard { margin-bottom: 20px; }
@@ -790,6 +791,83 @@ body.sidebar-expanded .nav-label { opacity: 1; }
 .badge-active { background: rgba(16, 185, 129, 0.15); color: var(--success); }
 .badge-trial { background: rgba(245, 158, 11, 0.15); color: #f59e0b; }
 .badge-suspended { background: rgba(239, 68, 68, 0.15); color: var(--error); }
+.badge-paid,
+.badge-completed { background: rgba(16, 185, 129, 0.15); color: var(--success); }
+.badge-pending,
+.badge-draft,
+.badge-planning { background: rgba(245, 158, 11, 0.15); color: #f59e0b; }
+.badge-filed,
+.badge-on_hold { background: rgba(59, 130, 246, 0.15); color: var(--accent); }
+.badge-expired,
+.badge-inactive { background: rgba(100, 116, 139, 0.15); color: var(--text-muted); }
+
+.text-sm { font-size: 12px; }
+
+/* Forms */
+.form-card { max-width: 640px; }
+
+.app-form .form-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+}
+
+@media (max-width: 600px) {
+    .app-form .form-row { grid-template-columns: 1fr; }
+}
+
+.app-form select,
+.app-form input[type="date"],
+.app-form input[type="number"],
+.app-form input[type="text"],
+.app-form textarea {
+    width: 100%;
+    padding: 10px 14px;
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    background: var(--bg-secondary);
+    color: var(--text);
+    font-size: 14px;
+    font-family: inherit;
+    transition: border-color 0.15s;
+}
+
+.app-form select:focus,
+.app-form input:focus,
+.app-form textarea:focus {
+    outline: none;
+    border-color: var(--accent);
+    box-shadow: 0 0 0 3px var(--accent-soft);
+}
+
+.form-actions {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 12px;
+    margin-top: 24px;
+    padding-top: 20px;
+    border-top: 1px solid var(--border);
+}
+
+.page-header .btn { flex-shrink: 0; }
+
+/* Progress bar */
+.progress-bar {
+    height: 6px;
+    background: var(--bg-secondary);
+    border-radius: 3px;
+    overflow: hidden;
+    margin-bottom: 4px;
+    min-width: 80px;
+}
+
+.progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--accent), var(--accent-2));
+    border-radius: 3px;
+    transition: width 0.3s ease;
+}
 
 .module-tag {
     display: inline-block;

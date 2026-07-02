@@ -24,7 +24,15 @@ $currentPath = uri_string();
         <?php foreach ($tenantModules as $module): ?>
             <?php
             $code = $module['code'];
-            $url  = $code === 'dashboard' ? site_url('dashboard') : site_url('module/' . $code);
+            $url  = match ($code) {
+                'dashboard' => site_url('dashboard'),
+                'finance'   => site_url('module/finance'),
+                'payroll'   => site_url('module/payroll'),
+                'insurance' => site_url('module/insurance'),
+                'tax'       => site_url('module/tax'),
+                'projects'  => site_url('module/projects'),
+                default     => site_url('module/' . $code),
+            };
             $active = ($code === 'dashboard' && $currentPath === 'dashboard')
                 || ($code === 'finance' && str_starts_with($currentPath, 'module/finance'))
                 || ($code !== 'dashboard' && $code !== 'finance' && str_starts_with($currentPath, 'module/' . $code));

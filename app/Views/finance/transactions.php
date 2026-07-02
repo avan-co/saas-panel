@@ -15,6 +15,7 @@ echo $this->include('partials/module_tabs');
     <div class="page-header-text">
         <h2 class="page-heading"><?= esc(lang('Finance.transactions')) ?></h2>
     </div>
+    <a href="<?= site_url('module/finance/transactions/new') ?>" class="btn btn-primary"><?= esc(lang('Finance.new_transaction')) ?></a>
 </div>
 
 <div class="card card-elevated">
