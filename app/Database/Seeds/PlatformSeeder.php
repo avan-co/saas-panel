@@ -26,5 +26,8 @@ class PlatformSeeder extends Seeder
 
         $demoSeeder = new DemoDataSeeder(config(Database::class));
         $demoSeeder->setAdminId($adminId)->run();
+
+        $roleSeeder = new RoleDemoSeeder(config(Database::class));
+        $roleSeeder->run();
     }
 }

@@ -13,7 +13,7 @@ class UserModel extends Model
     protected $useSoftDeletes   = false;
     protected $allowedFields    = [
         'name', 'email', 'password', 'locale', 'theme',
-        'is_platform_admin', 'status',
+        'is_platform_admin', 'status', 'last_login_at', 'last_login_ip',
     ];
     protected $useTimestamps = true;
 

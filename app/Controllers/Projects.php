@@ -2,41 +2,49 @@
 
 namespace App\Controllers;
 
-use App\Controllers\Concerns\ChecksPermission;
+use App\Controllers\Concerns\ChecksProjectAccess;
 use App\Controllers\Concerns\HasProjectNav;
 use App\Controllers\Concerns\HasTenantModule;
 use App\Models\FinContactModel;
 use App\Models\FinTransactionModel;
 use App\Models\ProjectMemberModel;
 use App\Models\ProjectModel;
+use App\Models\ProjectTeamModel;
 use App\Models\TenantMembershipModel;
+use App\Models\TenantTeamModel;
 
 class Projects extends BaseController
 {
     use HasTenantModule;
     use HasProjectNav;
-    use ChecksPermission;
+    use ChecksProjectAccess;
 
     public function index()
     {
         $tenant = $this->requireModule('projects');
 
-        if ($tenant === null) {
-            return $this->moduleDeniedRedirect();
+        if ($tenant === null || ! $this->requirePermission('projects.view')) {
+            return $tenant === null ? $this->moduleDeniedRedirect() : $this->permissionDeniedRedirect();
         }
 
         $tenantId = (int) $tenant['id'];
         $this->seedIfEmpty($tenantId);
 
         $projectModel = model(ProjectModel::class);
+        $projects     = service('projectAccess')->filterProjects(
+            (int) session('user_id'),
+            $tenantId,
+            $projectModel->getForTenant($tenantId),
+        );
 
         return $this->render('projects/index', [
             'title'       => lang('Projects.title'),
-            'projects'    => $projectModel->getForTenant($tenantId),
-            'activeCount' => $projectModel->countActive($tenantId),
-            'totalBudget' => $projectModel->totalBudget($tenantId),
-            'avgProgress' => $projectModel->averageProgress($tenantId),
+            'projects'    => $projects,
+            'activeCount' => count(array_filter($projects, static fn ($p) => in_array($p['status'], ['planning', 'active'], true))),
+            'totalBudget' => array_sum(array_map(static fn ($p) => (float) $p['budget'], $projects)),
+            'avgProgress' => $projects !== [] ? (int) round(array_sum(array_map(static fn ($p) => (int) $p['progress'], $projects)) / count($projects)) : 0,
             'workload'    => service('project')->workload($tenantId),
+            'canManage'   => $this->requirePermission('projects.manage'),
             'breadcrumbs' => $this->moduleBreadcrumbs(lang('Projects.title')),
         ]);
     }
@@ -71,6 +79,10 @@ class Projects extends BaseController
             return redirect()->to('/module/projects')->with('error', lang('Projects.not_found'));
         }
 
+        if (! $this->requireProjectAccess($id)) {
+            return $this->projectAccessDeniedRedirect();
+        }
+
         service('project')->checkDeadlines($tenantId, (int) session('user_id'));
         service('project')->seedDefaultAutomation($tenantId, $id);
 
@@ -90,6 +102,7 @@ class Projects extends BaseController
             'finance'          => $finance,
             'transactions'     => $transactions,
             'hasFinance'       => service('tenantContext')->hasModule('finance'),
+            'canManage'        => $this->requirePermission('projects.manage'),
             'projectNav'       => 'dashboard',
             'projectNavItems'  => $this->projectNavItems($id),
             'breadcrumbs'      => $this->projectBreadcrumbs($project),
@@ -100,7 +113,7 @@ class Projects extends BaseController
     {
         $tenant = $this->requireModule('projects');
 
-        if ($tenant === null || ! $this->requirePermission('projects.tasks')) {
+        if ($tenant === null || ! $this->requirePermission('projects.manage')) {
             return $tenant === null ? $this->moduleDeniedRedirect() : $this->permissionDeniedRedirect();
         }
 
@@ -111,7 +124,7 @@ class Projects extends BaseController
     {
         $tenant = $this->requireModule('projects');
 
-        if ($tenant === null || ! $this->requirePermission('projects.tasks')) {
+        if ($tenant === null || ! $this->requirePermission('projects.manage')) {
             return $tenant === null ? $this->moduleDeniedRedirect() : $this->permissionDeniedRedirect();
         }
 
@@ -122,6 +135,7 @@ class Projects extends BaseController
         $tenantId = (int) $tenant['id'];
         $id       = (int) model(ProjectModel::class)->insert($this->projectPayload($tenantId));
         $this->syncMembers($tenantId, $id);
+        $this->syncTeams($tenantId, $id);
 
         return redirect()->to('/module/projects/' . $id)->with('success', lang('Projects.saved'));
     }
@@ -130,7 +144,7 @@ class Projects extends BaseController
     {
         $tenant = $this->requireModule('projects');
 
-        if ($tenant === null || ! $this->requirePermission('projects.tasks')) {
+        if ($tenant === null || ! $this->requirePermission('projects.manage')) {
             return $tenant === null ? $this->moduleDeniedRedirect() : $this->permissionDeniedRedirect();
         }
 
@@ -147,7 +161,7 @@ class Projects extends BaseController
     {
         $tenant = $this->requireModule('projects');
 
-        if ($tenant === null || ! $this->requirePermission('projects.tasks')) {
+        if ($tenant === null || ! $this->requirePermission('projects.manage')) {
             return $tenant === null ? $this->moduleDeniedRedirect() : $this->permissionDeniedRedirect();
         }
 
@@ -165,6 +179,7 @@ class Projects extends BaseController
         $tenantId = (int) $tenant['id'];
         $projectModel->update($id, $this->projectPayload($tenantId));
         $this->syncMembers($tenantId, $id);
+        $this->syncTeams($tenantId, $id);
 
         return redirect()->to('/module/projects/' . $id)->with('success', lang('Projects.updated'));
     }
@@ -173,7 +188,7 @@ class Projects extends BaseController
     {
         $tenant = $this->requireModule('projects');
 
-        if ($tenant === null || ! $this->requirePermission('projects.tasks')) {
+        if ($tenant === null || ! $this->requirePermission('projects.manage')) {
             return $tenant === null ? $this->moduleDeniedRedirect() : $this->permissionDeniedRedirect();
         }
 
@@ -192,6 +207,7 @@ class Projects extends BaseController
     protected function formData(int $tenantId, ?array $project): array
     {
         $members = $project ? model(ProjectMemberModel::class)->forProject($tenantId, (int) $project['id']) : [];
+        $teams   = $project ? model(ProjectTeamModel::class)->forProject($tenantId, (int) $project['id']) : [];
         $contacts = service('tenantContext')->hasModule('finance')
             ? model(FinContactModel::class)->getForTenant($tenantId) : [];
 
@@ -199,6 +215,8 @@ class Projects extends BaseController
             'title'       => $project ? lang('Projects.edit_project') : lang('Projects.new_project'),
             'project'     => $project,
             'members'     => $members,
+            'teams'       => $teams,
+            'allTeams'    => model(TenantTeamModel::class)->getForTenant($tenantId),
             'users'       => model(TenantMembershipModel::class)->getForTenant($tenantId),
             'contacts'    => $contacts,
             'breadcrumbs' => $this->moduleBreadcrumbs(lang('Projects.title'), site_url('module/projects'), $project ? lang('Projects.edit_project') : lang('Projects.new_project')),
@@ -216,6 +234,12 @@ class Projects extends BaseController
         if ($managerId > 0) {
             model(ProjectModel::class)->update($projectId, ['manager_user_id' => $managerId]);
         }
+    }
+
+    protected function syncTeams(int $tenantId, int $projectId): void
+    {
+        $teamIds = $this->request->getPost('team_id') ?: [];
+        model(ProjectTeamModel::class)->syncTeams($tenantId, $projectId, (array) $teamIds);
     }
 
     protected function projectRules(): array

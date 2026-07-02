@@ -20,7 +20,7 @@
                     <div class="form-group">
                         <label><?= esc(lang('Settings.user_role')) ?></label>
                         <select name="role">
-                            <?php foreach (['admin','accountant','manager','hr','viewer'] as $role): ?>
+                            <?php foreach (['admin','accountant','manager','hr','employee','viewer'] as $role): ?>
                                 <option value="<?= $role ?>"><?= esc(lang('Settings.role_' . $role)) ?></option>
                             <?php endforeach; ?>
                         </select>
@@ -34,7 +34,7 @@
                 </div>
                 <fieldset class="permissions-fieldset">
                     <legend><?= esc(lang('Settings.custom_permissions')) ?></legend>
-                    <?php foreach (['finance.view','finance.transactions','finance.invoices','finance.contacts','projects.view','projects.edit'] as $perm): ?>
+                    <?php foreach (['finance.view','finance.transactions','finance.invoices','finance.contacts','projects.manage','projects.view','projects.tasks'] as $perm): ?>
                         <label class="checkbox-label"><input type="checkbox" name="permissions[]" value="<?= $perm ?>"> <?= esc($perm) ?></label>
                     <?php endforeach; ?>
                 </fieldset>
@@ -62,7 +62,7 @@
                                     <form method="post" action="<?= site_url('module/settings/users/' . $m['id'] . '/update') ?>" class="app-form" style="padding:12px">
                                         <?= csrf_field() ?>
                                         <select name="role">
-                                            <?php foreach (['admin','accountant','manager','hr','viewer'] as $role): ?>
+                                            <?php foreach (['admin','accountant','manager','hr','employee','viewer'] as $role): ?>
                                                 <option value="<?= $role ?>" <?= $m['role'] === $role ? 'selected' : '' ?>><?= esc(lang('Settings.role_' . $role)) ?></option>
                                             <?php endforeach; ?>
                                         </select>

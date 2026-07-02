@@ -27,6 +27,7 @@ class ModuleMenus extends BaseConfig
     public array $settings = [
         ['key' => 'general',      'route' => 'module/settings',              'label' => 'Settings.business_profile'],
         ['key' => 'users',        'route' => 'module/settings/users',        'label' => 'Settings.users'],
+        ['key' => 'teams',        'route' => 'module/settings/teams',        'label' => 'Settings.teams'],
         ['key' => 'modules',      'route' => 'module/settings/modules',      'label' => 'Settings.module_harmony'],
         ['key' => 'audit',        'route' => 'module/settings/audit',        'label' => 'Settings.audit_log'],
         ['key' => 'period_locks', 'route' => 'module/settings/period-locks', 'label' => 'Settings.period_locks'],

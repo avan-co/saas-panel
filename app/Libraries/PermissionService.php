@@ -12,10 +12,29 @@ class PermissionService
         'owner'      => ['*'],
         'admin'      => ['*'],
         'accountant' => ['finance.*', 'projects.view', 'settings.view'],
-        'manager'    => ['finance.view', 'finance.transactions', 'projects.*', 'settings.view'],
+        'manager'    => ['finance.view', 'finance.transactions', 'projects.manage', 'projects.view', 'projects.tasks', 'settings.view'],
         'hr'         => ['payroll.*', 'insurance.*', 'settings.view'],
-        'viewer'     => ['*.view'],
+        'employee'   => ['projects.view', 'projects.tasks'],
+        'viewer'     => ['finance.view', 'payroll.view', 'projects.view', 'settings.view'],
     ];
+
+    public static function allPermissions(): array
+    {
+        return [
+            'finance.view', 'finance.transactions', 'finance.invoices', 'finance.contacts',
+            'finance.checks', 'finance.loans', 'finance.assets', 'finance.approve',
+            'payroll.view', 'payroll.employees', 'payroll.runs',
+            'projects.manage', 'projects.view', 'projects.tasks',
+            'settings.view',
+        ];
+    }
+
+    public function roleLabel(string $role): string
+    {
+        $key = 'Settings.role_' . $role;
+
+        return lang($key) !== $key ? lang($key) : $role;
+    }
 
     public function load(int $userId, int $tenantId): void
     {

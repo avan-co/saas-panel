@@ -169,6 +169,17 @@ $routes->group('', ['filter' => 'auth'], static function ($routes) {
     $routes->get('module/settings/users', 'TenantUsers::index', ['filter' => 'tenant']);
     $routes->post('module/settings/users/store', 'TenantUsers::store', ['filter' => 'tenant']);
     $routes->post('module/settings/users/(:num)/update', 'TenantUsers::update/$1', ['filter' => 'tenant']);
+    $routes->get('module/settings/teams', 'SettingsTeams::index', ['filter' => 'tenant']);
+    $routes->post('module/settings/teams/store', 'SettingsTeams::store', ['filter' => 'tenant']);
+    $routes->post('module/settings/teams/(:num)/update', 'SettingsTeams::update/$1', ['filter' => 'tenant']);
+    $routes->post('module/settings/teams/(:num)/delete', 'SettingsTeams::delete/$1', ['filter' => 'tenant']);
+
+    $routes->get('module/persons', 'Persons::index', ['filter' => 'tenant']);
+    $routes->get('module/persons/new', 'Persons::create', ['filter' => 'tenant']);
+    $routes->post('module/persons/store', 'Persons::store', ['filter' => 'tenant']);
+    $routes->get('module/persons/(:num)/edit', 'Persons::edit/$1', ['filter' => 'tenant']);
+    $routes->post('module/persons/(:num)/update', 'Persons::update/$1', ['filter' => 'tenant']);
+    $routes->post('module/persons/(:num)/delete', 'Persons::delete/$1', ['filter' => 'tenant']);
     $routes->get('module/settings/modules', 'SettingsModules::index', ['filter' => 'tenant']);
     $routes->get('module/settings/api', 'SettingsApi::index', ['filter' => 'tenant']);
     $routes->post('module/settings/api/keys', 'SettingsApi::storeApiKey', ['filter' => 'tenant']);
@@ -183,9 +194,13 @@ $routes->group('', ['filter' => 'auth'], static function ($routes) {
 
     $routes->group('platform', ['filter' => 'platformadmin'], static function ($routes) {
         $routes->get('tenants', 'Platform\Tenants::index');
+        $routes->get('tenants/new', 'Platform\Tenants::create');
+        $routes->post('tenants/store', 'Platform\Tenants::store');
+        $routes->get('tenants/(:num)', 'Platform\Tenants::show/$1');
         $routes->get('tenants/(:num)/edit', 'Platform\Tenants::edit/$1');
         $routes->post('tenants/(:num)/update', 'Platform\Tenants::update/$1');
         $routes->post('tenants/(:num)/suspend', 'Platform\Tenants::suspend/$1');
+        $routes->post('tenants/(:num)/delete', 'Platform\Tenants::delete/$1');
         $routes->get('users', 'Platform\Users::index');
         $routes->post('users/(:num)/toggle-admin', 'Platform\Users::toggleAdmin/$1');
         $routes->get('system', 'Platform\System::index');

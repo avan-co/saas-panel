@@ -53,6 +53,11 @@ class Auth extends BaseController
             'theme'             => $user['theme'],
         ]);
 
+        $userModel->update((int) $user['id'], [
+            'last_login_at' => date('Y-m-d H:i:s'),
+            'last_login_ip' => $this->request->getIPAddress(),
+        ]);
+
         service('tenantContext')->loadFromSession((int) $user['id']);
 
         return redirect()->to('/dashboard');

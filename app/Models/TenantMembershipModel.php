@@ -10,7 +10,7 @@ class TenantMembershipModel extends Model
     protected $primaryKey       = 'id';
     protected $useAutoIncrement = true;
     protected $returnType       = 'array';
-    protected $allowedFields    = ['tenant_id', 'user_id', 'role', 'permissions', 'manager_id', 'department'];
+    protected $allowedFields    = ['tenant_id', 'user_id', 'role', 'permissions', 'manager_id', 'department', 'person_id'];
     protected $useTimestamps    = true;
 
     public function userBelongsToTenant(int $userId, int $tenantId): bool

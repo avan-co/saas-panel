@@ -276,6 +276,33 @@ HTML=$(curl_get "$BASE/module/projects/1")
 assert_contains "project dashboard" "$HTML" "Dashboard"
 curl_get "$BASE/tenant/switch/1" > /dev/null
 
+echo "--- 26e. Platform tenant create ---"
+CODE=$(curl_code "$BASE/platform/tenants/new")
+assert_code "platform tenant create" "200" "$CODE"
+
+echo "--- 26f. Settings teams ---"
+curl_get "$BASE/tenant/switch/3" > /dev/null
+CODE=$(curl_code "$BASE/module/settings/teams")
+assert_code "settings teams" "200" "$CODE"
+
+echo "--- 26g. Persons directory ---"
+CODE=$(curl_code "$BASE/module/persons")
+assert_code "persons directory" "200" "$CODE"
+
+echo "--- 26h. Employee project access ---"
+curl_get "$BASE/logout" > /dev/null
+HTML=$(curl_get "$BASE/login")
+CSRF=$(get_csrf "$HTML")
+curl_post "$BASE/login" "csrf_test_name=${CSRF}&email=viewer@agency.local&password=password" > /dev/null
+curl_get "$BASE/tenant/switch/3" > /dev/null
+HTML=$(curl_get "$BASE/module/projects")
+assert_not_contains "viewer no project access" "$HTML" "PRJ-001"
+assert_not_contains "viewer no project 2" "$HTML" "PRJ-002"
+curl_get "$BASE/logout" > /dev/null
+HTML=$(curl_get "$BASE/login")
+CSRF=$(get_csrf "$HTML")
+curl_post "$BASE/login" "csrf_test_name=${CSRF}&email=admin@demo.local&password=password" > /dev/null
+
 echo "--- 26d. Settings integration stats ---"
 HTML=$(curl_get "$BASE/module/settings/modules")
 assert_contains "integration stats" "$HTML" "Integration"

@@ -55,7 +55,7 @@ class TenantUsers extends BaseController
         }
 
         $rules = [
-            'role' => 'required|in_list[admin,accountant,hr,viewer,manager]',
+            'role' => 'required|in_list[admin,accountant,hr,viewer,manager,employee]',
         ];
 
         if (! $this->validate($rules)) {
@@ -87,7 +87,7 @@ class TenantUsers extends BaseController
             'name'     => 'required|min_length[2]|max_length[120]',
             'email'    => 'required|valid_email',
             'password' => 'required|min_length[8]',
-            'role'     => 'required|in_list[admin,accountant,hr,viewer,manager]',
+            'role'     => 'required|in_list[admin,accountant,hr,viewer,manager,employee]',
         ];
 
         if (! $this->validate($rules)) {

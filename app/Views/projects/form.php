@@ -130,6 +130,19 @@
             </div>
             <?php endforeach; ?>
 
+            <h3><?= esc(lang('Projects.teams')) ?></h3>
+            <div class="form-group">
+                <select name="team_id[]" multiple size="4">
+                <?php
+                $selectedTeamIds = array_column($teams ?? [], 'team_id');
+                foreach ($allTeams ?? [] as $t):
+                ?>
+                    <option value="<?= $t['id'] ?>" <?= in_array($t['id'], $selectedTeamIds, false) ? 'selected' : '' ?>><?= esc($t['name']) ?></option>
+                <?php endforeach; ?>
+                </select>
+                <small><?= esc(lang('Projects.teams_hint')) ?></small>
+            </div>
+
             <div class="form-actions">
                 <a href="<?= site_url('module/projects') ?>" class="btn btn-secondary"><?= esc(lang('App.cancel')) ?></a>
                 <button type="submit" class="btn btn-primary"><?= esc(lang('App.save')) ?></button>
