@@ -1,164 +1,81 @@
 # پنل SaaS چندکسب‌وکاری — BizPanel
 
-پلتفرم مدیریت چند کسب‌وکار با PHP (CodeIgniter 4) و MySQL — مناسب نصب روی **هاست اشتراکی لینوکس + cPanel**.
+پلتفرم مدیریت چند کسب‌وکار با PHP (CodeIgniter 4) و MySQL — مناسب **cPanel + Git Clone**.
 
-## ویژگی‌های فعلی (فاز ۰)
-
-- **نصب وب‌محور** — فقط آدرس `/install` را باز کنید
-- چند کسب‌وکار (Multi-tenant) با جداسازی داده
-- فعال‌سازی ماژول per کسب‌وکار
-- پنل مدیریت پلتفرم (Super Admin)
-- تم روشن / تاریک / سیستم
-- دو زبانه فارسی و انگلیسی
-- RTL خودکار برای فارسی
-
-## نصب با Git در cPanel (پیشنهادی)
-
-اگر **Git Version Control** را در cPanel تنظیم کرده‌اید:
-
-### ساختار پیشنهادی
+## نصب — فقط ۳ قدم
 
 ```
-/home/username/
-└── saas-panel/          ← ریپو کلون می‌شود اینجا
-    ├── app/
-    ├── public/          ← Document Root دامنه
-    ├── vendor/          ← بعد از composer ساخته می‌شود
-    └── writable/
+Git Clone  →  Document Root = public/  →  باز کردن /install
 ```
 
-### مراحل بعد از Clone
-
-#### ۱. Document Root
-
-cPanel → **Domains** → دامنه یا ساب‌دامین → **Document Root**:
-
-```
-/home/username/saas-panel/public
-```
-
-> اگر Document Root را نمی‌توانید عوض کنید، در Git Deployment مسیر `public/` را به `public_html` deploy کنید.
-
-#### ۲. نصب وابستگی‌ها (فقط یک‌بار)
-
-`vendor/` داخل Git نیست — باید روی سرور نصب شود.
-
-**روش A — دکمه Deploy در cPanel Git** (اگر `.cpanel.yml` موجود است):
-- Git Version Control → Manage → **Deploy HEAD Commit**
-
-**روش B — Terminal cPanel:**
-```bash
-cd ~/saas-panel
-chmod +x deploy.sh
-./deploy.sh
-```
-
-**روش C — دستی:**
-```bash
-cd ~/saas-panel
-composer install --no-dev --optimize-autoloader
-chmod -R 755 writable/
-```
-
-#### ۳. دیتابیس MySQL
-
-cPanel → **MySQL Databases**:
-- دیتابیس **خالی** بسازید
-- کاربر MySQL بسازید و به دیتابیس وصل کنید
-
-#### ۴. اجرای نصاب وب
-
-```
-https://yourdomain.com/install
-```
-
-| مرحله نصاب | کار |
-|------------|-----|
-| ۱ | بررسی PHP و افزونه‌ها |
-| ۲ | hostname=`localhost` + نام DB + کاربر + رمز |
-| ۳ | آدرس سایت + ایمیل/رمز مدیر |
-| ۴ | نصب خودکار |
-
-بعد از نصب → `/install` بسته می‌شود و به `/login` می‌روید.
+همه‌چیز (دیتابیس، تنظیمات، حساب مدیر) از طریق **نصاب وب** انجام می‌شود.  
+نیازی به Terminal، composer یا اسکریپت دستی نیست.
 
 ---
 
-## نصب دستی (بدون Git)
+### ۱. Git Clone در cPanel
 
-### ۱. آپلود فایل‌ها
+cPanel → **Git Version Control** → Clone ریپو
 
-روی کامپیوتر:
-```bash
-composer install --no-dev
+مسیر معمول:
+```
+/home/username/saas-panel/
 ```
 
-کل پروژه (شامل `vendor/`) را ZIP کنید و در هاست Extract کنید.
+### ۲. Document Root
 
-### ۲. ساخت دیتابیس MySQL
-
-در cPanel → **MySQL Databases**:
-- یک دیتابیس بسازید
-- یک کاربر MySQL بسازید و به دیتابیس وصل کنید
-
-> فقط دیتابیس خالی بسازید — جداول خودکار نصب می‌شوند.
-
-### ۳. تنظیم Document Root
-
-در cPanel → **Domains** → Document Root را روی پوشه **`public`** بگذارید:
+cPanel → **Domains** → Document Root:
 
 ```
 /home/username/saas-panel/public
 ```
 
-### ۴. اجرای نصاب وب
+### ۳. دیتابیس MySQL (خالی)
 
-در مرورگر باز کنید:
+cPanel → **MySQL Databases**:
+- یک دیتابیس بسازید
+- کاربر MySQL بسازید و به دیتابیس وصل کنید
+
+### ۴. نصاب وب
+
+در مرورگر:
 
 ```
 https://yourdomain.com/install
 ```
 
-مراحل نصاب:
-1. **بررسی پیش‌نیازها** — PHP، افزونه‌ها، مجوز writable
-2. **اتصال دیتابیس** — hostname، نام DB، کاربر، رمز
-3. **تنظیمات** — آدرس سایت، حساب مدیر، داده نمونه (اختیاری)
-4. **نصب خودکار** — migration و راه‌اندازی
+| مرحله | کار |
+|--------|-----|
+| ۱ | بررسی پیش‌نیازها (PHP، vendor، افزونه‌ها) |
+| ۲ | اطلاعات MySQL — hostname معمولاً `localhost` |
+| ۳ | آدرس سایت + حساب مدیر + داده نمونه (اختیاری) |
+| ۴ | نصب خودکار — جداول، مدیر، آماده ورود |
 
-بعد از نصب به صفحه ورود هدایت می‌شوید.
+بعد از نصب → `/login`
 
-> فایل `writable/installed.lock` بعد از نصب ساخته می‌شود و دسترسی به `/install` بسته می‌شود.
+> `writable/installed.lock` دسترسی به `/install` را می‌بندد.
 
-### مجوز پوشه‌ها
+---
 
-```bash
-chmod -R 755 writable/
-```
-
-## نصب دستی (اختیاری — Terminal)
-
-اگر به Terminal دسترسی دارید:
-
-```bash
-cp env.cpanel.example .env
-# ویرایش .env
-php spark migrate
-php spark db:seed PlatformSeeder
-```
-
-یا: `./install.sh`
-
-## ساختار پروژه
+## ساختار
 
 ```
-public/          ← Document Root
-app/
-├── Controllers/Install.php   ← نصاب وب
-├── Libraries/Installer.php
-├── Language/fa|en/
-└── Views/install/
+saas-panel/
+├── public/       ← Document Root
+├── vendor/       ← داخل Git (بدون نیاز به composer روی سرور)
+├── app/
+└── writable/
 ```
 
-## افزودن متن (دو زبانه)
+## ویژگی‌ها
+
+- چند کسب‌وکار (Multi-tenant)
+- ماژول per کسب‌وکار (مالی، حقوق، بیمه، مالیات، پروژه)
+- پنل مدیریت پلتفرم
+- تم روشن / تاریک
+- دو زبانه fa / en + RTL
+
+## افزودن متن
 
 ```php
 // app/Language/fa/Finance.php
@@ -180,5 +97,5 @@ return ['invoice' => 'فاکتور'];
 ## امنیت
 
 - بعد از نصب `/install` غیرفعال می‌شود
-- `CI_ENVIRONMENT = production` در `.env`
 - SSL را فعال کنید
+- رمز مدیر را قوی انتخاب کنید

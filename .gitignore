@@ -84,9 +84,9 @@ php_errors.log
 /phpunit
 
 #-------------------------
-# Composer
+# Composer — vendor داخل Git است (نصب بدون Terminal روی cPanel)
 #-------------------------
-vendor/
+# vendor/
 
 #-------------------------
 # IDE / Development Files
