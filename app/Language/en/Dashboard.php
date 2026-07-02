@@ -15,4 +15,12 @@ return [
     'kpi_this_month'   => 'This month',
     'kpi_monthly_payroll' => 'Active staff total',
     'kpi_pending_tax'  => 'Pending / unfiled',
+    'kpi_active_projects' => 'Active projects',
+    'kpi_project_budget'  => 'Project budgets',
+    'kpi_linked_txns'     => 'Integrated transactions',
+    'erp_core'            => 'ERP core',
+    'erp_persons'         => 'Persons',
+    'erp_documents'       => 'Documents',
+    'erp_timesheets'      => 'Timesheets',
+    'erp_integrations'    => 'Integration events',
 ];

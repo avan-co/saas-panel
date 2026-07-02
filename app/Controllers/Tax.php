@@ -26,6 +26,9 @@ class Tax extends BaseController
             'title'         => lang('Tax.title'),
             'periods'       => $taxModel->getForTenant($tenantId),
             'pendingAmount' => $taxModel->pendingAmount($tenantId),
+            'accounts'      => service('tenantContext')->hasModule('finance')
+                ? model(\App\Models\FinAccountModel::class)->getForTenant($tenantId)
+                : [],
             'breadcrumbs'   => $this->moduleBreadcrumbs(lang('Tax.title')),
         ]);
     }
@@ -125,6 +128,40 @@ class Tax extends BaseController
         $taxModel->delete($id);
 
         return redirect()->to('/module/tax')->with('success', lang('App.deleted'));
+    }
+
+    public function markPaid(int $id)
+    {
+        $tenant = $this->requireModule('tax');
+
+        if ($tenant === null) {
+            return $this->moduleDeniedRedirect();
+        }
+
+        $period = model(TaxPeriodModel::class)->findForTenant($id, (int) $tenant['id']);
+
+        if ($period === null || $period['status'] === 'paid') {
+            return redirect()->back()->with('error', lang('App.not_found'));
+        }
+
+        $accountId = (int) $this->request->getPost('account_id');
+
+        if ($accountId <= 0 && service('tenantContext')->hasModule('finance')) {
+            try {
+                $accounts = model(\App\Models\FinAccountModel::class)->getForTenant((int) $tenant['id']);
+                $accountId = $accounts !== [] ? (int) $accounts[0]['id'] : 0;
+            } catch (\Throwable) {
+                $accountId = 0;
+            }
+        }
+
+        try {
+            service('erp')->onTaxPaid((int) $tenant['id'], $id, $accountId, $tenant);
+        } catch (\Throwable $e) {
+            return redirect()->back()->with('error', $e->getMessage());
+        }
+
+        return redirect()->to('/module/tax')->with('success', lang('Tax.paid_success'));
     }
 
     protected function periodRules(): array

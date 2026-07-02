@@ -15,4 +15,12 @@ return [
     'kpi_this_month'   => 'این ماه',
     'kpi_monthly_payroll' => 'جمع حقوق فعال',
     'kpi_pending_tax'  => 'معوق / اعلام‌نشده',
+    'kpi_active_projects' => 'پروژه‌های فعال',
+    'kpi_project_budget'  => 'بودجه پروژه‌ها',
+    'kpi_linked_txns'     => 'تراکنش‌های یکپارچه',
+    'erp_core'            => 'هسته ERP',
+    'erp_persons'         => 'اشخاص',
+    'erp_documents'       => 'اسناد',
+    'erp_timesheets'      => 'تایم‌شیت',
+    'erp_integrations'    => 'رویدادهای یکپارچه',
 ];

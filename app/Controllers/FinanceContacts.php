@@ -59,7 +59,13 @@ class FinanceContacts extends BaseController
             return redirect()->back()->withInput()->with('errors', $this->validator->getErrors());
         }
 
-        model(FinContactModel::class)->insert($this->payload((int) $tenant['id']));
+        $tenantId = (int) $tenant['id'];
+        $contactId = (int) model(FinContactModel::class)->insert($this->payload($tenantId));
+        $contact   = model(FinContactModel::class)->findForTenant($contactId, $tenantId);
+
+        if ($contact !== null) {
+            service('person')->syncFromContact($tenantId, $contact);
+        }
 
         return redirect()->to('/module/finance/contacts')->with('success', lang('Finance.contact_saved'));
     }
@@ -107,6 +113,11 @@ class FinanceContacts extends BaseController
         }
 
         $model->update($id, $this->payload((int) $tenant['id']));
+        $contact = $model->findForTenant($id, (int) $tenant['id']);
+
+        if ($contact !== null) {
+            service('person')->syncFromContact((int) $tenant['id'], $contact);
+        }
 
         return redirect()->to('/module/finance/contacts')->with('success', lang('Finance.contact_updated'));
     }

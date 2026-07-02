@@ -10,7 +10,8 @@ class FinTransactionModel extends Model
     protected $primaryKey    = 'id';
     protected $allowedFields = [
         'tenant_id', 'account_id', 'transfer_to_account_id', 'category_id', 'project_id',
-        'type', 'amount', 'description', 'contact_name', 'contact_id', 'invoice_id', 'reference', 'txn_date',
+        'type', 'amount', 'description', 'contact_name', 'contact_id', 'invoice_id',
+        'source_type', 'source_id', 'employee_id', 'reference', 'txn_date',
         'approval_status', 'approved_by', 'approved_at',
     ];
     protected $useTimestamps = true;
@@ -103,6 +104,23 @@ class FinTransactionModel extends Model
         $row = $this->where('id', $id)->where('tenant_id', $tenantId)->first();
 
         return $row ?: null;
+    }
+
+    public function findBySource(int $tenantId, string $sourceType, int $sourceId): ?array
+    {
+        $row = $this->where('tenant_id', $tenantId)
+            ->where('source_type', $sourceType)
+            ->where('source_id', $sourceId)
+            ->first();
+
+        return $row ?: null;
+    }
+
+    public function countLinked(int $tenantId): int
+    {
+        return $this->where('tenant_id', $tenantId)
+            ->where('source_type IS NOT NULL', null, false)
+            ->countAllResults();
     }
 
     public function forProject(int $tenantId, int $projectId, int $limit = 50): array

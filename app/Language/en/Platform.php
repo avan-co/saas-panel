@@ -16,4 +16,11 @@ return [
     'platform_admin'=> 'Platform admin',
     'toggle_admin'  => 'Toggle admin',
     'user_updated'  => 'User updated.',
+    'system_settings' => 'System settings',
+    'system_settings_subtitle' => 'Shared infrastructure for all businesses',
+    'infrastructure' => 'Infrastructure',
+    'app_url' => 'App URL',
+    'modian_configure_env' => 'Not configured',
+    'modian_env_hint' => 'Set MODIAN_CLIENT_ID and MODIAN_PRIVATE_KEY in server .env',
+    'tenant_settings_note' => 'Per-business settings are managed from Business settings in each tenant panel.',
 ];

@@ -3,12 +3,15 @@
 namespace App\Controllers\Platform;
 
 use App\Controllers\BaseController;
+use App\Controllers\Concerns\HasPlatformNav;
 use App\Models\ModuleModel;
 use App\Models\TenantModel;
 use App\Models\UserModel;
 
 class Tenants extends BaseController
 {
+    use HasPlatformNav;
+
     public function index()
     {
         $tenantModel = model(TenantModel::class);
@@ -25,8 +28,13 @@ class Tenants extends BaseController
         }
 
         return $this->render('platform/tenants/index', [
-            'title'   => lang('Platform.title'),
-            'tenants' => $tenants,
+            'title'          => lang('Platform.title'),
+            'moduleNav'      => 'tenants',
+            'moduleNavItems' => $this->platformNavItems(),
+            'tenants'        => $tenants,
+            'breadcrumbs'    => [
+                ['label' => lang('Platform.title')],
+            ],
         ]);
     }
 
@@ -43,10 +51,16 @@ class Tenants extends BaseController
         $enabledIds     = array_column($enabledModules, 'id');
 
         return $this->render('platform/tenants/form', [
-            'title'       => lang('Platform.edit_tenant'),
-            'tenant'      => $tenant,
-            'allModules'  => $allModules,
-            'enabledIds'  => $enabledIds,
+            'title'          => lang('Platform.edit_tenant'),
+            'moduleNav'      => 'tenants',
+            'moduleNavItems' => $this->platformNavItems(),
+            'tenant'         => $tenant,
+            'allModules'     => $allModules,
+            'enabledIds'     => $enabledIds,
+            'breadcrumbs'    => [
+                ['label' => lang('Platform.title'), 'url' => site_url('platform/tenants')],
+                ['label' => lang('Platform.edit_tenant')],
+            ],
         ]);
     }
 

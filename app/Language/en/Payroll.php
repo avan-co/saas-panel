@@ -3,6 +3,7 @@
 return [
     'title'          => 'Payroll',
     'employees'      => 'Employees',
+    'employee'       => 'Employee',
     'payroll_runs'   => 'Payroll runs',
     'active_staff'   => 'Active staff',
     'monthly_total'  => 'Monthly payroll',

@@ -29,10 +29,11 @@ class ProjectTasks extends BaseController
 
         $taskModel = model(ProjectTaskModel::class);
         $tasks     = $taskModel->getForProject($tenantId, $projectId);
-        $columns   = ['todo' => [], 'in_progress' => [], 'done' => []];
+        $columns   = ['backlog' => [], 'todo' => [], 'doing' => [], 'review' => [], 'done' => []];
 
         foreach ($tasks as $task) {
-            $status = in_array($task['status'], ['todo', 'in_progress', 'done'], true) ? $task['status'] : 'todo';
+            $status = $task['status'] === 'in_progress' ? 'doing' : $task['status'];
+            $status = array_key_exists($status, $columns) ? $status : 'todo';
             $columns[$status][] = $task;
         }
 
@@ -104,7 +105,7 @@ class ProjectTasks extends BaseController
 
         $status = (string) $this->request->getPost('status');
 
-        if (! in_array($status, ['todo', 'in_progress', 'done', 'cancelled'], true)) {
+        if (! in_array($status, ['backlog', 'todo', 'doing', 'review', 'done', 'cancelled'], true)) {
             return redirect()->back()->with('error', lang('App.invalid_request'));
         }
 

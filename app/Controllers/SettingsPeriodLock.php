@@ -2,22 +2,25 @@
 
 namespace App\Controllers;
 
+use App\Controllers\Concerns\HasSettingsNav;
 use App\Models\PeriodLockModel;
 
 class SettingsPeriodLock extends BaseController
 {
+    use HasSettingsNav;
+
     public function index()
     {
         $tenant = service('tenantContext')->getTenant();
 
-        if ($tenant === null || ! $this->canManage()) {
-            return redirect()->to('/module/settings')->with('error', lang('Settings.no_permission'));
+        if ($tenant === null || ! $this->canManageSettings()) {
+            return $tenant === null ? redirect()->to('/dashboard') : $this->settingsDeniedRedirect();
         }
 
         return $this->render('settings/period_locks', [
             'title'          => lang('Settings.period_locks'),
             'moduleNav'      => 'period_locks',
-            'moduleNavItems' => config('ModuleMenus')->settings,
+            'moduleNavItems' => $this->settingsNavItems(),
             'locks'          => model(PeriodLockModel::class)->getForTenant((int) $tenant['id']),
             'breadcrumbs'    => [
                 ['label' => lang('App.menu.dashboard'), 'url' => site_url('dashboard')],
@@ -31,8 +34,8 @@ class SettingsPeriodLock extends BaseController
     {
         $tenant = service('tenantContext')->getTenant();
 
-        if ($tenant === null || ! $this->canManage()) {
-            return redirect()->to('/module/settings')->with('error', lang('Settings.no_permission'));
+        if ($tenant === null || ! $this->canManageSettings()) {
+            return $this->settingsDeniedRedirect();
         }
 
         $year  = (int) $this->request->getPost('year');
@@ -45,20 +48,5 @@ class SettingsPeriodLock extends BaseController
         service('periodLock')->lock((int) $tenant['id'], $year, $month, (int) session('user_id'));
 
         return redirect()->to('/module/settings/period-locks')->with('success', lang('Settings.period_locked'));
-    }
-
-    protected function canManage(): bool
-    {
-        if (session('is_platform_admin')) {
-            return true;
-        }
-
-        $tenantId = (int) (service('tenantContext')->getTenant()['id'] ?? 0);
-        $row      = model(\App\Models\TenantMembershipModel::class)
-            ->where('tenant_id', $tenantId)
-            ->where('user_id', (int) session('user_id'))
-            ->first();
-
-        return $row !== null && in_array($row['role'], ['owner', 'admin'], true);
     }
 }

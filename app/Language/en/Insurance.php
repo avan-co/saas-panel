@@ -23,4 +23,6 @@ return [
     'status_expired'  => 'Expired',
     'saved'           => 'Policy saved.',
     'updated'         => 'Policy updated.',
+    'mark_paid'       => 'Record payment',
+    'paid_success'    => 'Insurance payment recorded in finance.',
 ];

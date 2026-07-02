@@ -19,12 +19,15 @@ class Dashboard extends BaseController
 
         $kpis           = $this->buildKpis($tenant, $moduleCodes);
         $recentActivity = $this->buildRecentActivity($tenant, $moduleCodes);
+        $erpStats       = $tenant !== null ? service('erp')->integrationStats((int) $tenant['id']) : [];
 
         return $this->render('dashboard/index', [
             'title'          => lang('Dashboard.title'),
             'tenant'         => $tenant,
             'kpis'           => $kpis,
             'recentActivity' => $recentActivity,
+            'erpStats'       => $erpStats,
+            'moduleCodes'    => $moduleCodes,
         ]);
     }
 
@@ -64,6 +67,29 @@ class Dashboard extends BaseController
             $kpis[]  = ['key' => 'tax', 'value' => format_amount($pending), 'hint' => lang('Dashboard.kpi_pending_tax')];
         } else {
             $kpis[] = ['key' => 'tax', 'value' => '—', 'hint' => null];
+        }
+
+        if (in_array('projects', $moduleCodes, true)) {
+            $projectModel = model(\App\Models\ProjectModel::class);
+            $kpis[] = [
+                'key'   => 'projects',
+                'value' => (string) $projectModel->countActive($tenantId),
+                'hint'  => lang('Dashboard.kpi_active_projects'),
+            ];
+            $kpis[] = [
+                'key'   => 'budget',
+                'value' => format_amount($projectModel->totalBudget($tenantId)),
+                'hint'  => lang('Dashboard.kpi_project_budget'),
+            ];
+        }
+
+        if (in_array('finance', $moduleCodes, true)) {
+            $linked = model(FinTransactionModel::class)->countLinked($tenantId);
+            $kpis[] = [
+                'key'   => 'integration',
+                'value' => (string) $linked,
+                'hint'  => lang('Dashboard.kpi_linked_txns'),
+            ];
         }
 
         return $kpis;

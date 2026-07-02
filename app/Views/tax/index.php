@@ -50,6 +50,14 @@
                             <td class="text-muted"><?= esc($period['due_date'] ?? '—') ?></td>
                             <td><span class="badge badge-<?= esc($period['status']) ?>"><?= esc(lang('Tax.status_' . $period['status'])) ?></span></td>
                             <td class="table-actions">
+                                <?php if ($period['status'] !== 'paid' && $accounts !== []): ?>
+                                <form method="post" action="<?= site_url('module/tax/' . $period['id'] . '/pay') ?>" class="inline-form"><?= csrf_field() ?>
+                                    <select name="account_id" class="input-sm">
+                                        <?php foreach ($accounts as $acc): ?><option value="<?= $acc['id'] ?>"><?= esc($acc['name']) ?></option><?php endforeach; ?>
+                                    </select>
+                                    <button type="submit" class="btn btn-primary btn-sm"><?= esc(lang('Tax.mark_paid')) ?></button>
+                                </form>
+                                <?php endif; ?>
                                 <a href="<?= site_url('module/tax/' . $period['id'] . '/edit') ?>" class="btn btn-ghost btn-sm"><?= esc(lang('App.edit')) ?></a>
                                 <?= view('partials/delete_form', ['action' => site_url('module/tax/' . $period['id'] . '/delete')]) ?>
                             </td>

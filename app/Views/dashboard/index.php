@@ -17,10 +17,13 @@
     <div class="kpi-grid kpi-grid-4">
         <?php
         $labels = [
-            'revenue' => lang('Dashboard.kpi_revenue'),
-            'expense' => lang('Dashboard.kpi_expense'),
-            'payroll' => lang('Dashboard.kpi_payroll'),
-            'tax'     => lang('Dashboard.kpi_tax'),
+            'revenue'     => lang('Dashboard.kpi_revenue'),
+            'expense'     => lang('Dashboard.kpi_expense'),
+            'payroll'     => lang('Dashboard.kpi_payroll'),
+            'tax'         => lang('Dashboard.kpi_tax'),
+            'projects'    => lang('Dashboard.kpi_active_projects'),
+            'budget'      => lang('Dashboard.kpi_project_budget'),
+            'integration' => lang('Dashboard.kpi_linked_txns'),
         ];
         foreach ($kpis as $kpi):
         ?>
@@ -33,6 +36,19 @@
             </div>
         <?php endforeach; ?>
     </div>
+
+    <?php if (! empty($erpStats) && (($erpStats['persons'] ?? 0) > 0 || ($erpStats['linked_txns'] ?? 0) > 0)): ?>
+    <div class="card card-elevated" style="margin-bottom:20px">
+        <div class="card-header"><h3><?= esc(lang('Dashboard.erp_core')) ?></h3></div>
+        <div class="card-body">
+            <div class="kpi-grid kpi-grid-4">
+                <div class="kpi-card"><span class="kpi-label"><?= esc(lang('Dashboard.erp_persons')) ?></span><span class="kpi-value"><?= (int) $erpStats['persons'] ?></span></div>
+                <div class="kpi-card"><span class="kpi-label"><?= esc(lang('Dashboard.erp_timesheets')) ?></span><span class="kpi-value"><?= (int) $erpStats['timesheets'] ?></span></div>
+                <div class="kpi-card"><span class="kpi-label"><?= esc(lang('Dashboard.erp_integrations')) ?></span><span class="kpi-value"><?= (int) $erpStats['linked_txns'] ?></span></div>
+            </div>
+        </div>
+    </div>
+    <?php endif; ?>
 
     <div class="content-grid">
         <div class="card card-elevated">

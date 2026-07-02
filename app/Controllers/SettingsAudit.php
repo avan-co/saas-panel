@@ -2,22 +2,25 @@
 
 namespace App\Controllers;
 
+use App\Controllers\Concerns\HasSettingsNav;
 use App\Models\AuditLogModel;
 
 class SettingsAudit extends BaseController
 {
+    use HasSettingsNav;
+
     public function index()
     {
         $tenant = service('tenantContext')->getTenant();
 
-        if ($tenant === null || ! $this->canManage()) {
-            return redirect()->to('/module/settings')->with('error', lang('Settings.no_permission'));
+        if ($tenant === null || ! $this->canManageSettings()) {
+            return $tenant === null ? redirect()->to('/dashboard') : $this->settingsDeniedRedirect();
         }
 
         return $this->render('settings/audit', [
             'title'          => lang('Settings.audit_log'),
             'moduleNav'      => 'audit',
-            'moduleNavItems' => config('ModuleMenus')->settings,
+            'moduleNavItems' => $this->settingsNavItems(),
             'logs'           => model(AuditLogModel::class)->getForTenant((int) $tenant['id'], 200),
             'breadcrumbs'    => [
                 ['label' => lang('App.menu.dashboard'), 'url' => site_url('dashboard')],
@@ -25,20 +28,5 @@ class SettingsAudit extends BaseController
                 ['label' => lang('Settings.audit_log')],
             ],
         ]);
-    }
-
-    protected function canManage(): bool
-    {
-        if (session('is_platform_admin')) {
-            return true;
-        }
-
-        $tenantId = (int) (service('tenantContext')->getTenant()['id'] ?? 0);
-        $row      = model(\App\Models\TenantMembershipModel::class)
-            ->where('tenant_id', $tenantId)
-            ->where('user_id', (int) session('user_id'))
-            ->first();
-
-        return $row !== null && in_array($row['role'], ['owner', 'admin'], true);
     }
 }

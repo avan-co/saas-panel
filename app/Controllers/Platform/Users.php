@@ -3,11 +3,14 @@
 namespace App\Controllers\Platform;
 
 use App\Controllers\BaseController;
+use App\Controllers\Concerns\HasPlatformNav;
 use App\Models\TenantMembershipModel;
 use App\Models\UserModel;
 
 class Users extends BaseController
 {
+    use HasPlatformNav;
+
     public function index()
     {
         $users = model(UserModel::class)->orderBy('created_at', 'DESC')->findAll();
@@ -21,8 +24,14 @@ class Users extends BaseController
         }
 
         return $this->render('platform/users/index', [
-            'title' => lang('Platform.users'),
-            'users' => $users,
+            'title'          => lang('Platform.users'),
+            'moduleNav'      => 'users',
+            'moduleNavItems' => $this->platformNavItems(),
+            'users'          => $users,
+            'breadcrumbs'    => [
+                ['label' => lang('Platform.title'), 'url' => site_url('platform/tenants')],
+                ['label' => lang('Platform.users')],
+            ],
         ]);
     }
 

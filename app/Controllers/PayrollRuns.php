@@ -144,6 +144,12 @@ class PayrollRuns extends BaseController
             return redirect()->back()->with('error', lang('App.not_found'));
         }
 
+        try {
+            service('erp')->onPayrollApproved((int) $tenant['id'], $id, $tenant);
+        } catch (\Throwable $e) {
+            return redirect()->back()->with('error', $e->getMessage());
+        }
+
         $model->update($id, ['status' => 'paid', 'paid_at' => date('Y-m-d H:i:s')]);
         service('audit')->log((int) $tenant['id'], 'approve', 'payroll_run', $id);
 

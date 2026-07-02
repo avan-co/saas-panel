@@ -1,8 +1,9 @@
 <?php
 
 return [
-    'title'             => 'Settings',
-    'subtitle'          => 'Business profile and regional preferences',
+    'title'             => 'Business settings',
+    'subtitle'          => 'Profile and financial rules for this business',
+    'business_profile'  => 'Business profile',
     'business_name'     => 'Business name',
     'timezone'          => 'Timezone',
     'currency'          => 'Currency',
@@ -45,4 +46,19 @@ return [
     'month_10' => 'October',
     'month_11' => 'November',
     'month_12' => 'December',
+    'module_harmony' => 'Module harmony',
+    'module_harmony_subtitle' => 'How enabled modules work together',
+    'integration_stats'     => 'Live integration stats',
+    'stat_persons'          => 'Unified persons',
+    'stat_documents'        => 'Shared documents',
+    'stat_timesheets'       => 'Timesheets',
+    'stat_linked_txns'      => 'Linked transactions',
+    'stat_payroll_linked'   => 'Payroll → finance',
+    'stat_tax_linked'       => 'Tax → finance',
+    'stat_insurance_linked' => 'Insurance → finance',
+    'enabled_modules'     => 'Enabled modules',
+    'api_access' => 'API access',
+    'api_access_subtitle' => 'API keys and webhooks for external systems',
+    'readonly_notice' => 'Read-only access. Only owner/admin can edit.',
+    'tax_identity' => 'Tax identity',
 ];

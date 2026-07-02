@@ -3,6 +3,7 @@
 return [
     'title'          => 'حقوق و دستمزد',
     'employees'      => 'پرسنل',
+    'employee'       => 'کارمند',
     'payroll_runs'   => 'فیش‌های حقوقی',
     'active_staff'   => 'پرسنل فعال',
     'monthly_total'  => 'جمع حقوق ماهانه',

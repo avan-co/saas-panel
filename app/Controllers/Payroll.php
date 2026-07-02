@@ -66,6 +66,13 @@ class Payroll extends BaseController
 
         model(PayrollEmployeeModel::class)->insert($this->employeePayload((int) $tenant['id']));
 
+        $employeeId = (int) model(PayrollEmployeeModel::class)->getInsertID();
+        $employee   = model(PayrollEmployeeModel::class)->findForTenant($employeeId, (int) $tenant['id']);
+
+        if ($employee !== null) {
+            service('person')->syncFromEmployee((int) $tenant['id'], $employee);
+        }
+
         return redirect()->to('/module/payroll')->with('success', lang('Payroll.saved'));
     }
 
@@ -112,6 +119,11 @@ class Payroll extends BaseController
         }
 
         $employeeModel->update($id, $this->employeePayload((int) $tenant['id']));
+        $employee = $employeeModel->findForTenant($id, (int) $tenant['id']);
+
+        if ($employee !== null) {
+            service('person')->syncFromEmployee((int) $tenant['id'], $employee);
+        }
 
         return redirect()->to('/module/payroll')->with('success', lang('Payroll.updated'));
     }

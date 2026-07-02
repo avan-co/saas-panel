@@ -10,7 +10,8 @@ class ProjectTaskModel extends Model
     protected $primaryKey    = 'id';
     protected $allowedFields = [
         'tenant_id', 'project_id', 'title', 'description', 'assignee_user_id',
-        'status', 'priority', 'due_date', 'sort_order',
+        'status', 'priority', 'due_date', 'estimated_hours', 'actual_hours',
+        'estimated_cost', 'actual_cost', 'sort_order',
     ];
     protected $useTimestamps = true;
 

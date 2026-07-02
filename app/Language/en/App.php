@@ -29,8 +29,8 @@ return [
         'insurance'  => 'Insurance',
         'tax'        => 'Tax',
         'projects'   => 'Projects',
-        'settings'   => 'Settings',
-        'platform'   => 'Platform Admin',
+        'settings'   => 'Business settings',
+        'platform'   => 'System admin',
     ],
     'modules' => [
         'dashboard' => 'Dashboard',

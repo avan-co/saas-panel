@@ -139,4 +139,40 @@ class Services extends BaseService
 
         return new \App\Libraries\InsightEngine();
     }
+
+    public static function person(bool $getShared = true)
+    {
+        if ($getShared) {
+            return static::getSharedInstance('person');
+        }
+
+        return new \App\Libraries\PersonService();
+    }
+
+    public static function erp(bool $getShared = true)
+    {
+        if ($getShared) {
+            return static::getSharedInstance('erp');
+        }
+
+        return new \App\Libraries\ErpIntegrationService();
+    }
+
+    public static function timesheet(bool $getShared = true)
+    {
+        if ($getShared) {
+            return static::getSharedInstance('timesheet');
+        }
+
+        return new \App\Libraries\TimesheetService();
+    }
+
+    public static function document(bool $getShared = true)
+    {
+        if ($getShared) {
+            return static::getSharedInstance('document');
+        }
+
+        return new \App\Libraries\DocumentService();
+    }
 }

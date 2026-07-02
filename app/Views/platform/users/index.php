@@ -1,6 +1,7 @@
 <?= $this->extend('layouts/app') ?>
 <?= $this->section('content') ?>
-<div class="platform-page">
+<div class="page-module page-platform">
+<?= $this->include('partials/module_subnav') ?>
 <div class="page-header"><h2 class="page-heading"><?= esc(lang('Platform.users')) ?></h2></div>
 <div class="card"><div class="table-wrap">
 <table class="data-table">

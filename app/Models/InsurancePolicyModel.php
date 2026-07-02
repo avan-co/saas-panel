@@ -8,7 +8,7 @@ class InsurancePolicyModel extends Model
 {
     protected $table         = 'insurance_policies';
     protected $primaryKey    = 'id';
-    protected $allowedFields = ['tenant_id', 'policy_number', 'provider', 'type', 'premium', 'start_date', 'end_date', 'status'];
+    protected $allowedFields = ['tenant_id', 'policy_number', 'provider', 'type', 'premium', 'start_date', 'end_date', 'status', 'finance_txn_id'];
     protected $useTimestamps = true;
 
     public function getForTenant(int $tenantId): array

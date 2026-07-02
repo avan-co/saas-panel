@@ -236,8 +236,12 @@ assert_contains "new employee form" "$HTML" 'name="base_salary"'
 echo "--- 26. Settings page ---"
 HTML=$(curl_get "$BASE/module/settings")
 assert_contains "settings page" "$HTML" "page-settings"
-CODE=$(curl_code "$BASE/module/settings/integrations")
-assert_code "settings integrations" "200" "$CODE"
+CODE=$(curl_code "$BASE/module/settings/modules")
+assert_code "settings module harmony" "200" "$CODE"
+CODE=$(curl_code "$BASE/module/settings/api")
+assert_code "settings api access" "200" "$CODE"
+CODE=$(curl_code "$BASE/platform/system")
+assert_code "platform system settings" "200" "$CODE"
 CODE=$(curl_code "$BASE/module/settings/audit")
 assert_code "settings audit" "200" "$CODE"
 CODE=$(curl_code "$BASE/module/settings/period-locks")
@@ -247,11 +251,19 @@ echo "--- 26b. Payroll runs ---"
 CODE=$(curl_code "$BASE/module/payroll/runs")
 assert_code "payroll runs" "200" "$CODE"
 
-echo "--- 26c. Project tasks ---"
+echo "--- 26c. Project tasks (5-column kanban) ---"
 curl_get "$BASE/tenant/switch/3" > /dev/null
-CODE=$(curl_code "$BASE/module/projects/1/tasks")
-assert_code "project tasks" "200" "$CODE"
+HTML=$(curl_get "$BASE/module/projects/1/tasks")
+assert_contains "kanban backlog" "$HTML" "Backlog"
+CODE=$(curl_code "$BASE/module/projects/1/timesheets")
+assert_code "project timesheets" "200" "$CODE"
+HTML=$(curl_get "$BASE/module/projects/1/timesheets")
+assert_contains "timesheets page" "$HTML" "Timesheet"
 curl_get "$BASE/tenant/switch/1" > /dev/null
+
+echo "--- 26d. Settings integration stats ---"
+HTML=$(curl_get "$BASE/module/settings/modules")
+assert_contains "integration stats" "$HTML" "Integration"
 
 echo "--- 27. Logout ---"
 curl_get "$BASE/logout" > /dev/null

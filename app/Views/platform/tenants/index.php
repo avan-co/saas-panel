@@ -1,7 +1,8 @@
 <?= $this->extend('layouts/app') ?>
 
 <?= $this->section('content') ?>
-<div class="platform-page">
+<div class="page-module page-platform">
+<?= $this->include('partials/module_subnav') ?>
     <div class="kpi-grid kpi-grid-1">
         <div class="kpi-card">
             <span class="kpi-label"><?= esc(lang('Platform.total_tenants')) ?></span>
