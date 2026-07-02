@@ -1,6 +1,7 @@
 <?= $this->extend('layouts/app') ?>
 <?= $this->section('content') ?>
-<div class="platform-page">
+<div class="page-module page-platform">
+<?= $this->include('partials/module_subnav') ?>
 <div class="page-header"><h2 class="page-heading"><?= esc(lang('Platform.edit_tenant')) ?>: <?= esc($tenant['name']) ?></h2></div>
 <div class="card form-card"><div class="card-body">
 <form method="post" action="<?= site_url('platform/tenants/' . $tenant['id'] . '/update') ?>" class="app-form">

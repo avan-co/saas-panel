@@ -236,8 +236,12 @@ assert_contains "new employee form" "$HTML" 'name="base_salary"'
 echo "--- 26. Settings page ---"
 HTML=$(curl_get "$BASE/module/settings")
 assert_contains "settings page" "$HTML" "page-settings"
-CODE=$(curl_code "$BASE/module/settings/integrations")
-assert_code "settings integrations" "200" "$CODE"
+CODE=$(curl_code "$BASE/module/settings/modules")
+assert_code "settings module harmony" "200" "$CODE"
+CODE=$(curl_code "$BASE/module/settings/api")
+assert_code "settings api access" "200" "$CODE"
+CODE=$(curl_code "$BASE/platform/system")
+assert_code "platform system settings" "200" "$CODE"
 CODE=$(curl_code "$BASE/module/settings/audit")
 assert_code "settings audit" "200" "$CODE"
 CODE=$(curl_code "$BASE/module/settings/period-locks")

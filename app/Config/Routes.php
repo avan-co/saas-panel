@@ -146,11 +146,12 @@ $routes->group('', ['filter' => 'auth'], static function ($routes) {
     $routes->get('module/settings/users', 'TenantUsers::index', ['filter' => 'tenant']);
     $routes->post('module/settings/users/store', 'TenantUsers::store', ['filter' => 'tenant']);
     $routes->post('module/settings/users/(:num)/update', 'TenantUsers::update/$1', ['filter' => 'tenant']);
-    $routes->get('module/settings/integrations', 'SettingsIntegrations::index', ['filter' => 'tenant']);
-    $routes->post('module/settings/integrations/api-keys', 'SettingsIntegrations::storeApiKey', ['filter' => 'tenant']);
-    $routes->post('module/settings/integrations/api-keys/(:num)/delete', 'SettingsIntegrations::deleteApiKey/$1', ['filter' => 'tenant']);
-    $routes->post('module/settings/integrations/webhooks', 'SettingsIntegrations::storeWebhook', ['filter' => 'tenant']);
-    $routes->post('module/settings/integrations/webhooks/(:num)/delete', 'SettingsIntegrations::deleteWebhook/$1', ['filter' => 'tenant']);
+    $routes->get('module/settings/modules', 'SettingsModules::index', ['filter' => 'tenant']);
+    $routes->get('module/settings/api', 'SettingsApi::index', ['filter' => 'tenant']);
+    $routes->post('module/settings/api/keys', 'SettingsApi::storeApiKey', ['filter' => 'tenant']);
+    $routes->post('module/settings/api/keys/(:num)/delete', 'SettingsApi::deleteApiKey/$1', ['filter' => 'tenant']);
+    $routes->post('module/settings/api/webhooks', 'SettingsApi::storeWebhook', ['filter' => 'tenant']);
+    $routes->post('module/settings/api/webhooks/(:num)/delete', 'SettingsApi::deleteWebhook/$1', ['filter' => 'tenant']);
     $routes->get('module/settings/audit', 'SettingsAudit::index', ['filter' => 'tenant']);
     $routes->get('module/settings/period-locks', 'SettingsPeriodLock::index', ['filter' => 'tenant']);
     $routes->post('module/settings/period-locks', 'SettingsPeriodLock::lock', ['filter' => 'tenant']);
@@ -164,6 +165,7 @@ $routes->group('', ['filter' => 'auth'], static function ($routes) {
         $routes->post('tenants/(:num)/suspend', 'Platform\Tenants::suspend/$1');
         $routes->get('users', 'Platform\Users::index');
         $routes->post('users/(:num)/toggle-admin', 'Platform\Users::toggleAdmin/$1');
+        $routes->get('system', 'Platform\System::index');
     });
 });
 

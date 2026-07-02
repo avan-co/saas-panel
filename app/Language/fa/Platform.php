@@ -1,7 +1,7 @@
 <?php
 
 return [
-    'title'         => 'مدیریت پلتفرم',
+    'title'         => 'مدیریت سامانه',
     'tenants'       => 'کسب‌وکارها',
     'tenant_name'   => 'نام کسب‌وکار',
     'owner'         => 'مالک',
@@ -16,4 +16,11 @@ return [
     'platform_admin'=> 'سوپرادمین',
     'toggle_admin'  => 'تغییر دسترسی ادمین',
     'user_updated'  => 'کاربر به‌روزرسانی شد.',
+    'system_settings' => 'تنظیمات سامانه',
+    'system_settings_subtitle' => 'پیکربندی زیرساخت مشترک همه کسب‌وکارها',
+    'infrastructure' => 'زیرساخت',
+    'app_url'       => 'آدرس سامانه',
+    'modian_configure_env' => 'پیکربندی نشده',
+    'modian_env_hint' => 'متغیرهای MODIAN_CLIENT_ID و MODIAN_PRIVATE_KEY را در فایل .env سرور تنظیم کنید.',
+    'tenant_settings_note' => 'تنظیمات هر کسب‌وکار (نام، منطقه زمانی، کاربران و ...) از منوی «تنظیمات کسب‌وکار» در پنل همان کسب‌وکار انجام می‌شود.',
 ];

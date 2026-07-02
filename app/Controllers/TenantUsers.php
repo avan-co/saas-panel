@@ -2,12 +2,15 @@
 
 namespace App\Controllers;
 
+use App\Controllers\Concerns\HasSettingsNav;
 use App\Models\NotificationModel;
 use App\Models\TenantMembershipModel;
 use App\Models\UserModel;
 
 class TenantUsers extends BaseController
 {
+    use HasSettingsNav;
+
     public function index()
     {
         $tenant = service('tenantContext')->getTenant();
@@ -16,8 +19,8 @@ class TenantUsers extends BaseController
             return redirect()->to('/dashboard');
         }
 
-        if (! $this->canManageUsers()) {
-            return redirect()->to('/module/settings')->with('error', lang('Settings.no_permission'));
+        if (! $this->canManageSettings()) {
+            return $this->settingsDeniedRedirect();
         }
 
         $membershipModel = model(TenantMembershipModel::class);
@@ -25,7 +28,7 @@ class TenantUsers extends BaseController
         return $this->render('settings/users/index', [
             'title'          => lang('Settings.users'),
             'moduleNav'      => 'users',
-            'moduleNavItems' => config('ModuleMenus')->settings,
+            'moduleNavItems' => $this->settingsNavItems(),
             'members'        => $membershipModel->getForTenant((int) $tenant['id']),
             'orgTree'        => $membershipModel->orgTree((int) $tenant['id']),
             'breadcrumbs'    => [
@@ -40,8 +43,8 @@ class TenantUsers extends BaseController
     {
         $tenant = service('tenantContext')->getTenant();
 
-        if ($tenant === null || ! $this->canManageUsers()) {
-            return redirect()->to('/module/settings')->with('error', lang('Settings.no_permission'));
+        if ($tenant === null || ! $this->canManageSettings()) {
+            return $this->settingsDeniedRedirect();
         }
 
         $model      = model(TenantMembershipModel::class);
@@ -76,8 +79,8 @@ class TenantUsers extends BaseController
     {
         $tenant = service('tenantContext')->getTenant();
 
-        if ($tenant === null || ! $this->canManageUsers()) {
-            return redirect()->to('/module/settings')->with('error', lang('Settings.no_permission'));
+        if ($tenant === null || ! $this->canManageSettings()) {
+            return $this->settingsDeniedRedirect();
         }
 
         $rules = [
@@ -136,22 +139,5 @@ class TenantUsers extends BaseController
         );
 
         return redirect()->to('/module/settings/users')->with('success', lang('Settings.user_added'));
-    }
-
-    protected function canManageUsers(): bool
-    {
-        $tenantId = (int) (service('tenantContext')->getTenant()['id'] ?? 0);
-        $userId   = (int) session('user_id');
-
-        if (session('is_platform_admin')) {
-            return true;
-        }
-
-        $row = model(TenantMembershipModel::class)
-            ->where('tenant_id', $tenantId)
-            ->where('user_id', $userId)
-            ->first();
-
-        return $row !== null && in_array($row['role'], ['owner', 'admin'], true);
     }
 }

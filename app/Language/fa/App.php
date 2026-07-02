@@ -29,8 +29,8 @@ return [
         'insurance'  => 'بیمه',
         'tax'        => 'مالیات',
         'projects'   => 'مدیریت پروژه',
-        'settings'   => 'تنظیمات',
-        'platform'   => 'مدیریت پلتفرم',
+        'settings'   => 'تنظیمات کسب‌وکار',
+        'platform'   => 'مدیریت سامانه',
     ],
     'modules' => [
         'dashboard' => 'داشبورد',

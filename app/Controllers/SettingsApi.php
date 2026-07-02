@@ -2,32 +2,34 @@
 
 namespace App\Controllers;
 
+use App\Controllers\Concerns\HasSettingsNav;
 use App\Models\ApiKeyModel;
 use App\Models\WebhookModel;
 
-class SettingsIntegrations extends BaseController
+class SettingsApi extends BaseController
 {
+    use HasSettingsNav;
+
     public function index()
     {
         $tenant = service('tenantContext')->getTenant();
 
-        if ($tenant === null || ! $this->canManage()) {
-            return redirect()->to('/module/settings')->with('error', lang('Settings.no_permission'));
+        if ($tenant === null || ! $this->canManageSettings()) {
+            return $tenant === null ? redirect()->to('/dashboard') : $this->settingsDeniedRedirect();
         }
 
         $tenantId = (int) $tenant['id'];
 
-        return $this->render('settings/integrations', [
-            'title'          => lang('Settings.integrations'),
-            'moduleNav'      => 'integrations',
-            'moduleNavItems' => config('ModuleMenus')->settings,
+        return $this->render('settings/api', [
+            'title'          => lang('Settings.api_access'),
+            'moduleNav'      => 'api',
+            'moduleNavItems' => $this->settingsNavItems(),
             'apiKeys'        => model(ApiKeyModel::class)->where('tenant_id', $tenantId)->findAll(),
             'webhooks'       => model(WebhookModel::class)->where('tenant_id', $tenantId)->findAll(),
-            'modianReady'    => service('modian')->isConfigured(),
             'breadcrumbs'    => [
                 ['label' => lang('App.menu.dashboard'), 'url' => site_url('dashboard')],
                 ['label' => lang('Settings.title'), 'url' => site_url('module/settings')],
-                ['label' => lang('Settings.integrations')],
+                ['label' => lang('Settings.api_access')],
             ],
         ]);
     }
@@ -36,8 +38,8 @@ class SettingsIntegrations extends BaseController
     {
         $tenant = service('tenantContext')->getTenant();
 
-        if ($tenant === null || ! $this->canManage()) {
-            return redirect()->to('/module/settings')->with('error', lang('Settings.no_permission'));
+        if ($tenant === null || ! $this->canManageSettings()) {
+            return $this->settingsDeniedRedirect();
         }
 
         $name = (string) $this->request->getPost('name');
@@ -59,28 +61,28 @@ class SettingsIntegrations extends BaseController
             'scopes'     => json_encode(['transactions.read', 'transactions.write']),
         ]);
 
-        return redirect()->to('/module/settings/integrations')->with('success', lang('Settings.api_key_created'))->with('new_api_key', $secret);
+        return redirect()->to('/module/settings/api')->with('success', lang('Settings.api_key_created'))->with('new_api_key', $secret);
     }
 
     public function deleteApiKey(int $id)
     {
         $tenant = service('tenantContext')->getTenant();
 
-        if ($tenant === null || ! $this->canManage()) {
-            return redirect()->to('/module/settings')->with('error', lang('Settings.no_permission'));
+        if ($tenant === null || ! $this->canManageSettings()) {
+            return $this->settingsDeniedRedirect();
         }
 
         model(ApiKeyModel::class)->where('id', $id)->where('tenant_id', (int) $tenant['id'])->delete();
 
-        return redirect()->to('/module/settings/integrations')->with('success', lang('App.deleted'));
+        return redirect()->to('/module/settings/api')->with('success', lang('App.deleted'));
     }
 
     public function storeWebhook()
     {
         $tenant = service('tenantContext')->getTenant();
 
-        if ($tenant === null || ! $this->canManage()) {
-            return redirect()->to('/module/settings')->with('error', lang('Settings.no_permission'));
+        if ($tenant === null || ! $this->canManageSettings()) {
+            return $this->settingsDeniedRedirect();
         }
 
         $url = (string) $this->request->getPost('url');
@@ -99,34 +101,19 @@ class SettingsIntegrations extends BaseController
             'is_active' => 1,
         ]);
 
-        return redirect()->to('/module/settings/integrations')->with('success', lang('Settings.webhook_created'));
+        return redirect()->to('/module/settings/api')->with('success', lang('Settings.webhook_created'));
     }
 
     public function deleteWebhook(int $id)
     {
         $tenant = service('tenantContext')->getTenant();
 
-        if ($tenant === null || ! $this->canManage()) {
-            return redirect()->to('/module/settings')->with('error', lang('Settings.no_permission'));
+        if ($tenant === null || ! $this->canManageSettings()) {
+            return $this->settingsDeniedRedirect();
         }
 
         model(WebhookModel::class)->where('id', $id)->where('tenant_id', (int) $tenant['id'])->delete();
 
-        return redirect()->to('/module/settings/integrations')->with('success', lang('App.deleted'));
-    }
-
-    protected function canManage(): bool
-    {
-        if (session('is_platform_admin')) {
-            return true;
-        }
-
-        $tenantId = (int) (service('tenantContext')->getTenant()['id'] ?? 0);
-        $row      = model(\App\Models\TenantMembershipModel::class)
-            ->where('tenant_id', $tenantId)
-            ->where('user_id', (int) session('user_id'))
-            ->first();
-
-        return $row !== null && in_array($row['role'], ['owner', 'admin'], true);
+        return redirect()->to('/module/settings/api')->with('success', lang('App.deleted'));
     }
 }

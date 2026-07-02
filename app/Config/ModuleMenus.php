@@ -23,11 +23,20 @@ class ModuleMenus extends BaseConfig
         ['key' => 'reports',       'route' => 'module/finance/reports',      'label' => 'Finance.reports'],
     ];
 
+    /** تنظیمات پنل کسب‌وکار — فقط ادمین/مالک tenant */
     public array $settings = [
-        ['key' => 'general',       'route' => 'module/settings',              'label' => 'Settings.title'],
-        ['key' => 'users',         'route' => 'module/settings/users',        'label' => 'Settings.users'],
-        ['key' => 'integrations',  'route' => 'module/settings/integrations', 'label' => 'Settings.integrations'],
-        ['key' => 'audit',         'route' => 'module/settings/audit',        'label' => 'Settings.audit_log'],
-        ['key' => 'period_locks',  'route' => 'module/settings/period-locks', 'label' => 'Settings.period_locks'],
+        ['key' => 'general',      'route' => 'module/settings',              'label' => 'Settings.business_profile'],
+        ['key' => 'users',        'route' => 'module/settings/users',        'label' => 'Settings.users'],
+        ['key' => 'modules',      'route' => 'module/settings/modules',      'label' => 'Settings.module_harmony'],
+        ['key' => 'audit',        'route' => 'module/settings/audit',        'label' => 'Settings.audit_log'],
+        ['key' => 'period_locks', 'route' => 'module/settings/period-locks', 'label' => 'Settings.period_locks'],
+        ['key' => 'api',          'route' => 'module/settings/api',          'label' => 'Settings.api_access'],
+    ];
+
+    /** مدیریت سامانه — فقط سوپرادمین پلتفرم */
+    public array $platform = [
+        ['key' => 'tenants', 'route' => 'platform/tenants', 'label' => 'Platform.tenants'],
+        ['key' => 'users',   'route' => 'platform/users',   'label' => 'Platform.users'],
+        ['key' => 'system',  'route' => 'platform/system',  'label' => 'Platform.system_settings'],
     ];
 }

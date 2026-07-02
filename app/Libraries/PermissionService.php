@@ -12,7 +12,7 @@ class PermissionService
         'owner'      => ['*'],
         'admin'      => ['*'],
         'accountant' => ['finance.*', 'projects.view', 'settings.view'],
-        'manager'    => ['finance.view', 'finance.transactions', 'projects.*'],
+        'manager'    => ['finance.view', 'finance.transactions', 'projects.*', 'settings.view'],
         'hr'         => ['payroll.*', 'insurance.*', 'settings.view'],
         'viewer'     => ['*.view'],
     ];
