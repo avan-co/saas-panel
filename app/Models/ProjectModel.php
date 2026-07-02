@@ -8,7 +8,10 @@ class ProjectModel extends Model
 {
     protected $table         = 'projects';
     protected $primaryKey    = 'id';
-    protected $allowedFields = ['tenant_id', 'name', 'code', 'client_name', 'status', 'budget', 'progress', 'start_date', 'end_date'];
+    protected $allowedFields = [
+        'tenant_id', 'name', 'code', 'client_name', 'contact_id', 'manager_user_id',
+        'status', 'budget', 'actual_cost', 'labor_cost', 'progress', 'start_date', 'end_date',
+    ];
     protected $useTimestamps = true;
 
     public function getForTenant(int $tenantId): array

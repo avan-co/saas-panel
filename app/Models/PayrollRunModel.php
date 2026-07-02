@@ -8,7 +8,10 @@ class PayrollRunModel extends Model
 {
     protected $table         = 'payroll_runs';
     protected $primaryKey    = 'id';
-    protected $allowedFields = ['tenant_id', 'period_year', 'period_month', 'total_amount', 'employee_count', 'status', 'paid_at'];
+    protected $allowedFields = [
+        'tenant_id', 'period_year', 'period_month', 'total_amount', 'employee_count',
+        'status', 'paid_at', 'finance_txn_id', 'insurance_txn_id', 'tax_txn_id',
+    ];
     protected $useTimestamps = true;
 
     public function recentForTenant(int $tenantId, int $limit = 6): array

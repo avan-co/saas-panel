@@ -17,4 +17,6 @@ return [
     'year'            => 'Year',
     'saved'           => 'Tax period saved.',
     'updated'         => 'Tax period updated.',
+    'mark_paid'       => 'Record payment',
+    'paid_success'    => 'Tax payment recorded in finance.',
 ];

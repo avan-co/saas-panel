@@ -18,6 +18,7 @@ class SettingsModules extends BaseController
 
         $modules = service('tenantContext')->getModules();
         $links   = $this->moduleLinks($modules);
+        $stats   = service('erp')->integrationStats((int) $tenant['id']);
 
         return $this->render('settings/modules', [
             'title'          => lang('Settings.module_harmony'),
@@ -25,6 +26,7 @@ class SettingsModules extends BaseController
             'moduleNavItems' => $this->settingsNavItems(),
             'modules'        => $modules,
             'links'          => $links,
+            'stats'          => $stats,
             'canManage'      => $this->canManageSettings(),
             'breadcrumbs'    => [
                 ['label' => lang('App.menu.dashboard'), 'url' => site_url('dashboard')],

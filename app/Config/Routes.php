@@ -121,6 +121,7 @@ $routes->group('', ['filter' => 'auth'], static function ($routes) {
     $routes->get('module/insurance/(:num)/edit', 'Insurance::edit/$1', ['filter' => 'tenant']);
     $routes->post('module/insurance/(:num)/update', 'Insurance::update/$1', ['filter' => 'tenant']);
     $routes->post('module/insurance/(:num)/delete', 'Insurance::delete/$1', ['filter' => 'tenant']);
+    $routes->post('module/insurance/(:num)/pay', 'Insurance::markPaid/$1', ['filter' => 'tenant']);
 
     $routes->get('module/tax', 'Tax::index', ['filter' => 'tenant']);
     $routes->get('module/tax/new', 'Tax::create', ['filter' => 'tenant']);
@@ -128,6 +129,7 @@ $routes->group('', ['filter' => 'auth'], static function ($routes) {
     $routes->get('module/tax/(:num)/edit', 'Tax::edit/$1', ['filter' => 'tenant']);
     $routes->post('module/tax/(:num)/update', 'Tax::update/$1', ['filter' => 'tenant']);
     $routes->post('module/tax/(:num)/delete', 'Tax::delete/$1', ['filter' => 'tenant']);
+    $routes->post('module/tax/(:num)/pay', 'Tax::markPaid/$1', ['filter' => 'tenant']);
 
     $routes->get('module/projects', 'Projects::index', ['filter' => 'tenant']);
     $routes->get('module/projects/new', 'Projects::create', ['filter' => 'tenant']);
@@ -140,6 +142,8 @@ $routes->group('', ['filter' => 'auth'], static function ($routes) {
     $routes->post('module/projects/(:num)/tasks/store', 'ProjectTasks::store/$1', ['filter' => 'tenant']);
     $routes->post('module/projects/(:num)/tasks/(:num)/status', 'ProjectTasks::updateStatus/$1/$2', ['filter' => 'tenant']);
     $routes->post('module/projects/(:num)/tasks/(:num)/delete', 'ProjectTasks::delete/$1/$2', ['filter' => 'tenant']);
+    $routes->get('module/projects/(:num)/timesheets', 'ProjectTimesheets::index/$1', ['filter' => 'tenant']);
+    $routes->post('module/projects/(:num)/timesheets/store', 'ProjectTimesheets::store/$1', ['filter' => 'tenant']);
 
     $routes->get('module/settings', 'Settings::index', ['filter' => 'tenant']);
     $routes->post('module/settings', 'Settings::update', ['filter' => 'tenant']);

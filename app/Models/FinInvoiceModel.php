@@ -9,7 +9,7 @@ class FinInvoiceModel extends Model
     protected $table         = 'fin_invoices';
     protected $primaryKey    = 'id';
     protected $allowedFields = [
-        'tenant_id', 'contact_id', 'project_id', 'number', 'amount', 'subtotal', 'vat_amount', 'vat_rate',
+        'tenant_id', 'contact_id', 'project_id', 'number', 'direction', 'amount', 'subtotal', 'vat_amount', 'vat_rate',
         'status', 'issue_date', 'due_date', 'description', 'modian_uuid', 'modian_status',
     ];
     protected $useTimestamps = true;

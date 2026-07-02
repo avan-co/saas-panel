@@ -251,11 +251,19 @@ echo "--- 26b. Payroll runs ---"
 CODE=$(curl_code "$BASE/module/payroll/runs")
 assert_code "payroll runs" "200" "$CODE"
 
-echo "--- 26c. Project tasks ---"
+echo "--- 26c. Project tasks (5-column kanban) ---"
 curl_get "$BASE/tenant/switch/3" > /dev/null
-CODE=$(curl_code "$BASE/module/projects/1/tasks")
-assert_code "project tasks" "200" "$CODE"
+HTML=$(curl_get "$BASE/module/projects/1/tasks")
+assert_contains "kanban backlog" "$HTML" "Backlog"
+CODE=$(curl_code "$BASE/module/projects/1/timesheets")
+assert_code "project timesheets" "200" "$CODE"
+HTML=$(curl_get "$BASE/module/projects/1/timesheets")
+assert_contains "timesheets page" "$HTML" "Timesheet"
 curl_get "$BASE/tenant/switch/1" > /dev/null
+
+echo "--- 26d. Settings integration stats ---"
+HTML=$(curl_get "$BASE/module/settings/modules")
+assert_contains "integration stats" "$HTML" "Integration"
 
 echo "--- 27. Logout ---"
 curl_get "$BASE/logout" > /dev/null

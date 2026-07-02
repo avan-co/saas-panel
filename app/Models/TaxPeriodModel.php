@@ -8,7 +8,7 @@ class TaxPeriodModel extends Model
 {
     protected $table         = 'tax_periods';
     protected $primaryKey    = 'id';
-    protected $allowedFields = ['tenant_id', 'period_year', 'period_quarter', 'taxable_income', 'tax_amount', 'status', 'due_date'];
+    protected $allowedFields = ['tenant_id', 'period_year', 'period_quarter', 'taxable_income', 'tax_amount', 'status', 'due_date', 'finance_txn_id'];
     protected $useTimestamps = true;
 
     public function getForTenant(int $tenantId): array

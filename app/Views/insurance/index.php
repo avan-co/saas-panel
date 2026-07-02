@@ -54,6 +54,14 @@
                             <td class="amount-cell"><?= esc($fmt((float) $policy['premium'])) ?></td>
                             <td><span class="badge badge-<?= esc($policy['status']) ?>"><?= esc(lang('Insurance.status_' . $policy['status'])) ?></span></td>
                             <td class="table-actions">
+                                <?php if (empty($policy['finance_txn_id']) && $accounts !== []): ?>
+                                <form method="post" action="<?= site_url('module/insurance/' . $policy['id'] . '/pay') ?>" class="inline-form"><?= csrf_field() ?>
+                                    <select name="account_id" class="input-sm">
+                                        <?php foreach ($accounts as $acc): ?><option value="<?= $acc['id'] ?>"><?= esc($acc['name']) ?></option><?php endforeach; ?>
+                                    </select>
+                                    <button type="submit" class="btn btn-primary btn-sm"><?= esc(lang('Insurance.mark_paid')) ?></button>
+                                </form>
+                                <?php endif; ?>
                                 <a href="<?= site_url('module/insurance/' . $policy['id'] . '/edit') ?>" class="btn btn-ghost btn-sm"><?= esc(lang('App.edit')) ?></a>
                                 <?= view('partials/delete_form', ['action' => site_url('module/insurance/' . $policy['id'] . '/delete')]) ?>
                             </td>

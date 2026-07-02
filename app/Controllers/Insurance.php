@@ -27,6 +27,9 @@ class Insurance extends BaseController
             'policies'     => $policyModel->getForTenant($tenantId),
             'activeCount'  => $policyModel->countActive($tenantId),
             'totalPremium' => $policyModel->totalPremium($tenantId),
+            'accounts'     => service('tenantContext')->hasModule('finance')
+                ? model(\App\Models\FinAccountModel::class)->getForTenant($tenantId)
+                : [],
             'breadcrumbs'  => $this->moduleBreadcrumbs(lang('Insurance.title')),
         ]);
     }
@@ -126,6 +129,36 @@ class Insurance extends BaseController
         $policyModel->delete($id);
 
         return redirect()->to('/module/insurance')->with('success', lang('App.deleted'));
+    }
+
+    public function markPaid(int $id)
+    {
+        $tenant = $this->requireModule('insurance');
+
+        if ($tenant === null) {
+            return $this->moduleDeniedRedirect();
+        }
+
+        $policy = model(InsurancePolicyModel::class)->findForTenant($id, (int) $tenant['id']);
+
+        if ($policy === null || ! empty($policy['finance_txn_id'])) {
+            return redirect()->back()->with('error', lang('App.not_found'));
+        }
+
+        $accountId = (int) $this->request->getPost('account_id');
+
+        if ($accountId <= 0 && service('tenantContext')->hasModule('finance')) {
+            $accounts  = model(\App\Models\FinAccountModel::class)->getForTenant((int) $tenant['id']);
+            $accountId = $accounts !== [] ? (int) $accounts[0]['id'] : 0;
+        }
+
+        try {
+            service('erp')->onInsurancePremiumPaid((int) $tenant['id'], $id, $accountId, $tenant);
+        } catch (\Throwable $e) {
+            return redirect()->back()->with('error', $e->getMessage());
+        }
+
+        return redirect()->to('/module/insurance')->with('success', lang('Insurance.paid_success'));
     }
 
     protected function policyRules(): array

@@ -8,7 +8,7 @@ class FinContactModel extends Model
 {
     protected $table         = 'fin_contacts';
     protected $primaryKey    = 'id';
-    protected $allowedFields = ['tenant_id', 'name', 'type', 'phone', 'email', 'tax_id', 'address', 'balance', 'note', 'is_active'];
+    protected $allowedFields = ['tenant_id', 'person_id', 'name', 'type', 'phone', 'email', 'tax_id', 'address', 'balance', 'note', 'is_active'];
     protected $useTimestamps = true;
 
     public function getForTenant(int $tenantId): array

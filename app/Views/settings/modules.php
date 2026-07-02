@@ -7,7 +7,20 @@
     <p class="page-subheading"><?= esc(lang('Settings.module_harmony_subtitle')) ?></p>
 </div>
 
-<div class="card card-elevated"><div class="card-header"><h3><?= esc(lang('Settings.enabled_modules')) ?></h3></div>
+<div class="card card-elevated"><div class="card-header"><h3><?= esc(lang('Settings.integration_stats')) ?></h3></div>
+<div class="card-body">
+    <div class="kpi-grid kpi-grid-4">
+        <div class="kpi-card"><span class="kpi-label"><?= esc(lang('Settings.stat_persons')) ?></span><span class="kpi-value"><?= (int) ($stats['persons'] ?? 0) ?></span></div>
+        <div class="kpi-card"><span class="kpi-label"><?= esc(lang('Settings.stat_documents')) ?></span><span class="kpi-value"><?= (int) ($stats['documents'] ?? 0) ?></span></div>
+        <div class="kpi-card"><span class="kpi-label"><?= esc(lang('Settings.stat_timesheets')) ?></span><span class="kpi-value"><?= (int) ($stats['timesheets'] ?? 0) ?></span></div>
+        <div class="kpi-card"><span class="kpi-label"><?= esc(lang('Settings.stat_linked_txns')) ?></span><span class="kpi-value"><?= (int) ($stats['linked_txns'] ?? 0) ?></span></div>
+        <div class="kpi-card"><span class="kpi-label"><?= esc(lang('Settings.stat_payroll_linked')) ?></span><span class="kpi-value"><?= (int) ($stats['payroll_linked'] ?? 0) ?></span></div>
+        <div class="kpi-card"><span class="kpi-label"><?= esc(lang('Settings.stat_tax_linked')) ?></span><span class="kpi-value"><?= (int) ($stats['tax_linked'] ?? 0) ?></span></div>
+        <div class="kpi-card"><span class="kpi-label"><?= esc(lang('Settings.stat_insurance_linked')) ?></span><span class="kpi-value"><?= (int) ($stats['insurance_linked'] ?? 0) ?></span></div>
+    </div>
+</div></div>
+
+<div class="card card-elevated" style="margin-top:20px"><div class="card-header"><h3><?= esc(lang('Settings.enabled_modules')) ?></h3></div>
 <div class="card-body">
 <?php if ($modules === []): ?>
     <p class="text-muted"><?= esc(lang('Settings.no_modules')) ?></p>

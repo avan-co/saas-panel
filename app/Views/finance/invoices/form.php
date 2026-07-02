@@ -8,6 +8,12 @@
 <?= csrf_field() ?>
 <div class="form-row">
     <div class="form-group"><label><?= esc(lang('Finance.invoice_number')) ?></label><input type="text" name="number" value="<?= esc(old('number', $invoice['number'] ?? '')) ?>" required></div>
+    <div class="form-group"><label><?= esc(lang('Finance.invoice_direction')) ?></label>
+        <select name="direction">
+            <option value="sale" <?= (old('direction', $invoice['direction'] ?? 'sale') === 'sale') ? 'selected' : '' ?>><?= esc(lang('Finance.direction_sale')) ?></option>
+            <option value="purchase" <?= (old('direction', $invoice['direction'] ?? '') === 'purchase') ? 'selected' : '' ?>><?= esc(lang('Finance.direction_purchase')) ?></option>
+        </select>
+    </div>
     <div class="form-group"><label><?= esc(lang('Finance.vat_rate')) ?></label><input type="number" name="vat_rate" min="0" max="100" step="0.1" value="<?= esc(old('vat_rate', $vatRate ?? 10)) ?>"></div>
 </div>
 <div class="form-row">

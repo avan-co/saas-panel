@@ -9,7 +9,7 @@ class PayrollEmployeeModel extends Model
     protected $table         = 'payroll_employees';
     protected $primaryKey    = 'id';
     protected $allowedFields = [
-        'tenant_id', 'name', 'national_id', 'insurance_number', 'marital_status', 'children_count',
+        'tenant_id', 'person_id', 'name', 'national_id', 'insurance_number', 'marital_status', 'children_count',
         'job_title', 'base_salary', 'status', 'hired_at',
     ];
     protected $useTimestamps = true;

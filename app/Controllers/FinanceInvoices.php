@@ -77,6 +77,12 @@ class FinanceInvoices extends BaseController
         $this->saveLines((int) $id, $tenantId);
         $this->handleUpload((int) $id, $tenantId);
 
+        try {
+            service('erp')->onInvoiceRecorded($tenantId, (int) $id, $tenant);
+        } catch (\Throwable $e) {
+            return redirect()->to('/module/finance/invoices')->with('error', $e->getMessage());
+        }
+
         return redirect()->to('/module/finance/invoices')->with('success', lang('Finance.invoice_saved'));
     }
 
@@ -134,6 +140,12 @@ class FinanceInvoices extends BaseController
         model(FinInvoiceLineModel::class)->deleteForInvoice($id);
         $this->saveLines($id, $tenantId);
         $this->handleUpload($id, $tenantId);
+
+        try {
+            service('erp')->onInvoiceRecorded($tenantId, $id, $tenant);
+        } catch (\Throwable $e) {
+            return redirect()->to('/module/finance/invoices')->with('error', $e->getMessage());
+        }
 
         return redirect()->to('/module/finance/invoices')->with('success', lang('Finance.invoice_updated'));
     }
@@ -342,6 +354,7 @@ class FinanceInvoices extends BaseController
             'contact_id'  => $this->request->getPost('contact_id') ? (int) $this->request->getPost('contact_id') : null,
             'project_id'  => $this->request->getPost('project_id') ? (int) $this->request->getPost('project_id') : null,
             'number'      => (string) $this->request->getPost('number'),
+            'direction'   => (string) ($this->request->getPost('direction') ?: 'sale'),
             'subtotal'    => $subtotal,
             'vat_amount'  => $vatTotal,
             'vat_rate'    => $vatRate,
