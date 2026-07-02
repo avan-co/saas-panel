@@ -22,6 +22,7 @@
                         <th><?= esc(lang('Platform.plan')) ?></th>
                         <th><?= esc(lang('App.status')) ?></th>
                         <th><?= esc(lang('Platform.modules')) ?></th>
+                        <th><?= esc(lang('App.actions')) ?></th>
                     </tr>
                 </thead>
                 <tbody>
@@ -38,6 +39,9 @@
                                 <?php foreach ($tenant['modules'] as $mod): ?>
                                     <span class="module-tag"><?= esc(lang('App.modules.' . $mod['code'])) ?></span>
                                 <?php endforeach; ?>
+                            </td>
+                            <td class="table-actions">
+                                <a href="<?= site_url('platform/tenants/' . $tenant['id'] . '/edit') ?>" class="btn btn-ghost btn-sm"><?= esc(lang('App.edit')) ?></a>
                             </td>
                         </tr>
                     <?php endforeach; ?>

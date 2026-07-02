@@ -52,7 +52,42 @@ $routes->group('', ['filter' => 'auth'], static function ($routes) {
         $routes->post('reminders/store', 'FinanceReminders::store');
         $routes->post('reminders/(:num)/paid', 'FinanceReminders::markPaid/$1');
         $routes->get('reports', 'FinanceReports::index');
+        $routes->get('contacts', 'FinanceContacts::index');
+        $routes->get('contacts/new', 'FinanceContacts::create');
+        $routes->post('contacts/store', 'FinanceContacts::store');
+        $routes->get('contacts/(:num)', 'FinanceContacts::show/$1');
+        $routes->get('contacts/(:num)/edit', 'FinanceContacts::edit/$1');
+        $routes->post('contacts/(:num)/update', 'FinanceContacts::update/$1');
+        $routes->post('contacts/(:num)/delete', 'FinanceContacts::delete/$1');
+        $routes->get('invoices', 'FinanceInvoices::index');
+        $routes->get('invoices/new', 'FinanceInvoices::create');
+        $routes->post('invoices/store', 'FinanceInvoices::store');
+        $routes->get('invoices/(:num)/edit', 'FinanceInvoices::edit/$1');
+        $routes->post('invoices/(:num)/update', 'FinanceInvoices::update/$1');
+        $routes->post('invoices/(:num)/delete', 'FinanceInvoices::delete/$1');
+        $routes->get('invoices/files/(:num)/download', 'FinanceInvoices::download/$1');
+        $routes->get('checks', 'FinanceChecks::index');
+        $routes->get('checks/new', 'FinanceChecks::create');
+        $routes->post('checks/store', 'FinanceChecks::store');
+        $routes->get('checks/(:num)/edit', 'FinanceChecks::edit/$1');
+        $routes->post('checks/(:num)/update', 'FinanceChecks::update/$1');
+        $routes->post('checks/(:num)/delete', 'FinanceChecks::delete/$1');
+        $routes->get('loans', 'FinanceLoans::index');
+        $routes->get('loans/new', 'FinanceLoans::create');
+        $routes->post('loans/store', 'FinanceLoans::store');
+        $routes->get('loans/(:num)/edit', 'FinanceLoans::edit/$1');
+        $routes->post('loans/(:num)/update', 'FinanceLoans::update/$1');
+        $routes->post('loans/(:num)/installment', 'FinanceLoans::payInstallment/$1');
+        $routes->post('loans/(:num)/delete', 'FinanceLoans::delete/$1');
+        $routes->get('assets', 'FinanceAssets::index');
+        $routes->get('assets/new', 'FinanceAssets::create');
+        $routes->post('assets/store', 'FinanceAssets::store');
+        $routes->get('assets/(:num)/edit', 'FinanceAssets::edit/$1');
+        $routes->post('assets/(:num)/update', 'FinanceAssets::update/$1');
+        $routes->post('assets/(:num)/delete', 'FinanceAssets::delete/$1');
     });
+
+    $routes->get('search', 'Search::index', ['filter' => 'tenant']);
 
     $routes->get('notifications', 'Notifications::index');
     $routes->get('notifications/dropdown', 'Notifications::dropdown');
@@ -82,6 +117,7 @@ $routes->group('', ['filter' => 'auth'], static function ($routes) {
     $routes->get('module/projects', 'Projects::index', ['filter' => 'tenant']);
     $routes->get('module/projects/new', 'Projects::create', ['filter' => 'tenant']);
     $routes->post('module/projects/store', 'Projects::store', ['filter' => 'tenant']);
+    $routes->get('module/projects/(:num)', 'Projects::show/$1', ['filter' => 'tenant']);
     $routes->get('module/projects/(:num)/edit', 'Projects::edit/$1', ['filter' => 'tenant']);
     $routes->post('module/projects/(:num)/update', 'Projects::update/$1', ['filter' => 'tenant']);
     $routes->post('module/projects/(:num)/delete', 'Projects::delete/$1', ['filter' => 'tenant']);
@@ -90,10 +126,16 @@ $routes->group('', ['filter' => 'auth'], static function ($routes) {
     $routes->post('module/settings', 'Settings::update', ['filter' => 'tenant']);
     $routes->get('module/settings/users', 'TenantUsers::index', ['filter' => 'tenant']);
     $routes->post('module/settings/users/store', 'TenantUsers::store', ['filter' => 'tenant']);
+    $routes->post('module/settings/users/(:num)/update', 'TenantUsers::update/$1', ['filter' => 'tenant']);
 
     $routes->get('module/(:segment)', 'ModulePage::show/$1', ['filter' => 'tenant']);
 
     $routes->group('platform', ['filter' => 'platformadmin'], static function ($routes) {
         $routes->get('tenants', 'Platform\Tenants::index');
+        $routes->get('tenants/(:num)/edit', 'Platform\Tenants::edit/$1');
+        $routes->post('tenants/(:num)/update', 'Platform\Tenants::update/$1');
+        $routes->post('tenants/(:num)/suspend', 'Platform\Tenants::suspend/$1');
+        $routes->get('users', 'Platform\Users::index');
+        $routes->post('users/(:num)/toggle-admin', 'Platform\Users::toggleAdmin/$1');
     });
 });

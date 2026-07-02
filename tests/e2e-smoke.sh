@@ -197,38 +197,56 @@ echo "--- 18. Settings users ---"
 HTML=$(curl_get "$BASE/module/settings/users")
 assert_contains "settings users" "$HTML" "page-settings"
 
-echo "--- 19. Projects module (agency tenant) ---"
+echo "--- 19. Finance phase 2-5 modules ---"
+for path in contacts invoices checks loans assets; do
+  CODE=$(curl_code "$BASE/module/finance/$path")
+  assert_code "finance $path" "200" "$CODE"
+done
+
+echo "--- 20. Search ---"
+HTML=$(curl_get "$BASE/search?q=test")
+assert_contains "search page" "$HTML" "page-search"
+
+echo "--- 21. Platform users ---"
+CODE=$(curl_code "$BASE/platform/users")
+assert_code "platform users" "200" "$CODE"
+
+echo "--- 22. Projects module (agency tenant) ---"
 curl_get "$BASE/tenant/switch/3" > /dev/null
 HTML=$(curl_get "$BASE/module/projects")
 assert_contains "projects module" "$HTML" "page-projects"
 
-echo "--- 20. Projects create form ---"
+echo "--- 23. Projects create form ---"
 HTML=$(curl_get "$BASE/module/projects/new")
 assert_contains "new project form" "$HTML" 'name="name"'
 
-echo "--- 21. Payroll create form ---"
+echo "--- 24. Project detail ---"
+HTML=$(curl_get "$BASE/module/projects/1")
+assert_contains "project detail" "$HTML" "page-projects"
+
+echo "--- 25. Payroll create form ---"
 curl_get "$BASE/tenant/switch/1" > /dev/null
 HTML=$(curl_get "$BASE/module/payroll/employees/new")
 assert_contains "new employee form" "$HTML" 'name="base_salary"'
 
-echo "--- 22. Settings page ---"
+echo "--- 26. Settings page ---"
 HTML=$(curl_get "$BASE/module/settings")
 assert_contains "settings page" "$HTML" "page-settings"
 
-echo "--- 23. Logout ---"
+echo "--- 27. Logout ---"
 curl_get "$BASE/logout" > /dev/null
 CODE=$(curl_code "$BASE/dashboard")
 assert_code "dashboard requires auth" "302" "$CODE"
 
-echo "--- 24. Root redirect ---"
+echo "--- 28. Root redirect ---"
 CODE=$(curl_code "$BASE/")
 assert_code "home redirect" "302" "$CODE"
 
-echo "--- 25. Reinstall: installer accessible ---"
+echo "--- 29. Reinstall: installer accessible ---"
 HTML=$(curl_get "$BASE/install")
 assert_contains "reinstall accessible" "$HTML" "requirements-list"
 
-echo "--- 26. Reinstall: full install cycle ---"
+echo "--- 30. Reinstall: full install cycle ---"
 rm -f /workspace/writable/installed.lock
 HTML=$(curl_get "$BASE/install/database")
 CSRF=$(get_csrf "$HTML")

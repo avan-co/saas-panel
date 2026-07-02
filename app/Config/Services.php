@@ -31,4 +31,22 @@ class Services extends BaseService
             model(\App\Models\ModuleModel::class),
         );
     }
+
+    public static function permissions(bool $getShared = true)
+    {
+        if ($getShared) {
+            return static::getSharedInstance('permissions');
+        }
+
+        return new \App\Libraries\PermissionService();
+    }
+
+    public static function upload(bool $getShared = true)
+    {
+        if ($getShared) {
+            return static::getSharedInstance('upload');
+        }
+
+        return new \App\Libraries\UploadService();
+    }
 }

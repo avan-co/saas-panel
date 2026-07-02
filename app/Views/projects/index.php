@@ -66,6 +66,7 @@
                             </td>
                             <td><span class="badge badge-<?= esc($project['status']) ?>"><?= esc(lang('Projects.status_' . $project['status'])) ?></span></td>
                             <td class="table-actions">
+                                <a href="<?= site_url('module/projects/' . $project['id']) ?>" class="btn btn-ghost btn-sm"><?= esc(lang('Projects.view')) ?></a>
                                 <a href="<?= site_url('module/projects/' . $project['id'] . '/edit') ?>" class="btn btn-ghost btn-sm"><?= esc(lang('App.edit')) ?></a>
                                 <?= view('partials/delete_form', ['action' => site_url('module/projects/' . $project['id'] . '/delete')]) ?>
                             </td>

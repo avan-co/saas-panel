@@ -23,4 +23,5 @@ return [
     'status_active'    => 'Active',
     'status_on_hold'   => 'On hold',
     'status_completed' => 'Completed',
+    'view'             => 'View',
 ];
