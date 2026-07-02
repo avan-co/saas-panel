@@ -22,7 +22,7 @@ class DemoDataSeeder extends Seeder
             return;
         }
 
-        if ($this->db->table('tenants')->countAllResults() > 0) {
+        if ($this->db->table('tenant_memberships')->where('user_id', $this->adminId)->countAllResults() > 0) {
             return;
         }
 
