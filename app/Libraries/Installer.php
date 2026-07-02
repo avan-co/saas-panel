@@ -212,6 +212,9 @@ ENV;
     {
         $seeder = new \App\Database\Seeds\DemoDataSeeder(config(\Config\Database::class));
         $seeder->setAdminId($adminId)->run();
+
+        $roleSeeder = new \App\Database\Seeds\RoleDemoSeeder(config(\Config\Database::class));
+        $roleSeeder->run();
     }
 
     public static function detectBaseUrl(): string

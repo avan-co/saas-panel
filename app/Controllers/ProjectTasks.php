@@ -2,7 +2,7 @@
 
 namespace App\Controllers;
 
-use App\Controllers\Concerns\ChecksPermission;
+use App\Controllers\Concerns\ChecksProjectAccess;
 use App\Controllers\Concerns\HasProjectNav;
 use App\Controllers\Concerns\HasTenantModule;
 use App\Models\ProjectModel;
@@ -15,7 +15,7 @@ class ProjectTasks extends BaseController
 {
     use HasTenantModule;
     use HasProjectNav;
-    use ChecksPermission;
+    use ChecksProjectAccess;
 
     protected array $kanbanColumns = ['backlog', 'todo', 'doing', 'review', 'testing', 'done'];
 
@@ -32,6 +32,10 @@ class ProjectTasks extends BaseController
 
         if ($project === null) {
             return redirect()->to('/module/projects')->with('error', lang('Projects.not_found'));
+        }
+
+        if (! $this->requireProjectAccess($projectId)) {
+            return $this->projectAccessDeniedRedirect();
         }
 
         $taskModel = model(ProjectTaskModel::class);
@@ -82,6 +86,10 @@ class ProjectTasks extends BaseController
             return redirect()->to('/module/projects')->with('error', lang('App.not_found'));
         }
 
+        if (! $this->requireProjectAccess($projectId)) {
+            return $this->projectAccessDeniedRedirect();
+        }
+
         $depends = null;
 
         if (! empty($task['depends_on_task_id'])) {
@@ -116,6 +124,10 @@ class ProjectTasks extends BaseController
 
         if (model(ProjectModel::class)->findForTenant($projectId, $tenantId) === null) {
             return redirect()->to('/module/projects')->with('error', lang('Projects.not_found'));
+        }
+
+        if (! $this->requireProjectAccess($projectId)) {
+            return $this->projectAccessDeniedRedirect();
         }
 
         if (! $this->validate($this->taskRules())) {

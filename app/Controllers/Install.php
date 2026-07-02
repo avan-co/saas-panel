@@ -192,7 +192,13 @@ class Install extends Controller
         session()->remove('install_db');
         session()->remove('install_app');
 
-        return redirect()->to('/login')->with('success', lang('Install.complete_help'));
+        $success = lang('Install.complete_help');
+
+        if (! empty($appConfig['seed_demo'])) {
+            $success .= ' ' . lang('Install.demo_accounts_help');
+        }
+
+        return redirect()->to('/login')->with('success', $success);
     }
 
     protected function render(string $bodyView, array $data = []): string

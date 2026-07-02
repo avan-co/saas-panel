@@ -21,6 +21,24 @@ class ProjectMemberModel extends Model
             ->findAll();
     }
 
+    public function isMember(int $tenantId, int $projectId, int $userId): bool
+    {
+        return $this->where('tenant_id', $tenantId)
+            ->where('project_id', $projectId)
+            ->where('user_id', $userId)
+            ->countAllResults() > 0;
+    }
+
+    public function projectIdsForUser(int $tenantId, int $userId): array
+    {
+        $rows = $this->select('project_id')
+            ->where('tenant_id', $tenantId)
+            ->where('user_id', $userId)
+            ->findAll();
+
+        return array_map(static fn ($r) => (int) $r['project_id'], $rows);
+    }
+
     public function syncMembers(int $tenantId, int $projectId, array $userIds, array $roles): void
     {
         $this->where('tenant_id', $tenantId)->where('project_id', $projectId)->delete();

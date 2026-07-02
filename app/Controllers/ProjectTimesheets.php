@@ -2,7 +2,7 @@
 
 namespace App\Controllers;
 
-use App\Controllers\Concerns\ChecksPermission;
+use App\Controllers\Concerns\ChecksProjectAccess;
 use App\Controllers\Concerns\HasProjectNav;
 use App\Controllers\Concerns\HasTenantModule;
 use App\Models\PayrollEmployeeModel;
@@ -13,7 +13,7 @@ class ProjectTimesheets extends BaseController
 {
     use HasTenantModule;
     use HasProjectNav;
-    use ChecksPermission;
+    use ChecksProjectAccess;
 
     public function index(int $projectId)
     {
@@ -28,6 +28,10 @@ class ProjectTimesheets extends BaseController
 
         if ($project === null) {
             return redirect()->to('/module/projects')->with('error', lang('Projects.not_found'));
+        }
+
+        if (! $this->requireProjectAccess($projectId)) {
+            return $this->projectAccessDeniedRedirect();
         }
 
         $employees = service('tenantContext')->hasModule('payroll')
@@ -59,6 +63,10 @@ class ProjectTimesheets extends BaseController
 
         if (model(ProjectModel::class)->findForTenant($projectId, $tenantId) === null) {
             return redirect()->to('/module/projects')->with('error', lang('Projects.not_found'));
+        }
+
+        if (! $this->requireProjectAccess($projectId)) {
+            return $this->projectAccessDeniedRedirect();
         }
 
         helper('date');

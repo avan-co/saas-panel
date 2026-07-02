@@ -3,7 +3,6 @@
 namespace App\Database\Seeds;
 
 use CodeIgniter\Database\Seeder;
-use CodeIgniter\I18n\Time;
 
 class DemoDataSeeder extends Seeder
 {
@@ -26,7 +25,7 @@ class DemoDataSeeder extends Seeder
             return;
         }
 
-        $now = Time::now()->toDateTimeString();
+        $now = date('Y-m-d H:i:s');
 
         $tenants = [
             ['name' => 'رستوران نمونه', 'slug' => 'restaurant-demo', 'plan' => 'pro'],
@@ -42,12 +41,14 @@ class DemoDataSeeder extends Seeder
 
         foreach ($tenants as $tenantData) {
             $this->db->table('tenants')->insert([
-                'name'              => $tenantData['name'],
-                'slug'              => $tenantData['slug'],
-                'owner_id'          => $this->adminId,
-                'status'            => 'active',
-                'plan'              => $tenantData['plan'],
-                'timezone'          => 'Asia/Tehran',
+                'name'                   => $tenantData['name'],
+                'slug'                   => $tenantData['slug'],
+                'owner_id'               => $this->adminId,
+                'status'                 => 'active',
+                'plan'                   => $tenantData['plan'],
+                'subscription_starts_at' => $now,
+                'subscription_ends_at'   => date('Y-m-d H:i:s', strtotime('+1 year')),
+                'timezone'               => 'Asia/Tehran',
                 'currency'          => 'IRR',
                 'fiscal_year_start' => 1,
                 'created_at'        => $now,

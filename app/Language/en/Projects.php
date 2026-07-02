@@ -144,4 +144,7 @@ return [
     'automation_task_done' => 'Task "{task}" completed.',
     'deadline_soon'    => 'Deadline approaching',
     'deadline_overdue' => 'Overdue deadline',
+    'access_denied'    => 'You do not have access to this project.',
+    'teams'            => 'Project teams',
+    'teams_hint'       => 'Members of selected teams will get access to this project.',
 ];

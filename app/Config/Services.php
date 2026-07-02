@@ -184,4 +184,13 @@ class Services extends BaseService
 
         return new \App\Libraries\ProjectService();
     }
+
+    public static function projectAccess(bool $getShared = true)
+    {
+        if ($getShared) {
+            return static::getSharedInstance('projectAccess');
+        }
+
+        return new \App\Libraries\ProjectAccessService();
+    }
 }
