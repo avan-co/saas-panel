@@ -18,7 +18,7 @@ class InstallFilter implements FilterInterface
 
         if (Installer::isInstalled()) {
             if ($isInstallPath) {
-                return redirect()->to('/login');
+                return;
             }
 
             return;

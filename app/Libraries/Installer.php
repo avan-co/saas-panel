@@ -24,6 +24,50 @@ class Installer
         ], JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE));
     }
 
+    public static function clearInstallLock(): void
+    {
+        if (is_file(self::LOCK_FILE)) {
+            unlink(self::LOCK_FILE);
+        }
+    }
+
+    /**
+     * Drop every table in the configured database for a clean reinstall.
+     */
+    public static function resetDatabase(): ?string
+    {
+        try {
+            $db    = Database::connect();
+            $forge = Database::forge();
+
+            $tables = $db->listTables();
+
+            if ($tables === []) {
+                return null;
+            }
+
+            $db->disableForeignKeyChecks();
+
+            foreach ($tables as $table) {
+                $forge->dropTable($table, true);
+            }
+
+            $db->enableForeignKeyChecks();
+
+            return null;
+        } catch (\Throwable $e) {
+            return $e->getMessage();
+        }
+    }
+
+    public static function clearAuthSession(): void
+    {
+        session()->remove('user_id');
+        session()->remove('user_name');
+        session()->remove('is_platform_admin');
+        session()->remove('current_tenant_id');
+    }
+
     /**
      * @return list<array{key: string, label: string, passed: bool}>
      */

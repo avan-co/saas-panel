@@ -1,5 +1,11 @@
 <p class="install-help"><?= esc(lang('Install.requirements_help')) ?></p>
 
+<?php if (! empty($isReinstall)): ?>
+    <div class="alert alert-warning install-reinstall-notice">
+        <?= esc(lang('Install.reinstall_warning')) ?>
+    </div>
+<?php endif; ?>
+
 <ul class="requirements-list">
     <?php foreach ($requirements as $req): ?>
         <li class="<?= $req['passed'] ? 'passed' : 'failed' ?>">

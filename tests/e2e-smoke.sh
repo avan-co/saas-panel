@@ -129,7 +129,7 @@ CSRF=$(get_csrf "$HTML")
 echo "--- 5. Install: execute ---"
 curl_post "$BASE/install/execute" "csrf_test_name=${CSRF}" > /dev/null
 CODE=$(curl_code "$BASE/install")
-assert_code "install blocked after setup" "302" "$CODE"
+assert_code "install available after setup" "200" "$CODE"
 test -f /workspace/writable/installed.lock && echo "  PASS: installed.lock exists" && PASS=$((PASS+1)) || { echo "  FAIL: installed.lock missing"; FAIL=$((FAIL+1)); }
 
 echo "--- 6. Auth: login page ---"
@@ -204,6 +204,29 @@ assert_code "dashboard requires auth" "302" "$CODE"
 echo "--- 22. Root redirect ---"
 CODE=$(curl_code "$BASE/")
 assert_code "home redirect" "302" "$CODE"
+
+echo "--- 23. Reinstall: installer accessible ---"
+HTML=$(curl_get "$BASE/install")
+assert_contains "reinstall accessible" "$HTML" "requirements-list"
+
+echo "--- 24. Reinstall: full install cycle ---"
+rm -f /workspace/writable/installed.lock
+HTML=$(curl_get "$BASE/install/database")
+CSRF=$(get_csrf "$HTML")
+curl_post "$BASE/install/database" "csrf_test_name=${CSRF}&hostname=localhost&port=3306&database=bizpanel_test&username=bizpanel&password=bizpanel" > /dev/null
+HTML=$(curl_get "$BASE/install/setup")
+CSRF=$(get_csrf "$HTML")
+SITE_URL="$BASE/"
+curl_post "$BASE/install/setup" "csrf_test_name=${CSRF}&baseURL=${SITE_URL}&admin_name=Reinstall+Admin&admin_email=reinstall@test.local&admin_password=password123&admin_password_confirm=password123&seed_demo=1" > /dev/null
+HTML=$(curl_get "$BASE/install/process")
+CSRF=$(get_csrf "$HTML")
+curl_post "$BASE/install/execute" "csrf_test_name=${CSRF}" > /dev/null
+HTML=$(curl_get "$BASE/login")
+assert_contains "reinstall login page" "$HTML" 'name="email"'
+CSRF=$(get_csrf "$HTML")
+curl_post "$BASE/login" "csrf_test_name=${CSRF}&email=reinstall@test.local&password=password123" > /dev/null
+HTML=$(curl_get "$BASE/dashboard")
+assert_contains "reinstall dashboard" "$HTML" "kpi-grid"
 
 echo
 echo "=== Results: $PASS passed, $FAIL failed ==="

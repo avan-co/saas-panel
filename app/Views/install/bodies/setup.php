@@ -1,5 +1,11 @@
 <p class="install-help"><?= esc(lang('Install.setup_help')) ?></p>
 
+<?php if (! empty($isReinstall)): ?>
+    <div class="alert alert-warning install-reinstall-notice">
+        <?= esc(lang('Install.reinstall_warning')) ?>
+    </div>
+<?php endif; ?>
+
 <form method="post" action="<?= site_url('install/setup') ?>" class="install-form">
     <?= csrf_field() ?>
 

@@ -18,7 +18,9 @@ return [
     'database_help'      => 'Create a MySQL database in cPanel and enter the connection details.',
     'setup_help'         => 'Set your site URL and platform admin account.',
     'process_help'       => 'Please wait, automatic installation is in progress...',
-    'complete_help'      => 'Platform installed successfully. The installer is now locked.',
+    'complete_help'      => 'Platform installed successfully. You can sign in now.',
+    'reinstall_warning'  => 'Reinstall: completing setup will drop all existing database tables and recreate everything from scratch.',
+    'reset_failed'       => 'Database reset failed:',
 
     'hostname'           => 'Database host',
     'database'           => 'Database name',
