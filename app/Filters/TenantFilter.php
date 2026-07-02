@@ -21,6 +21,10 @@ class TenantFilter implements FilterInterface
         $tenantContext = service('tenantContext');
 
         if (! $tenantContext->loadFromSession((int) $userId)) {
+            if (session('is_platform_admin')) {
+                return;
+            }
+
             return redirect()->to('/login')->with('error', lang('App.no_tenant_access'));
         }
     }
