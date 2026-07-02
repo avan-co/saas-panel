@@ -48,4 +48,5 @@ return [
     'confirm_delete'     => 'Are you sure you want to delete this item?',
     'deleted'            => 'Deleted successfully.',
     'not_found'          => 'Item not found.',
+    'permission_denied'  => 'You do not have permission.',
 ];

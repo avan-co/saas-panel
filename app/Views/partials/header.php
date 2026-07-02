@@ -23,6 +23,10 @@
         <?php endif; ?>
 
         <div class="header-actions">
+            <form method="get" action="<?= site_url('search') ?>" class="header-search">
+                <input type="search" name="q" placeholder="<?= esc(lang('App.search')) ?>" aria-label="<?= esc(lang('App.search')) ?>">
+            </form>
+
             <div class="locale-switch">
                 <a href="<?= site_url('locale/fa') ?>" class="<?= $locale === 'fa' ? 'active' : '' ?>">FA</a>
                 <a href="<?= site_url('locale/en') ?>" class="<?= $locale === 'en' ? 'active' : '' ?>">EN</a>

@@ -20,24 +20,56 @@ class TenantUsers extends BaseController
             return redirect()->to('/module/settings')->with('error', lang('Settings.no_permission'));
         }
 
-        $members = model(TenantMembershipModel::class)
-            ->select('tenant_memberships.*, users.name, users.email, users.status AS user_status')
-            ->join('users', 'users.id = tenant_memberships.user_id')
-            ->where('tenant_memberships.tenant_id', (int) $tenant['id'])
-            ->orderBy('tenant_memberships.role', 'ASC')
-            ->findAll();
+        $membershipModel = model(TenantMembershipModel::class);
 
         return $this->render('settings/users/index', [
             'title'          => lang('Settings.users'),
             'moduleNav'      => 'users',
             'moduleNavItems' => config('ModuleMenus')->settings,
-            'members'        => $members,
+            'members'        => $membershipModel->getForTenant((int) $tenant['id']),
+            'orgTree'        => $membershipModel->orgTree((int) $tenant['id']),
             'breadcrumbs'    => [
                 ['label' => lang('App.menu.dashboard'), 'url' => site_url('dashboard')],
                 ['label' => lang('Settings.title'), 'url' => site_url('module/settings')],
                 ['label' => lang('Settings.users')],
             ],
         ]);
+    }
+
+    public function update(int $id)
+    {
+        $tenant = service('tenantContext')->getTenant();
+
+        if ($tenant === null || ! $this->canManageUsers()) {
+            return redirect()->to('/module/settings')->with('error', lang('Settings.no_permission'));
+        }
+
+        $model      = model(TenantMembershipModel::class);
+        $membership = $model->where('id', $id)->where('tenant_id', (int) $tenant['id'])->first();
+
+        if ($membership === null) {
+            return redirect()->to('/module/settings/users')->with('error', lang('App.not_found'));
+        }
+
+        $rules = [
+            'role' => 'required|in_list[admin,accountant,hr,viewer,manager]',
+        ];
+
+        if (! $this->validate($rules)) {
+            return redirect()->back()->withInput()->with('errors', $this->validator->getErrors());
+        }
+
+        $perms = $this->request->getPost('permissions');
+        $permsJson = is_array($perms) ? json_encode(array_values($perms)) : null;
+
+        $model->update($id, [
+            'role'        => (string) $this->request->getPost('role'),
+            'department'  => (string) $this->request->getPost('department'),
+            'manager_id'  => $this->request->getPost('manager_id') ? (int) $this->request->getPost('manager_id') : null,
+            'permissions' => $permsJson,
+        ]);
+
+        return redirect()->to('/module/settings/users')->with('success', lang('Settings.user_updated'));
     }
 
     public function store()
@@ -83,11 +115,16 @@ class TenantUsers extends BaseController
             return redirect()->back()->with('error', lang('Settings.user_exists'));
         }
 
+        $perms = $this->request->getPost('permissions');
+        $permsJson = is_array($perms) ? json_encode(array_values($perms)) : null;
+
         $membershipModel->insert([
-            'tenant_id' => (int) $tenant['id'],
-            'user_id'   => $userId,
-            'role'      => (string) $this->request->getPost('role'),
-            'department'=> (string) $this->request->getPost('department'),
+            'tenant_id'   => (int) $tenant['id'],
+            'user_id'     => $userId,
+            'role'        => (string) $this->request->getPost('role'),
+            'department'  => (string) $this->request->getPost('department'),
+            'manager_id'  => $this->request->getPost('manager_id') ? (int) $this->request->getPost('manager_id') : null,
+            'permissions' => $permsJson,
         ]);
 
         model(NotificationModel::class)->notifyUser(

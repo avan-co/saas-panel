@@ -32,6 +32,40 @@ class Projects extends BaseController
         ]);
     }
 
+    public function show(int $id)
+    {
+        $tenant = $this->requireModule('projects');
+
+        if ($tenant === null) {
+            return $this->moduleDeniedRedirect();
+        }
+
+        $tenantId     = (int) $tenant['id'];
+        $projectModel = model(ProjectModel::class);
+        $project      = $projectModel->findForTenant($id, $tenantId);
+
+        if ($project === null) {
+            return redirect()->to('/module/projects')->with('error', lang('Projects.not_found'));
+        }
+
+        $finance = ['income' => 0, 'expense' => 0, 'profit' => 0];
+        $transactions = [];
+
+        if (service('tenantContext')->hasModule('finance')) {
+            $finance      = $projectModel->financialSummary($tenantId, $id);
+            $transactions = model(\App\Models\FinTransactionModel::class)->forProject($tenantId, $id);
+        }
+
+        return $this->render('projects/show', [
+            'title'        => $project['name'],
+            'project'      => $project,
+            'finance'      => $finance,
+            'transactions' => $transactions,
+            'hasFinance'   => service('tenantContext')->hasModule('finance'),
+            'breadcrumbs'  => $this->moduleBreadcrumbs(lang('Projects.title'), site_url('module/projects'), $project['name']),
+        ]);
+    }
+
     public function create()
     {
         $tenant = $this->requireModule('projects');

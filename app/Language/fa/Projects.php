@@ -23,4 +23,5 @@ return [
     'status_active'    => 'در حال اجرا',
     'status_on_hold'   => 'متوقف',
     'status_completed' => 'تکمیل شده',
+    'view'             => 'مشاهده',
 ];

@@ -47,4 +47,29 @@ class ProjectModel extends Model
 
         return $row ?: null;
     }
+
+    public function financialSummary(int $tenantId, int $projectId): array
+    {
+        $txn = model(FinTransactionModel::class)->projectSummary($tenantId, $projectId);
+        $income  = (float) ($txn['income'] ?? 0);
+        $expense = (float) ($txn['expense'] ?? 0);
+
+        return [
+            'income'  => $income,
+            'expense' => $expense,
+            'profit'  => $income - $expense,
+        ];
+    }
+
+    public function search(int $tenantId, string $q, int $limit = 20): array
+    {
+        return $this->where('tenant_id', $tenantId)
+            ->groupStart()
+            ->like('name', $q)
+            ->orLike('code', $q)
+            ->orLike('client_name', $q)
+            ->groupEnd()
+            ->limit($limit)
+            ->findAll();
+    }
 }
