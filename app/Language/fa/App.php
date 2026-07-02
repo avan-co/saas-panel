@@ -46,6 +46,7 @@ return [
     'tenant_switched'    => 'کسب‌وکار به «{name}» تغییر کرد.',
     'delete'             => 'حذف',
     'view'               => 'مشاهده',
+    'download'           => 'دانلود',
     'invalid_request'    => 'درخواست نامعتبر است.',
     'confirm_delete'     => 'آیا از حذف این مورد مطمئن هستید؟',
     'deleted'            => 'با موفقیت حذف شد.',

@@ -10,7 +10,7 @@ class DocumentModel extends Model
     protected $primaryKey    = 'id';
     protected $allowedFields = [
         'tenant_id', 'title', 'doc_type', 'file_path', 'original_name', 'mime', 'size',
-        'entity_type', 'entity_id', 'version', 'is_locked', 'approved_by', 'approved_at', 'uploaded_by',
+        'entity_type', 'entity_id', 'version', 'is_locked', 'approval_status', 'approved_by', 'approved_at', 'uploaded_by',
     ];
     protected $useTimestamps = true;
 

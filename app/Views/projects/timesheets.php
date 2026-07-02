@@ -1,13 +1,9 @@
 <?= $this->extend('layouts/app') ?>
 <?= $this->section('content') ?>
 <div class="page-module page-projects">
-<?= $this->include('partials/breadcrumb') ?>
+<?= $this->include('partials/project_subnav') ?>
 <div class="page-header card-header-row">
     <h2 class="page-heading"><?= esc($project['name']) ?> — <?= esc(lang('Projects.timesheets')) ?></h2>
-    <div>
-        <a href="<?= site_url('module/projects/' . $project['id'] . '/tasks') ?>" class="btn btn-secondary"><?= esc(lang('Projects.tasks')) ?></a>
-        <a href="<?= site_url('module/projects/' . $project['id']) ?>" class="btn btn-secondary"><?= esc(lang('Projects.back_to_project')) ?></a>
-    </div>
 </div>
 
 <?php if ($canEdit && $employees !== []): ?>

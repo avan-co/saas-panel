@@ -10,7 +10,8 @@ class ProjectModel extends Model
     protected $primaryKey    = 'id';
     protected $allowedFields = [
         'tenant_id', 'name', 'code', 'client_name', 'contact_id', 'manager_user_id',
-        'status', 'budget', 'actual_cost', 'labor_cost', 'progress', 'start_date', 'end_date',
+        'status', 'priority', 'description', 'budget', 'actual_cost', 'labor_cost',
+        'progress', 'health_status', 'start_date', 'end_date',
     ];
     protected $useTimestamps = true;
 

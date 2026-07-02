@@ -40,9 +40,44 @@
                 </div>
             </div>
 
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="client_name"><?= esc(lang('Projects.client')) ?></label>
+                    <input type="text" id="client_name" name="client_name" value="<?= esc(old('client_name', $project['client_name'] ?? '')) ?>" maxlength="120">
+                </div>
+                <?php if (! empty($contacts)): ?>
+                <div class="form-group">
+                    <label><?= esc(lang('Finance.contact')) ?></label>
+                    <select name="contact_id"><option value="">—</option>
+                    <?php foreach ($contacts as $c): ?><option value="<?= $c['id'] ?>" <?= (string)old('contact_id', $project['contact_id'] ?? '')===(string)$c['id']?'selected':'' ?>><?= esc($c['name']) ?></option><?php endforeach; ?>
+                    </select>
+                </div>
+                <?php endif; ?>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="manager_user_id"><?= esc(lang('Projects.manager')) ?></label>
+                    <select id="manager_user_id" name="manager_user_id">
+                        <option value="">—</option>
+                        <?php foreach ($users as $u): ?>
+                        <option value="<?= $u['user_id'] ?>" <?= (string)old('manager_user_id', $project['manager_user_id'] ?? '')===(string)$u['user_id']?'selected':'' ?>><?= esc($u['name']) ?></option>
+                        <?php endforeach; ?>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="priority"><?= esc(lang('Projects.priority')) ?></label>
+                    <select id="priority" name="priority">
+                        <?php foreach (['low','medium','high','critical'] as $p): ?>
+                        <option value="<?= $p ?>" <?= old('priority', $project['priority'] ?? 'medium')===$p?'selected':'' ?>><?= esc(lang('Projects.priority_'.$p)) ?></option>
+                        <?php endforeach; ?>
+                    </select>
+                </div>
+            </div>
+
             <div class="form-group">
-                <label for="client_name"><?= esc(lang('Projects.client')) ?></label>
-                <input type="text" id="client_name" name="client_name" value="<?= esc(old('client_name', $project['client_name'] ?? '')) ?>" maxlength="120">
+                <label for="description"><?= esc(lang('Projects.description')) ?></label>
+                <textarea id="description" name="description" rows="3"><?= esc(old('description', $project['description'] ?? '')) ?></textarea>
             </div>
 
             <div class="form-row">
@@ -64,19 +99,36 @@
 
             <div class="form-row">
                 <div class="form-group">
-                    <label for="progress"><?= esc(lang('Projects.progress')) ?> (%)</label>
-                    <input type="number" id="progress" name="progress" min="0" max="100" step="1" value="<?= esc(old('progress', $project['progress'] ?? '0')) ?>" required>
+                    <label for="start_date"><?= esc(lang('Projects.start_date')) ?></label>
+                    <input type="text" id="start_date" name="start_date" class="jalali-date" value="<?= esc(old('start_date', !empty($project['start_date']) ? jalali_date($project['start_date']) : '')) ?>">
                 </div>
                 <div class="form-group">
-                    <label for="start_date"><?= esc(lang('Projects.start_date')) ?></label>
-                    <input type="date" id="start_date" name="start_date" value="<?= esc(old('start_date', $project['start_date'] ?? '')) ?>">
+                    <label for="end_date"><?= esc(lang('Projects.end_date')) ?></label>
+                    <input type="text" id="end_date" name="end_date" class="jalali-date" value="<?= esc(old('end_date', !empty($project['end_date']) ? jalali_date($project['end_date']) : '')) ?>">
                 </div>
             </div>
 
-            <div class="form-group">
-                <label for="end_date"><?= esc(lang('Projects.end_date')) ?></label>
-                <input type="date" id="end_date" name="end_date" value="<?= esc(old('end_date', $project['end_date'] ?? '')) ?>">
+            <h3><?= esc(lang('Projects.members')) ?></h3>
+            <?php $memberRows = $members !== [] ? $members : [['user_id'=>'','role'=>'expert']]; ?>
+            <?php foreach ($memberRows as $i => $m): ?>
+            <div class="form-row">
+                <div class="form-group">
+                    <select name="member_user_id[]">
+                        <option value="">—</option>
+                        <?php foreach ($users as $u): ?>
+                        <option value="<?= $u['user_id'] ?>" <?= (string)($m['user_id']??'')===(string)$u['user_id']?'selected':'' ?>><?= esc($u['name']) ?></option>
+                        <?php endforeach; ?>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <select name="member_role[]">
+                        <?php foreach (['manager','expert','intern','client','viewer'] as $r): ?>
+                        <option value="<?= $r ?>" <?= ($m['role']??'expert')===$r?'selected':'' ?>><?= esc(lang('Projects.role_'.$r)) ?></option>
+                        <?php endforeach; ?>
+                    </select>
+                </div>
             </div>
+            <?php endforeach; ?>
 
             <div class="form-actions">
                 <a href="<?= site_url('module/projects') ?>" class="btn btn-secondary"><?= esc(lang('App.cancel')) ?></a>

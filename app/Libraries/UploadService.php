@@ -12,6 +12,13 @@ class UploadService
         'jpeg' => 'image/jpeg',
         'png'  => 'image/png',
         'webp' => 'image/webp',
+        'doc'  => 'application/msword',
+        'docx' => 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+        'xls'  => 'application/vnd.ms-excel',
+        'xlsx' => 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+        'dwg'  => 'application/acad',
+        'step' => 'application/step',
+        'stp'  => 'application/step',
     ];
 
     public function storeForTenant(int $tenantId, string $subdir, ?UploadedFile $file): ?array
@@ -22,7 +29,7 @@ class UploadService
 
         $ext = strtolower($file->getClientExtension());
 
-        if (! isset($this->allowedMimes[$ext])) {
+        if (! isset($this->allowedMimes[$ext]) && ! in_array($ext, ['sldprt', 'sldasm'], true)) {
             return null;
         }
 

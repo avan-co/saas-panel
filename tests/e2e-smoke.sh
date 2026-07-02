@@ -251,14 +251,29 @@ echo "--- 26b. Payroll runs ---"
 CODE=$(curl_code "$BASE/module/payroll/runs")
 assert_code "payroll runs" "200" "$CODE"
 
-echo "--- 26c. Project tasks (5-column kanban) ---"
+echo "--- 26c. Project tasks (6-column kanban) ---"
 curl_get "$BASE/tenant/switch/3" > /dev/null
 HTML=$(curl_get "$BASE/module/projects/1/tasks")
 assert_contains "kanban backlog" "$HTML" "Backlog"
+assert_contains "kanban testing" "$HTML" "Testing"
+CODE=$(curl_code "$BASE/module/projects/1/gantt")
+assert_code "project gantt" "200" "$CODE"
+CODE=$(curl_code "$BASE/module/projects/1/reports")
+assert_code "project reports" "200" "$CODE"
+CODE=$(curl_code "$BASE/module/projects/1/wiki")
+assert_code "project wiki" "200" "$CODE"
+CODE=$(curl_code "$BASE/module/projects/1/files")
+assert_code "project files" "200" "$CODE"
+CODE=$(curl_code "$BASE/module/projects/1/risks")
+assert_code "project risks" "200" "$CODE"
+CODE=$(curl_code "$BASE/module/projects/1/calendar")
+assert_code "project calendar" "200" "$CODE"
+CODE=$(curl_code "$BASE/module/projects/workload")
+assert_code "team workload" "200" "$CODE"
 CODE=$(curl_code "$BASE/module/projects/1/timesheets")
 assert_code "project timesheets" "200" "$CODE"
-HTML=$(curl_get "$BASE/module/projects/1/timesheets")
-assert_contains "timesheets page" "$HTML" "Timesheet"
+HTML=$(curl_get "$BASE/module/projects/1")
+assert_contains "project dashboard" "$HTML" "Dashboard"
 curl_get "$BASE/tenant/switch/1" > /dev/null
 
 echo "--- 26d. Settings integration stats ---"
