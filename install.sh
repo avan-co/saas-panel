@@ -1,8 +1,10 @@
 #!/bin/bash
-# نصب سریع روی cPanel Terminal
+# نصب دستی (اختیاری) — روش پیشنهادی: باز کردن /install در مرورگر
 set -e
 
-echo "=== BizPanel Install ==="
+echo "=== BizPanel Manual Install ==="
+echo "روش پیشنهادی: https://yourdomain.com/install"
+echo ""
 
 if [ ! -f .env ]; then
     echo "فایل .env یافت نشد. ابتدا env.cpanel.example را کپی کنید."
@@ -18,5 +20,4 @@ chmod -R 755 public/
 
 echo ""
 echo "=== نصب کامل شد ==="
-echo "ورود: admin@demo.local / password"
-echo "حتماً رمز را عوض کنید!"
+echo "ورود با حسابی که در seeder تعریف شده: admin@demo.local / password"

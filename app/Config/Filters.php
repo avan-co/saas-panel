@@ -4,6 +4,7 @@ namespace Config;
 
 use CodeIgniter\Config\Filters as BaseFilters;
 use App\Filters\AuthFilter;
+use App\Filters\InstallFilter;
 use App\Filters\LocaleFilter;
 use App\Filters\PlatformAdminFilter;
 use App\Filters\TenantFilter;
@@ -29,6 +30,7 @@ class Filters extends BaseFilters
      * or [filter_name => [classname1, classname2, ...]]
      */
     public array $aliases = [
+        'install'        => InstallFilter::class,
         'auth'           => AuthFilter::class,
         'tenant'         => TenantFilter::class,
         'locale'         => LocaleFilter::class,
@@ -59,6 +61,7 @@ class Filters extends BaseFilters
      */
     public array $required = [
         'before' => [
+            'install',
             'locale',
         ],
         'after' => [

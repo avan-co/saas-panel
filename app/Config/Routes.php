@@ -5,6 +5,15 @@ use CodeIgniter\Router\RouteCollection;
 /** @var RouteCollection $routes */
 $routes->get('/', 'Home::index');
 
+// Web Installer
+$routes->get('install', 'Install::index');
+$routes->get('install/database', 'Install::database');
+$routes->post('install/database', 'Install::saveDatabase');
+$routes->get('install/setup', 'Install::setup');
+$routes->post('install/setup', 'Install::runSetup');
+$routes->get('install/process', 'Install::process');
+$routes->post('install/execute', 'Install::execute');
+
 $routes->get('login', 'Auth::login');
 $routes->post('login', 'Auth::attempt');
 $routes->get('logout', 'Auth::logout');

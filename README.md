@@ -4,162 +4,110 @@
 
 ## ویژگی‌های فعلی (فاز ۰)
 
+- **نصب وب‌محور** — فقط آدرس `/install` را باز کنید
 - چند کسب‌وکار (Multi-tenant) با جداسازی داده
-- فعال‌سازی ماژول per کسب‌وکار (مالی، حقوق، بیمه، مالیات، پروژه)
+- فعال‌سازی ماژول per کسب‌وکار
 - پنل مدیریت پلتفرم (Super Admin)
 - تم روشن / تاریک / سیستم
-- دو زبانه فارسی و انگلیسی (فایل‌های زبان CI4)
+- دو زبانه فارسی و انگلیسی
 - RTL خودکار برای فارسی
-- منوی باریک قابل گسترش
 
-## پیش‌نیازها (cPanel)
-
-- PHP 8.1 یا بالاتر
-- MySQL 5.7+ / MariaDB
-- افزونه‌های PHP: `mysqli`, `mbstring`, `intl`, `json`, `curl`
-- `mod_rewrite` فعال
-
-## نصب روی cPanel — گام‌به‌گام
+## نصب روی cPanel — ۳ مرحله ساده
 
 ### ۱. آپلود فایل‌ها
 
-کل پروژه را در هاست آپلود کنید (مثلاً در `saas-panel/` داخل `home/username/`).
+روی کامپیوتر:
+```bash
+composer install --no-dev
+```
 
-> **روش پیشنهادی:** روی کامپیوتر خودتان `composer install --no-dev` بزنید، سپس کل پوشه (شامل `vendor/`) را ZIP کنید و در File Manager آپلود و Extract کنید.
->
-> اگر cPanel شما Terminal دارد، می‌توانید بعد از آپلود فقط سورس را بفرستید و `composer install --no-dev` را روی سرور اجرا کنید.
+کل پروژه (شامل `vendor/`) را ZIP کنید و در هاست Extract کنید.
 
 ### ۲. ساخت دیتابیس MySQL
 
 در cPanel → **MySQL Databases**:
+- یک دیتابیس بسازید
+- یک کاربر MySQL بسازید و به دیتابیس وصل کنید
 
-1. یک دیتابیس بسازید (مثلاً `username_bizpanel`)
-2. یک کاربر MySQL بسازید
-3. کاربر را به دیتابیس اضافه کنید (All Privileges)
+> فقط دیتابیس خالی بسازید — جداول خودکار نصب می‌شوند.
 
 ### ۳. تنظیم Document Root
 
-در cPanel → **Domains** → دامنه یا ساب‌دامین → Document Root را روی پوشه **`public`** پروژه بگذارید:
+در cPanel → **Domains** → Document Root را روی پوشه **`public`** بگذارید:
 
 ```
 /home/username/saas-panel/public
 ```
 
-اگر نمی‌توانید Document Root را عوض کنید، محتوای `public/` را در `public_html` کپی کنید و فایل `index.php` را ویرایش کنید:
+### ۴. اجرای نصاب وب
 
-```php
-$pathsPath = FCPATH . '../app/Config/Paths.php';
-// مسیر را متناسب با ساختار هاست تنظیم کنید
+در مرورگر باز کنید:
+
+```
+https://yourdomain.com/install
 ```
 
-### ۴. فایل `.env`
+مراحل نصاب:
+1. **بررسی پیش‌نیازها** — PHP، افزونه‌ها، مجوز writable
+2. **اتصال دیتابیس** — hostname، نام DB، کاربر، رمز
+3. **تنظیمات** — آدرس سایت، حساب مدیر، داده نمونه (اختیاری)
+4. **نصب خودکار** — migration و راه‌اندازی
 
-1. فایل `env.cpanel.example` را کپی کنید به `.env`
-2. مقادیر را پر کنید:
+بعد از نصب به صفحه ورود هدایت می‌شوید.
 
-```ini
-app.baseURL = 'https://yourdomain.com/'
-database.default.database = username_bizpanel
-database.default.username = username_dbuser
-database.default.password = your_password
-```
+> فایل `writable/installed.lock` بعد از نصب ساخته می‌شود و دسترسی به `/install` بسته می‌شود.
 
-### ۵. مجوز پوشه‌ها
-
-در Terminal cPanel یا File Manager:
+### مجوز پوشه‌ها
 
 ```bash
 chmod -R 755 writable/
-chmod -R 755 public/
 ```
 
-### ۶. Migration و داده اولیه
+## نصب دستی (اختیاری — Terminal)
 
-در **Terminal** cPanel:
+اگر به Terminal دسترسی دارید:
 
 ```bash
-cd ~/saas-panel
-php spark key:generate
+cp env.cpanel.example .env
+# ویرایش .env
 php spark migrate
 php spark db:seed PlatformSeeder
 ```
 
-### ۷. ورود
-
-| فیلد | مقدار |
-|------|-------|
-| ایمیل | `admin@demo.local` |
-| رمز | `password` |
-
-بعد از ورود، سوئیچر کسب‌وکار در هدر را امتحان کنید.
+یا: `./install.sh`
 
 ## ساختار پروژه
 
 ```
+public/          ← Document Root
 app/
-├── Controllers/       # کنترلرها
-├── Database/
-│   ├── Migrations/    # جداول MySQL
-│   └── Seeds/         # داده نمونه
-├── Filters/           # احراز هویت، tenant، زبان
-├── Language/
-│   ├── fa/            # فارسی
-│   └── en/            # انگلیسی
-├── Libraries/         # TenantContext
-├── Models/
-└── Views/             # قالب UI
-
-public/                # Document Root — همین را در cPanel تنظیم کنید
-├── assets/css/app.css
-├── assets/js/app.js
-└── index.php
-
-writable/              # لاگ، کش، سشن — باید قابل نوشتن باشد
+├── Controllers/Install.php   ← نصاب وب
+├── Libraries/Installer.php
+├── Language/fa|en/
+└── Views/install/
 ```
 
-## افزودن متن جدید (دو زبانه)
-
-مثل CodeIgniter 4:
+## افزودن متن (دو زبانه)
 
 ```php
 // app/Language/fa/Finance.php
 return ['invoice' => 'فاکتور'];
-
-// app/Language/en/Finance.php
-return ['invoice' => 'Invoice'];
 ```
-
-در View:
 
 ```php
 <?= lang('Finance.invoice') ?>
 ```
 
-## ماژول‌های آینده
+## فازهای بعدی
 
 | فاز | ماژول |
 |-----|--------|
-| ۱ | مدیریت مالی کامل |
+| ۱ | مدیریت مالی |
 | ۱.۵ | حقوق، بیمه، مالیات |
 | ۲ | مدیریت پروژه |
 
-## توسعه محلی
+## امنیت
 
-```bash
-cp env .env
-# تنظیم MySQL محلی در .env
-php spark serve
-php spark migrate
-php spark db:seed PlatformSeeder
-```
-
-## امنیت (Production)
-
+- بعد از نصب `/install` غیرفعال می‌شود
 - `CI_ENVIRONMENT = production` در `.env`
-- رمز `admin@demo.local` را عوض کنید
-- `app.forceGlobalSecureRequests = true` با SSL
-- پوشه‌های `app/` و `writable/` خارج از public باشند
-
-## لایسنس
-
-MIT — CodeIgniter 4 Framework
+- SSL را فعال کنید
