@@ -8,7 +8,12 @@
     <div class="page-header-text">
         <h2 class="page-heading"><?= esc(lang('Payroll.title')) ?></h2>
     </div>
+    <a href="<?= site_url('module/payroll/employees/new') ?>" class="btn btn-primary"><?= esc(lang('Payroll.new_employee')) ?></a>
 </div>
+
+<?php if (session()->getFlashdata('success')): ?>
+    <div class="alert alert-success"><?= esc(session()->getFlashdata('success')) ?></div>
+<?php endif; ?>
 
 <?php $fmt = static fn (float $n): string => number_format($n, 0, '.', ','); ?>
 
@@ -36,6 +41,7 @@
                             <th><?= esc(lang('Payroll.name')) ?></th>
                             <th><?= esc(lang('Payroll.job_title')) ?></th>
                             <th><?= esc(lang('Payroll.base_salary')) ?></th>
+                            <th><?= esc(lang('App.actions')) ?></th>
                         </tr>
                     </thead>
                     <tbody>
@@ -44,6 +50,9 @@
                                 <td><?= esc($emp['name']) ?></td>
                                 <td class="text-muted"><?= esc($emp['job_title'] ?? '—') ?></td>
                                 <td class="amount-cell"><?= esc($fmt((float) $emp['base_salary'])) ?></td>
+                                <td>
+                                    <a href="<?= site_url('module/payroll/employees/' . $emp['id'] . '/edit') ?>" class="btn btn-ghost btn-sm"><?= esc(lang('App.edit')) ?></a>
+                                </td>
                             </tr>
                         <?php endforeach; ?>
                     </tbody>

@@ -40,4 +40,11 @@ class ProjectModel extends Model
 
         return (int) round((float) ($row['avg'] ?? 0));
     }
+
+    public function findForTenant(int $id, int $tenantId): ?array
+    {
+        $row = $this->where('id', $id)->where('tenant_id', $tenantId)->first();
+
+        return $row ?: null;
+    }
 }

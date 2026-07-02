@@ -22,13 +22,14 @@
             'payroll' => lang('Dashboard.kpi_payroll'),
             'tax'     => lang('Dashboard.kpi_tax'),
         ];
-        $icons = ['revenue' => 'income', 'expense' => 'expense', 'payroll' => 'users', 'tax' => 'file'];
         foreach ($kpis as $kpi):
         ?>
             <div class="kpi-card">
                 <span class="kpi-label"><?= esc($labels[$kpi['key']]) ?></span>
                 <span class="kpi-value"><?= esc($kpi['value']) ?></span>
-                <span class="kpi-change <?= $kpi['positive'] ? 'positive' : 'negative' ?>"><?= esc($kpi['change']) ?></span>
+                <?php if (! empty($kpi['hint'])): ?>
+                    <span class="kpi-meta"><?= esc($kpi['hint']) ?></span>
+                <?php endif; ?>
             </div>
         <?php endforeach; ?>
     </div>
@@ -40,9 +41,10 @@
             </div>
             <div class="card-body quick-actions">
                 <?php foreach ($tenantModules as $module): ?>
-                    <?php if ($module['code'] === 'dashboard') continue; ?>
-                    <?php $url = site_url('module/' . $module['code']); ?>
-                    <a href="<?= $url ?>" class="quick-action-card">
+                    <?php if ($module['code'] === 'dashboard') {
+                        continue;
+                    } ?>
+                    <a href="<?= module_url($module['code']) ?>" class="quick-action-card">
                         <span class="quick-action-title"><?= esc(lang('App.menu.' . $module['code'])) ?></span>
                         <span class="quick-action-link"><?= esc(lang('Dashboard.open_module')) ?> →</span>
                     </a>
@@ -51,12 +53,33 @@
         </div>
 
         <div class="card">
-            <div class="card-header">
+            <div class="card-header card-header-row">
                 <h3><?= esc(lang('Dashboard.recent')) ?></h3>
+                <?php if ($recentActivity !== []): ?>
+                    <a href="<?= site_url('module/finance/transactions') ?>" class="btn btn-ghost btn-sm"><?= esc(lang('Finance.view_all')) ?></a>
+                <?php endif; ?>
             </div>
-            <div class="card-body empty-state">
-                <p><?= esc(lang('Dashboard.no_activity')) ?></p>
-            </div>
+            <?php if ($recentActivity === []): ?>
+                <div class="card-body empty-state">
+                    <p><?= esc(lang('Dashboard.no_activity')) ?></p>
+                </div>
+            <?php else: ?>
+                <div class="table-wrap">
+                    <table class="data-table data-table-compact">
+                        <tbody>
+                            <?php foreach ($recentActivity as $txn): ?>
+                                <tr>
+                                    <td class="text-muted"><?= esc($txn['txn_date']) ?></td>
+                                    <td><?= esc($txn['description'] ?? '—') ?></td>
+                                    <td class="amount-cell <?= $txn['type'] === 'income' ? 'positive' : 'negative' ?>">
+                                        <?= $txn['type'] === 'income' ? '+' : '−' ?><?= esc(format_amount((float) $txn['amount'])) ?>
+                                    </td>
+                                </tr>
+                            <?php endforeach; ?>
+                        </tbody>
+                    </table>
+                </div>
+            <?php endif; ?>
         </div>
     </div>
 </div>

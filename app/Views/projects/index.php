@@ -8,7 +8,12 @@
     <div class="page-header-text">
         <h2 class="page-heading"><?= esc(lang('Projects.title')) ?></h2>
     </div>
+    <a href="<?= site_url('module/projects/new') ?>" class="btn btn-primary"><?= esc(lang('Projects.new_project')) ?></a>
 </div>
+
+<?php if (session()->getFlashdata('success')): ?>
+    <div class="alert alert-success"><?= esc(session()->getFlashdata('success')) ?></div>
+<?php endif; ?>
 
 <?php $fmt = static fn (float $n): string => number_format($n, 0, '.', ','); ?>
 
@@ -41,6 +46,7 @@
                         <th><?= esc(lang('Projects.budget')) ?></th>
                         <th><?= esc(lang('Projects.progress')) ?></th>
                         <th><?= esc(lang('App.status')) ?></th>
+                        <th><?= esc(lang('App.actions')) ?></th>
                     </tr>
                 </thead>
                 <tbody>
@@ -59,6 +65,9 @@
                                 <span class="text-muted text-sm"><?= (int) $project['progress'] ?>%</span>
                             </td>
                             <td><span class="badge badge-<?= esc($project['status']) ?>"><?= esc(lang('Projects.status_' . $project['status'])) ?></span></td>
+                            <td>
+                                <a href="<?= site_url('module/projects/' . $project['id'] . '/edit') ?>" class="btn btn-ghost btn-sm"><?= esc(lang('App.edit')) ?></a>
+                            </td>
                         </tr>
                     <?php endforeach; ?>
                 </tbody>

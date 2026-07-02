@@ -16,4 +16,12 @@ return [
     'status_draft'   => 'Draft',
     'no_employees'   => 'No employees yet.',
     'no_runs'        => 'No payroll runs yet.',
+    'new_employee'   => 'New employee',
+    'edit_employee'  => 'Edit employee',
+    'hired_at'       => 'Hire date',
+    'status_active'  => 'Active',
+    'status_inactive'=> 'Inactive',
+    'saved'          => 'Employee saved successfully.',
+    'updated'        => 'Employee updated.',
+    'not_found'      => 'Employee not found.',
 ];

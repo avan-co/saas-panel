@@ -5,6 +5,7 @@ return [
     'tagline'            => 'Unified business management',
     'save'               => 'Save',
     'cancel'             => 'Cancel',
+    'edit'               => 'Edit',
     'back'               => 'Back',
     'actions'            => 'Actions',
     'status'             => 'Status',
@@ -38,6 +39,7 @@ return [
         'insurance' => 'Insurance',
         'tax'       => 'Tax',
         'projects'  => 'Projects',
+        'settings'  => 'Settings',
     ],
     'coming_soon' => 'Coming soon.',
 ];

@@ -778,6 +778,8 @@ body.sidebar-expanded .nav-label { opacity: 1; }
 
 .data-table tbody tr:hover { background: var(--accent-soft); }
 
+.data-table-compact td { padding: 10px 16px; }
+
 .badge {
     display: inline-block;
     padding: 2px 8px;
@@ -851,6 +853,25 @@ body.sidebar-expanded .nav-label { opacity: 1; }
 }
 
 .page-header .btn { flex-shrink: 0; }
+
+.settings-meta {
+    margin: 20px 0;
+    padding: 16px;
+    background: var(--bg-secondary);
+    border-radius: var(--radius);
+    border: 1px solid var(--border);
+}
+
+.settings-meta-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 8px 0;
+}
+
+.settings-meta-row + .settings-meta-row {
+    border-top: 1px solid var(--border);
+}
 
 /* Progress bar */
 .progress-bar {

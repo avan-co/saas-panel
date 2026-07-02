@@ -33,9 +33,22 @@ $routes->group('', ['filter' => 'auth'], static function ($routes) {
     });
 
     $routes->get('module/payroll', 'Payroll::index', ['filter' => 'tenant']);
+    $routes->get('module/payroll/employees/new', 'Payroll::createEmployee', ['filter' => 'tenant']);
+    $routes->post('module/payroll/employees/store', 'Payroll::storeEmployee', ['filter' => 'tenant']);
+    $routes->get('module/payroll/employees/(:num)/edit', 'Payroll::editEmployee/$1', ['filter' => 'tenant']);
+    $routes->post('module/payroll/employees/(:num)/update', 'Payroll::updateEmployee/$1', ['filter' => 'tenant']);
+
     $routes->get('module/insurance', 'Insurance::index', ['filter' => 'tenant']);
     $routes->get('module/tax', 'Tax::index', ['filter' => 'tenant']);
+
     $routes->get('module/projects', 'Projects::index', ['filter' => 'tenant']);
+    $routes->get('module/projects/new', 'Projects::create', ['filter' => 'tenant']);
+    $routes->post('module/projects/store', 'Projects::store', ['filter' => 'tenant']);
+    $routes->get('module/projects/(:num)/edit', 'Projects::edit/$1', ['filter' => 'tenant']);
+    $routes->post('module/projects/(:num)/update', 'Projects::update/$1', ['filter' => 'tenant']);
+
+    $routes->get('module/settings', 'Settings::index', ['filter' => 'tenant']);
+    $routes->post('module/settings', 'Settings::update', ['filter' => 'tenant']);
 
     $routes->get('module/(:segment)', 'ModulePage::show/$1', ['filter' => 'tenant']);
 

@@ -183,12 +183,25 @@ curl_get "$BASE/tenant/switch/3" > /dev/null
 HTML=$(curl_get "$BASE/module/projects")
 assert_contains "projects module" "$HTML" "page-projects"
 
-echo "--- 18. Logout ---"
+echo "--- 18. Projects create form ---"
+HTML=$(curl_get "$BASE/module/projects/new")
+assert_contains "new project form" "$HTML" 'name="name"'
+
+echo "--- 19. Payroll create form ---"
+curl_get "$BASE/tenant/switch/1" > /dev/null
+HTML=$(curl_get "$BASE/module/payroll/employees/new")
+assert_contains "new employee form" "$HTML" 'name="base_salary"'
+
+echo "--- 20. Settings page ---"
+HTML=$(curl_get "$BASE/module/settings")
+assert_contains "settings page" "$HTML" "page-settings"
+
+echo "--- 21. Logout ---"
 curl_get "$BASE/logout" > /dev/null
 CODE=$(curl_code "$BASE/dashboard")
 assert_code "dashboard requires auth" "302" "$CODE"
 
-echo "--- 19. Root redirect ---"
+echo "--- 22. Root redirect ---"
 CODE=$(curl_code "$BASE/")
 assert_code "home redirect" "302" "$CODE"
 

@@ -12,4 +12,7 @@ return [
     'quick_actions'    => 'دسترسی سریع',
     'modules_overview' => 'ماژول‌های فعال',
     'open_module'      => 'ورود به ماژول',
+    'kpi_this_month'   => 'این ماه',
+    'kpi_monthly_payroll' => 'جمع حقوق فعال',
+    'kpi_pending_tax'  => 'معوق / اعلام‌نشده',
 ];

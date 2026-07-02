@@ -12,4 +12,7 @@ return [
     'quick_actions'    => 'Quick actions',
     'modules_overview' => 'Active modules',
     'open_module'      => 'Open module',
+    'kpi_this_month'   => 'This month',
+    'kpi_monthly_payroll' => 'Active staff total',
+    'kpi_pending_tax'  => 'Pending / unfiled',
 ];
