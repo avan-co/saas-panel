@@ -12,18 +12,19 @@ class DocumentService
         $latest   = $docModel->forEntity($tenantId, $entityType, $entityId);
         $version  = $latest !== [] ? ((int) $latest[0]['version'] + 1) : 1;
 
-        return (int) $docModel->insert([
-            'tenant_id'     => $tenantId,
-            'title'         => $title,
-            'doc_type'      => $docType,
-            'file_path'     => $fileMeta['file_path'] ?? null,
-            'original_name' => $fileMeta['original_name'] ?? null,
-            'mime'          => $fileMeta['mime'] ?? null,
-            'size'          => $fileMeta['size'] ?? 0,
-            'entity_type'   => $entityType,
-            'entity_id'     => $entityId,
-            'version'       => $version,
-            'uploaded_by'   => (int) session('user_id') ?: null,
+        return (int) model(DocumentModel::class)->insert([
+            'tenant_id'       => $tenantId,
+            'title'           => $title,
+            'doc_type'        => $docType,
+            'file_path'       => $fileMeta['file_path'] ?? null,
+            'original_name'   => $fileMeta['original_name'] ?? null,
+            'mime'            => $fileMeta['mime'] ?? null,
+            'size'            => $fileMeta['size'] ?? 0,
+            'entity_type'     => $entityType,
+            'entity_id'       => $entityId,
+            'version'         => $version,
+            'approval_status' => 'draft',
+            'uploaded_by'     => (int) session('user_id') ?: null,
         ]);
     }
 

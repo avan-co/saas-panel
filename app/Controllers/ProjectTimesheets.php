@@ -3,6 +3,7 @@
 namespace App\Controllers;
 
 use App\Controllers\Concerns\ChecksPermission;
+use App\Controllers\Concerns\HasProjectNav;
 use App\Controllers\Concerns\HasTenantModule;
 use App\Models\PayrollEmployeeModel;
 use App\Models\ProjectModel;
@@ -11,6 +12,7 @@ use App\Models\ProjectTaskModel;
 class ProjectTimesheets extends BaseController
 {
     use HasTenantModule;
+    use HasProjectNav;
     use ChecksPermission;
 
     public function index(int $projectId)
@@ -33,13 +35,15 @@ class ProjectTimesheets extends BaseController
             : [];
 
         return $this->render('projects/timesheets', [
-            'title'       => lang('Projects.timesheets') . ' — ' . $project['name'],
-            'project'     => $project,
-            'timesheets'  => model(\App\Models\TimesheetModel::class)->getForProject($tenantId, $projectId),
-            'employees'   => $employees,
-            'tasks'       => model(ProjectTaskModel::class)->getForProject($tenantId, $projectId),
-            'canEdit'     => $this->requirePermission('projects.tasks'),
-            'breadcrumbs' => $this->moduleBreadcrumbs(lang('Projects.title'), site_url('module/projects'), $project['name'], lang('Projects.timesheets')),
+            'title'           => lang('Projects.timesheets') . ' — ' . $project['name'],
+            'project'         => $project,
+            'timesheets'      => model(\App\Models\TimesheetModel::class)->getForProject($tenantId, $projectId),
+            'employees'       => $employees,
+            'tasks'           => model(ProjectTaskModel::class)->getForProject($tenantId, $projectId),
+            'canEdit'         => $this->requirePermission('projects.tasks'),
+            'projectNav'      => 'timesheets',
+            'projectNavItems' => $this->projectNavItems($projectId),
+            'breadcrumbs'     => $this->projectBreadcrumbs($project, lang('Projects.timesheets')),
         ]);
     }
 

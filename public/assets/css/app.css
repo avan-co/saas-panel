@@ -1262,7 +1262,14 @@ body.sidebar-mobile-open .sidebar {
 
 .notification-time { font-size: 12px; display: block; margin-top: 4px; }
 
-.inline-form { display: inline; }
+.kanban-board-6 { display: grid; grid-template-columns: repeat(6, minmax(140px, 1fr)); gap: 10px; margin-top: 20px; overflow-x: auto; }
+.kanban-dropzone.drag-over { background: var(--primary-soft, rgba(99,102,241,0.1)); min-height: 60px; }
+.health-green { background: #16a34a; color: #fff; }
+.health-yellow { background: #ca8a04; color: #fff; }
+.health-red { background: #dc2626; color: #fff; }
+.project-subnav { margin-bottom: 16px; flex-wrap: wrap; }
+@media (max-width: 900px) { .kanban-board-6 { grid-template-columns: repeat(3, 1fr); } }
+
 
 .header-search input {
     padding: 6px 12px;

@@ -45,6 +45,8 @@ return [
     'module_not_enabled' => 'This module is not enabled for the current business.',
     'tenant_switched'    => 'Switched to "{name}".',
     'delete'             => 'Delete',
+    'view'               => 'View',
+    'download'           => 'Download',
     'confirm_delete'     => 'Are you sure you want to delete this item?',
     'deleted'            => 'Deleted successfully.',
     'not_found'          => 'Item not found.',

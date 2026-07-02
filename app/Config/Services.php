@@ -175,4 +175,13 @@ class Services extends BaseService
 
         return new \App\Libraries\DocumentService();
     }
+
+    public static function project(bool $getShared = true)
+    {
+        if ($getShared) {
+            return static::getSharedInstance('project');
+        }
+
+        return new \App\Libraries\ProjectService();
+    }
 }

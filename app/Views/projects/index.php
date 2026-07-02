@@ -8,6 +8,7 @@
     <div class="page-header-text">
         <h2 class="page-heading"><?= esc(lang('Projects.title')) ?></h2>
     </div>
+    <a href="<?= site_url('module/projects/workload') ?>" class="btn btn-secondary"><?= esc(lang('Projects.workload')) ?></a>
     <a href="<?= site_url('module/projects/new') ?>" class="btn btn-primary"><?= esc(lang('Projects.new_project')) ?></a>
 </div>
 
