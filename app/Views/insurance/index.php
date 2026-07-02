@@ -8,6 +8,7 @@
     <div class="page-header-text">
         <h2 class="page-heading"><?= esc(lang('Insurance.title')) ?></h2>
     </div>
+    <a href="<?= site_url('module/insurance/new') ?>" class="btn btn-primary"><?= esc(lang('Insurance.new_policy')) ?></a>
 </div>
 
 <?php $fmt = static fn (float $n): string => number_format($n, 0, '.', ','); ?>
@@ -27,7 +28,11 @@
     <div class="card-header"><h3><?= esc(lang('Insurance.policies')) ?></h3></div>
     <div class="table-wrap">
         <?php if ($policies === []): ?>
-            <div class="empty-state"><?= esc(lang('Insurance.no_policies')) ?></div>
+            <?= view('partials/empty_state', [
+                'message'     => lang('Insurance.no_policies'),
+                'actionUrl'   => site_url('module/insurance/new'),
+                'actionLabel' => lang('Insurance.new_policy'),
+            ]) ?>
         <?php else: ?>
             <table class="data-table">
                 <thead>
@@ -36,7 +41,8 @@
                         <th><?= esc(lang('Insurance.provider')) ?></th>
                         <th><?= esc(lang('Insurance.type')) ?></th>
                         <th><?= esc(lang('Insurance.premium')) ?></th>
-                        <th><?= esc(lang('Insurance.valid_until')) ?></th>
+                        <th><?= esc(lang('App.status')) ?></th>
+                        <th><?= esc(lang('App.actions')) ?></th>
                     </tr>
                 </thead>
                 <tbody>
@@ -46,7 +52,11 @@
                             <td><?= esc($policy['provider']) ?></td>
                             <td><span class="tag"><?= esc(lang('Insurance.type_' . $policy['type'])) ?></span></td>
                             <td class="amount-cell"><?= esc($fmt((float) $policy['premium'])) ?></td>
-                            <td class="text-muted"><?= esc($policy['end_date'] ?? '—') ?></td>
+                            <td><span class="badge badge-<?= esc($policy['status']) ?>"><?= esc(lang('Insurance.status_' . $policy['status'])) ?></span></td>
+                            <td class="table-actions">
+                                <a href="<?= site_url('module/insurance/' . $policy['id'] . '/edit') ?>" class="btn btn-ghost btn-sm"><?= esc(lang('App.edit')) ?></a>
+                                <?= view('partials/delete_form', ['action' => site_url('module/insurance/' . $policy['id'] . '/delete')]) ?>
+                            </td>
                         </tr>
                     <?php endforeach; ?>
                 </tbody>

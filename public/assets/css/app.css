@@ -749,6 +749,44 @@ body.sidebar-expanded .nav-label { opacity: 1; }
     padding: 40px 20px;
 }
 
+.empty-state-action {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 16px;
+}
+
+.table-actions {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 4px;
+}
+
+.inline-delete-form {
+    display: inline;
+}
+
+.btn.text-error {
+    color: var(--error);
+}
+
+.sidebar-backdrop {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(15, 23, 42, 0.45);
+    z-index: 90;
+}
+
+body.sidebar-backdrop-open .sidebar-backdrop {
+    display: block;
+}
+
+body.sidebar-mobile-open .sidebar {
+    z-index: 100;
+}
+
 /* Table */
 .table-wrap { overflow-x: auto; padding: 0; }
 

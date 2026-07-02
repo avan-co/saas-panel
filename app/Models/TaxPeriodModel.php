@@ -28,4 +28,11 @@ class TaxPeriodModel extends Model
 
         return (float) ($row['total'] ?? 0);
     }
+
+    public function findForTenant(int $id, int $tenantId): ?array
+    {
+        $row = $this->where('id', $id)->where('tenant_id', $tenantId)->first();
+
+        return $row ?: null;
+    }
 }

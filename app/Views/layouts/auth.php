@@ -27,12 +27,7 @@
                 <p><?= esc(lang('App.tagline')) ?></p>
             </div>
 
-            <?php if (session()->getFlashdata('error')): ?>
-                <div class="alert alert-error"><?= esc(session()->getFlashdata('error')) ?></div>
-            <?php endif; ?>
-            <?php if (session()->getFlashdata('success')): ?>
-                <div class="alert alert-success"><?= esc(session()->getFlashdata('success')) ?></div>
-            <?php endif; ?>
+            <?= $this->include('partials/flash') ?>
 
             <?= $this->renderSection('content') ?>
 

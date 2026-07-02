@@ -28,4 +28,7 @@ return [
     'new_transaction' => 'New transaction',
     'saved'           => 'Transaction saved successfully.',
     'save_transaction'=> 'Save transaction',
+    'edit_transaction'=> 'Edit transaction',
+    'updated'         => 'Transaction updated.',
+    'no_accounts'     => 'No accounts defined.',
 ];

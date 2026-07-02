@@ -12,4 +12,9 @@ return [
     'status_filed'    => 'Filed',
     'status_paid'     => 'Paid',
     'no_periods'      => 'No tax periods yet.',
+    'new_period'      => 'New period',
+    'edit_period'     => 'Edit period',
+    'year'            => 'Year',
+    'saved'           => 'Tax period saved.',
+    'updated'         => 'Tax period updated.',
 ];

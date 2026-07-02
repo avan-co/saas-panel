@@ -12,6 +12,8 @@ class Tenant extends BaseController
             return redirect()->back()->with('error', lang('App.no_tenant_access'));
         }
 
-        return redirect()->to('/dashboard');
+        $tenant = service('tenantContext')->getTenant();
+
+        return redirect()->to('/dashboard')->with('success', lang('App.tenant_switched', ['name' => $tenant['name'] ?? '']));
     }
 }

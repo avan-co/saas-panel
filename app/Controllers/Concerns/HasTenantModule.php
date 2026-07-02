@@ -4,6 +4,11 @@ namespace App\Controllers\Concerns;
 
 trait HasTenantModule
 {
+    protected function moduleDeniedRedirect(): \CodeIgniter\HTTP\RedirectResponse
+    {
+        return redirect()->to('/dashboard')->with('error', lang('App.module_not_enabled'));
+    }
+
     protected function requireModule(string $code): ?array
     {
         $tenantContext = service('tenantContext');

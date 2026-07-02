@@ -15,4 +15,12 @@ return [
     'type_health'     => 'Health',
     'type_liability'  => 'Liability',
     'type_other'      => 'Other',
+    'new_policy'      => 'New policy',
+    'edit_policy'     => 'Edit policy',
+    'start_date'      => 'Start date',
+    'status_active'   => 'Active',
+    'status_pending'  => 'Pending',
+    'status_expired'  => 'Expired',
+    'saved'           => 'Policy saved.',
+    'updated'         => 'Policy updated.',
 ];

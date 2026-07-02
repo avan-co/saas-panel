@@ -11,10 +11,6 @@
     <a href="<?= site_url('module/projects/new') ?>" class="btn btn-primary"><?= esc(lang('Projects.new_project')) ?></a>
 </div>
 
-<?php if (session()->getFlashdata('success')): ?>
-    <div class="alert alert-success"><?= esc(session()->getFlashdata('success')) ?></div>
-<?php endif; ?>
-
 <?php $fmt = static fn (float $n): string => number_format($n, 0, '.', ','); ?>
 
 <div class="kpi-grid kpi-grid-4">
@@ -36,7 +32,11 @@
     <div class="card-header"><h3><?= esc(lang('Projects.title')) ?></h3></div>
     <div class="table-wrap">
         <?php if ($projects === []): ?>
-            <div class="empty-state"><?= esc(lang('Projects.no_projects')) ?></div>
+            <?= view('partials/empty_state', [
+                'message'     => lang('Projects.no_projects'),
+                'actionUrl'   => site_url('module/projects/new'),
+                'actionLabel' => lang('Projects.new_project'),
+            ]) ?>
         <?php else: ?>
             <table class="data-table">
                 <thead>
@@ -65,8 +65,9 @@
                                 <span class="text-muted text-sm"><?= (int) $project['progress'] ?>%</span>
                             </td>
                             <td><span class="badge badge-<?= esc($project['status']) ?>"><?= esc(lang('Projects.status_' . $project['status'])) ?></span></td>
-                            <td>
+                            <td class="table-actions">
                                 <a href="<?= site_url('module/projects/' . $project['id'] . '/edit') ?>" class="btn btn-ghost btn-sm"><?= esc(lang('App.edit')) ?></a>
+                                <?= view('partials/delete_form', ['action' => site_url('module/projects/' . $project['id'] . '/delete')]) ?>
                             </td>
                         </tr>
                     <?php endforeach; ?>

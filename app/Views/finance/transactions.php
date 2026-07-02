@@ -1,6 +1,7 @@
 <?= $this->extend('layouts/app') ?>
 
 <?= $this->section('content') ?>
+<div class="page-module page-finance">
 <?= $this->include('partials/breadcrumb') ?>
 
 <?php
@@ -21,7 +22,11 @@ echo $this->include('partials/module_tabs');
 <div class="card card-elevated">
     <div class="table-wrap">
         <?php if ($transactions === []): ?>
-            <div class="empty-state"><?= esc(lang('Finance.no_transactions')) ?></div>
+            <?= view('partials/empty_state', [
+                'message'     => lang('Finance.no_transactions'),
+                'actionUrl'   => site_url('module/finance/transactions/new'),
+                'actionLabel' => lang('Finance.new_transaction'),
+            ]) ?>
         <?php else: ?>
             <?php $fmt = static fn (float $n): string => number_format($n, 0, '.', ','); ?>
             <table class="data-table">
@@ -32,6 +37,7 @@ echo $this->include('partials/module_tabs');
                         <th><?= esc(lang('Finance.account')) ?></th>
                         <th><?= esc(lang('Finance.category')) ?></th>
                         <th><?= esc(lang('Finance.amount')) ?></th>
+                        <th><?= esc(lang('App.actions')) ?></th>
                     </tr>
                 </thead>
                 <tbody>
@@ -52,11 +58,16 @@ echo $this->include('partials/module_tabs');
                             <td class="amount-cell <?= $txn['type'] === 'income' ? 'positive' : 'negative' ?>">
                                 <?= $txn['type'] === 'income' ? '+' : '−' ?><?= esc($fmt((float) $txn['amount'])) ?>
                             </td>
+                            <td class="table-actions">
+                                <a href="<?= site_url('module/finance/transactions/' . $txn['id'] . '/edit') ?>" class="btn btn-ghost btn-sm"><?= esc(lang('App.edit')) ?></a>
+                                <?= view('partials/delete_form', ['action' => site_url('module/finance/transactions/' . $txn['id'] . '/delete')]) ?>
+                            </td>
                         </tr>
                     <?php endforeach; ?>
                 </tbody>
             </table>
         <?php endif; ?>
     </div>
+</div>
 </div>
 <?= $this->endSection() ?>

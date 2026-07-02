@@ -13,10 +13,6 @@
 
 <div class="card card-elevated form-card">
     <div class="card-body">
-        <?php if (session()->getFlashdata('success')): ?>
-            <div class="alert alert-success"><?= esc(session()->getFlashdata('success')) ?></div>
-        <?php endif; ?>
-
         <?php if (session()->getFlashdata('errors')): ?>
             <div class="alert alert-error">
                 <?php foreach (session()->getFlashdata('errors') as $err): ?>

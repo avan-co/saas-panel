@@ -15,4 +15,12 @@ return [
     'type_health'     => 'درمان',
     'type_liability'  => 'مسئولیت',
     'type_other'      => 'سایر',
+    'new_policy'      => 'بیمه‌نامه جدید',
+    'edit_policy'     => 'ویرایش بیمه‌نامه',
+    'start_date'      => 'تاریخ شروع',
+    'status_active'   => 'فعال',
+    'status_pending'  => 'در انتظار',
+    'status_expired'  => 'منقضی',
+    'saved'           => 'بیمه‌نامه ثبت شد.',
+    'updated'         => 'بیمه‌نامه به‌روزرسانی شد.',
 ];

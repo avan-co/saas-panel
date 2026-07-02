@@ -21,6 +21,7 @@
     </script>
 </head>
 <body class="<?= $isRtl ? 'rtl' : 'ltr' ?>">
+    <div class="sidebar-backdrop" id="sidebarBackdrop"></div>
     <div class="app-shell" id="appShell">
         <?= $this->include('partials/sidebar') ?>
 
@@ -28,12 +29,7 @@
             <?= $this->include('partials/header') ?>
 
             <main class="app-content">
-                <?php if (session()->getFlashdata('error')): ?>
-                    <div class="alert alert-error"><?= esc(session()->getFlashdata('error')) ?></div>
-                <?php endif; ?>
-                <?php if (session()->getFlashdata('success')): ?>
-                    <div class="alert alert-success"><?= esc(session()->getFlashdata('success')) ?></div>
-                <?php endif; ?>
+                <?= $this->include('partials/flash') ?>
 
                 <?= $this->renderSection('content') ?>
             </main>

@@ -1,7 +1,7 @@
 <?= $this->extend('layouts/app') ?>
 
 <?= $this->section('content') ?>
-<div class="page-finance">
+<div class="page-module page-finance">
 <?= $this->include('partials/breadcrumb') ?>
 
 <?php
@@ -17,6 +17,7 @@ echo $this->include('partials/module_tabs');
         <h2 class="page-heading"><?= esc(lang('Finance.title')) ?></h2>
         <p class="page-subheading"><?= esc(lang('Finance.cashflow_hint')) ?></p>
     </div>
+    <a href="<?= site_url('module/finance/transactions/new') ?>" class="btn btn-primary"><?= esc(lang('Finance.new_transaction')) ?></a>
 </div>
 
 <?php
@@ -31,7 +32,7 @@ $fmt = static fn (float $n): string => number_format($n, 0, '.', ',');
         </span>
         <span class="kpi-label"><?= esc(lang('Finance.total_balance')) ?></span>
         <span class="kpi-value"><?= esc($fmt($balance)) ?></span>
-        <span class="kpi-meta">IRR</span>
+        <span class="kpi-meta"><?= esc($currency ?? 'IRR') ?></span>
     </div>
     <div class="kpi-card">
         <span class="kpi-label"><?= esc(lang('Finance.month_income')) ?></span>
@@ -55,7 +56,11 @@ $fmt = static fn (float $n): string => number_format($n, 0, '.', ',');
         </div>
         <div class="table-wrap">
             <?php if ($recent === []): ?>
-                <div class="empty-state"><?= esc(lang('Finance.no_transactions')) ?></div>
+                <?= view('partials/empty_state', [
+                    'message'     => lang('Finance.no_transactions'),
+                    'actionUrl'   => site_url('module/finance/transactions/new'),
+                    'actionLabel' => lang('Finance.new_transaction'),
+                ]) ?>
             <?php else: ?>
                 <table class="data-table">
                     <thead>
@@ -97,7 +102,7 @@ $fmt = static fn (float $n): string => number_format($n, 0, '.', ',');
         </div>
         <div class="card-body account-list">
             <?php if ($accounts === []): ?>
-                <div class="empty-state"><?= esc(lang('Finance.no_transactions')) ?></div>
+                <?= view('partials/empty_state', ['message' => lang('Finance.no_accounts')]) ?>
             <?php else: ?>
                 <?php foreach ($accounts as $account): ?>
                     <div class="account-row">
@@ -111,5 +116,6 @@ $fmt = static fn (float $n): string => number_format($n, 0, '.', ',');
             <?php endif; ?>
         </div>
     </div>
+</div>
 </div>
 <?= $this->endSection() ?>

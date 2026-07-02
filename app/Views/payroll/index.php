@@ -11,10 +11,6 @@
     <a href="<?= site_url('module/payroll/employees/new') ?>" class="btn btn-primary"><?= esc(lang('Payroll.new_employee')) ?></a>
 </div>
 
-<?php if (session()->getFlashdata('success')): ?>
-    <div class="alert alert-success"><?= esc(session()->getFlashdata('success')) ?></div>
-<?php endif; ?>
-
 <?php $fmt = static fn (float $n): string => number_format($n, 0, '.', ','); ?>
 
 <div class="kpi-grid kpi-grid-4">
@@ -33,7 +29,11 @@
         <div class="card-header"><h3><?= esc(lang('Payroll.employees')) ?></h3></div>
         <div class="table-wrap">
             <?php if ($employees === []): ?>
-                <div class="empty-state"><?= esc(lang('Payroll.no_employees')) ?></div>
+                <?= view('partials/empty_state', [
+                    'message'     => lang('Payroll.no_employees'),
+                    'actionUrl'   => site_url('module/payroll/employees/new'),
+                    'actionLabel' => lang('Payroll.new_employee'),
+                ]) ?>
             <?php else: ?>
                 <table class="data-table">
                     <thead>
@@ -50,8 +50,9 @@
                                 <td><?= esc($emp['name']) ?></td>
                                 <td class="text-muted"><?= esc($emp['job_title'] ?? '—') ?></td>
                                 <td class="amount-cell"><?= esc($fmt((float) $emp['base_salary'])) ?></td>
-                                <td>
+                                <td class="table-actions">
                                     <a href="<?= site_url('module/payroll/employees/' . $emp['id'] . '/edit') ?>" class="btn btn-ghost btn-sm"><?= esc(lang('App.edit')) ?></a>
+                                    <?= view('partials/delete_form', ['action' => site_url('module/payroll/employees/' . $emp['id'] . '/delete')]) ?>
                                 </td>
                             </tr>
                         <?php endforeach; ?>

@@ -14,7 +14,7 @@ class Projects extends BaseController
         $tenant = $this->requireModule('projects');
 
         if ($tenant === null) {
-            return redirect()->to('/dashboard');
+            return $this->moduleDeniedRedirect();
         }
 
         $tenantId = (int) $tenant['id'];
@@ -37,7 +37,7 @@ class Projects extends BaseController
         $tenant = $this->requireModule('projects');
 
         if ($tenant === null) {
-            return redirect()->to('/dashboard');
+            return $this->moduleDeniedRedirect();
         }
 
         return $this->render('projects/form', [
@@ -52,7 +52,7 @@ class Projects extends BaseController
         $tenant = $this->requireModule('projects');
 
         if ($tenant === null) {
-            return redirect()->to('/dashboard');
+            return $this->moduleDeniedRedirect();
         }
 
         if (! $this->validate($this->projectRules())) {
@@ -69,7 +69,7 @@ class Projects extends BaseController
         $tenant = $this->requireModule('projects');
 
         if ($tenant === null) {
-            return redirect()->to('/dashboard');
+            return $this->moduleDeniedRedirect();
         }
 
         $project = model(ProjectModel::class)->findForTenant($id, (int) $tenant['id']);
@@ -90,7 +90,7 @@ class Projects extends BaseController
         $tenant = $this->requireModule('projects');
 
         if ($tenant === null) {
-            return redirect()->to('/dashboard');
+            return $this->moduleDeniedRedirect();
         }
 
         $projectModel = model(ProjectModel::class);
@@ -107,6 +107,26 @@ class Projects extends BaseController
         $projectModel->update($id, $this->projectPayload((int) $tenant['id']));
 
         return redirect()->to('/module/projects')->with('success', lang('Projects.updated'));
+    }
+
+    public function delete(int $id)
+    {
+        $tenant = $this->requireModule('projects');
+
+        if ($tenant === null) {
+            return $this->moduleDeniedRedirect();
+        }
+
+        $projectModel = model(ProjectModel::class);
+        $project      = $projectModel->findForTenant($id, (int) $tenant['id']);
+
+        if ($project === null) {
+            return redirect()->to('/module/projects')->with('error', lang('Projects.not_found'));
+        }
+
+        $projectModel->delete($id);
+
+        return redirect()->to('/module/projects')->with('success', lang('App.deleted'));
     }
 
     protected function projectRules(): array

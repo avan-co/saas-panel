@@ -8,6 +8,7 @@
     <div class="page-header-text">
         <h2 class="page-heading"><?= esc(lang('Tax.title')) ?></h2>
     </div>
+    <a href="<?= site_url('module/tax/new') ?>" class="btn btn-primary"><?= esc(lang('Tax.new_period')) ?></a>
 </div>
 
 <?php $fmt = static fn (float $n): string => number_format($n, 0, '.', ','); ?>
@@ -23,7 +24,11 @@
     <div class="card-header"><h3><?= esc(lang('Tax.periods')) ?></h3></div>
     <div class="table-wrap">
         <?php if ($periods === []): ?>
-            <div class="empty-state"><?= esc(lang('Tax.no_periods')) ?></div>
+            <?= view('partials/empty_state', [
+                'message'     => lang('Tax.no_periods'),
+                'actionUrl'   => site_url('module/tax/new'),
+                'actionLabel' => lang('Tax.new_period'),
+            ]) ?>
         <?php else: ?>
             <table class="data-table">
                 <thead>
@@ -33,6 +38,7 @@
                         <th><?= esc(lang('Tax.tax_amount')) ?></th>
                         <th><?= esc(lang('Tax.due_date')) ?></th>
                         <th><?= esc(lang('App.status')) ?></th>
+                        <th><?= esc(lang('App.actions')) ?></th>
                     </tr>
                 </thead>
                 <tbody>
@@ -43,6 +49,10 @@
                             <td class="amount-cell negative"><?= esc($fmt((float) $period['tax_amount'])) ?></td>
                             <td class="text-muted"><?= esc($period['due_date'] ?? '—') ?></td>
                             <td><span class="badge badge-<?= esc($period['status']) ?>"><?= esc(lang('Tax.status_' . $period['status'])) ?></span></td>
+                            <td class="table-actions">
+                                <a href="<?= site_url('module/tax/' . $period['id'] . '/edit') ?>" class="btn btn-ghost btn-sm"><?= esc(lang('App.edit')) ?></a>
+                                <?= view('partials/delete_form', ['action' => site_url('module/tax/' . $period['id'] . '/delete')]) ?>
+                            </td>
                         </tr>
                     <?php endforeach; ?>
                 </tbody>

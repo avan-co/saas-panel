@@ -15,7 +15,7 @@ class Payroll extends BaseController
         $tenant = $this->requireModule('payroll');
 
         if ($tenant === null) {
-            return redirect()->to('/dashboard');
+            return $this->moduleDeniedRedirect();
         }
 
         $tenantId = (int) $tenant['id'];
@@ -38,7 +38,7 @@ class Payroll extends BaseController
         $tenant = $this->requireModule('payroll');
 
         if ($tenant === null) {
-            return redirect()->to('/dashboard');
+            return $this->moduleDeniedRedirect();
         }
 
         return $this->render('payroll/form', [
@@ -53,7 +53,7 @@ class Payroll extends BaseController
         $tenant = $this->requireModule('payroll');
 
         if ($tenant === null) {
-            return redirect()->to('/dashboard');
+            return $this->moduleDeniedRedirect();
         }
 
         $rules = $this->employeeRules();
@@ -72,7 +72,7 @@ class Payroll extends BaseController
         $tenant = $this->requireModule('payroll');
 
         if ($tenant === null) {
-            return redirect()->to('/dashboard');
+            return $this->moduleDeniedRedirect();
         }
 
         $employee = model(PayrollEmployeeModel::class)->findForTenant($id, (int) $tenant['id']);
@@ -93,7 +93,7 @@ class Payroll extends BaseController
         $tenant = $this->requireModule('payroll');
 
         if ($tenant === null) {
-            return redirect()->to('/dashboard');
+            return $this->moduleDeniedRedirect();
         }
 
         $employeeModel = model(PayrollEmployeeModel::class);
@@ -112,6 +112,26 @@ class Payroll extends BaseController
         $employeeModel->update($id, $this->employeePayload((int) $tenant['id']));
 
         return redirect()->to('/module/payroll')->with('success', lang('Payroll.updated'));
+    }
+
+    public function deleteEmployee(int $id)
+    {
+        $tenant = $this->requireModule('payroll');
+
+        if ($tenant === null) {
+            return $this->moduleDeniedRedirect();
+        }
+
+        $employeeModel = model(PayrollEmployeeModel::class);
+        $employee      = $employeeModel->findForTenant($id, (int) $tenant['id']);
+
+        if ($employee === null) {
+            return redirect()->to('/module/payroll')->with('error', lang('Payroll.not_found'));
+        }
+
+        $employeeModel->delete($id);
+
+        return redirect()->to('/module/payroll')->with('success', lang('App.deleted'));
     }
 
     protected function employeeRules(): array

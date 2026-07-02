@@ -46,4 +46,11 @@ class FinTransactionModel extends Model
 
         return $summary;
     }
+
+    public function findForTenant(int $id, int $tenantId): ?array
+    {
+        $row = $this->where('id', $id)->where('tenant_id', $tenantId)->first();
+
+        return $row ?: null;
+    }
 }

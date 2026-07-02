@@ -28,4 +28,7 @@ return [
     'new_transaction' => 'تراکنش جدید',
     'saved'           => 'تراکنش با موفقیت ثبت شد.',
     'save_transaction'=> 'ثبت تراکنش',
+    'edit_transaction'=> 'ویرایش تراکنش',
+    'updated'         => 'تراکنش به‌روزرسانی شد.',
+    'no_accounts'     => 'حسابی تعریف نشده است.',
 ];

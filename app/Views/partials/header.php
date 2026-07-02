@@ -50,6 +50,7 @@
                     <span class="user-name"><?= esc($userName ?? '') ?></span>
                 </button>
                 <div class="user-dropdown">
+                    <a href="<?= site_url('module/settings') ?>"><?= esc(lang('App.menu.settings')) ?></a>
                     <a href="<?= site_url('logout') ?>"><?= esc(lang('App.logout')) ?></a>
                 </div>
             </div>

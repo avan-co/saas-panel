@@ -30,4 +30,11 @@ class InsurancePolicyModel extends Model
     {
         return $this->where('tenant_id', $tenantId)->where('status', 'active')->countAllResults();
     }
+
+    public function findForTenant(int $id, int $tenantId): ?array
+    {
+        $row = $this->where('id', $id)->where('tenant_id', $tenantId)->first();
+
+        return $row ?: null;
+    }
 }

@@ -60,8 +60,25 @@
                 <?php endif; ?>
             </div>
             <?php if ($recentActivity === []): ?>
-                <div class="card-body empty-state">
-                    <p><?= esc(lang('Dashboard.no_activity')) ?></p>
+                <div class="card-body">
+                    <?php
+                    $hasFinance = false;
+                    foreach ($tenantModules as $mod) {
+                        if ($mod['code'] === 'finance') {
+                            $hasFinance = true;
+                            break;
+                        }
+                    }
+                    if ($hasFinance):
+                        echo view('partials/empty_state', [
+                            'message'     => lang('Dashboard.no_activity'),
+                            'actionUrl'   => site_url('module/finance/transactions/new'),
+                            'actionLabel' => lang('Finance.new_transaction'),
+                        ]);
+                    else:
+                    ?>
+                        <div class="empty-state"><p><?= esc(lang('Dashboard.no_activity')) ?></p></div>
+                    <?php endif; ?>
                 </div>
             <?php else: ?>
                 <div class="table-wrap">
