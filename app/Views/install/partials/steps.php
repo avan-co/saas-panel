@@ -6,7 +6,7 @@
 ]; ?>
 <div class="install-steps">
     <?php foreach ($steps as $num => $label): ?>
-        <div class="install-step <?= ($step ?? 1) >= $num ? 'active' : '' ?> <?= ($step ?? 1) === $num ? 'current' : '' ?>">
+        <div class="install-step <?= ($step ?? 1) > $num ? 'completed' : '' ?> <?= ($step ?? 1) >= $num ? 'active' : '' ?> <?= ($step ?? 1) === $num ? 'current' : '' ?>">
             <span class="step-num"><?= $num ?></span>
             <span class="step-label"><?= esc($label) ?></span>
         </div>
