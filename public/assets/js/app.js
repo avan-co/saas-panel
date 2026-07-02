@@ -44,6 +44,7 @@
         sidebarToggle.addEventListener('click', function () {
             if (window.innerWidth <= 768) {
                 document.body.classList.toggle('sidebar-mobile-open');
+                document.body.classList.toggle('sidebar-backdrop-open', document.body.classList.contains('sidebar-mobile-open'));
             } else {
                 document.body.classList.toggle('sidebar-expanded');
                 localStorage.setItem('sidebarExpanded', document.body.classList.contains('sidebar-expanded'));
@@ -88,4 +89,11 @@
             el.classList.remove('open');
         });
     });
+
+    var sidebarBackdrop = document.getElementById('sidebarBackdrop');
+    if (sidebarBackdrop) {
+        sidebarBackdrop.addEventListener('click', function () {
+            document.body.classList.remove('sidebar-mobile-open', 'sidebar-backdrop-open');
+        });
+    }
 })();

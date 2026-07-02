@@ -1,0 +1,26 @@
+<?php
+
+return [
+    'title'            => 'Projects',
+    'active_projects'  => 'Active projects',
+    'total_budget'     => 'Total budget',
+    'avg_progress'     => 'Average progress',
+    'project_name'     => 'Project',
+    'client'           => 'Client',
+    'budget'           => 'Budget',
+    'progress'         => 'Progress',
+    'timeline'         => 'Timeline',
+    'no_projects'      => 'No projects yet.',
+    'new_project'      => 'New project',
+    'edit_project'     => 'Edit project',
+    'code'             => 'Project code',
+    'start_date'       => 'Start date',
+    'end_date'         => 'End date',
+    'saved'            => 'Project saved successfully.',
+    'updated'          => 'Project updated.',
+    'not_found'        => 'Project not found.',
+    'status_planning'  => 'Planning',
+    'status_active'    => 'Active',
+    'status_on_hold'   => 'On hold',
+    'status_completed' => 'Completed',
+];

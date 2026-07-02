@@ -91,16 +91,7 @@ rm -f /workspace/writable/installed.lock
 rm -f /workspace/.env
 rm -f "$COOKIE_JAR"
 
-mysql -u bizpanel -pbizpanel bizpanel_test -e "
-  SET FOREIGN_KEY_CHECKS=0;
-  TRUNCATE tenant_modules;
-  TRUNCATE tenant_memberships;
-  TRUNCATE tenants;
-  TRUNCATE users;
-  TRUNCATE modules;
-  TRUNCATE migrations;
-  SET FOREIGN_KEY_CHECKS=1;
-" 2>/dev/null || true
+mysql -u bizpanel -pbizpanel -e "DROP DATABASE IF EXISTS bizpanel_test; CREATE DATABASE bizpanel_test;" 2>/dev/null || true
 
 echo "--- 1. Install: requirements ---"
 HTML=$(curl_get "$BASE/install")
@@ -138,7 +129,7 @@ CSRF=$(get_csrf "$HTML")
 echo "--- 5. Install: execute ---"
 curl_post "$BASE/install/execute" "csrf_test_name=${CSRF}" > /dev/null
 CODE=$(curl_code "$BASE/install")
-assert_code "install blocked after setup" "302" "$CODE"
+assert_code "install available after setup" "200" "$CODE"
 test -f /workspace/writable/installed.lock && echo "  PASS: installed.lock exists" && PASS=$((PASS+1)) || { echo "  FAIL: installed.lock missing"; FAIL=$((FAIL+1)); }
 
 echo "--- 6. Auth: login page ---"
@@ -163,23 +154,79 @@ echo "--- 10. Platform admin ---"
 CODE=$(curl_code "$BASE/platform/tenants")
 assert_code "platform tenants" "200" "$CODE"
 
-echo "--- 11. Module page ---"
+echo "--- 11. Finance module ---"
 HTML=$(curl_get "$BASE/module/finance")
-assert_contains "finance module" "$HTML" "coming-soon"
+assert_contains "finance module" "$HTML" "page-finance"
 
-echo "--- 12. Tenant switch ---"
-# demo seeder creates tenants; switch to tenant 1
+echo "--- 12. Tenant switch (restaurant demo) ---"
 CODE=$(curl_code "$BASE/tenant/switch/1")
 assert_code "tenant switch" "302" "$CODE"
 
-echo "--- 13. Logout ---"
+echo "--- 13. Payroll module ---"
+HTML=$(curl_get "$BASE/module/payroll")
+assert_contains "payroll module" "$HTML" "page-payroll"
+
+echo "--- 14. Insurance module ---"
+HTML=$(curl_get "$BASE/module/insurance")
+assert_contains "insurance module" "$HTML" "page-insurance"
+
+echo "--- 15. Tax module ---"
+HTML=$(curl_get "$BASE/module/tax")
+assert_contains "tax module" "$HTML" "page-tax"
+
+echo "--- 16. Finance transactions form ---"
+HTML=$(curl_get "$BASE/module/finance/transactions/new")
+assert_contains "new transaction form" "$HTML" 'name="amount"'
+
+echo "--- 17. Projects module (agency tenant) ---"
+curl_get "$BASE/tenant/switch/3" > /dev/null
+HTML=$(curl_get "$BASE/module/projects")
+assert_contains "projects module" "$HTML" "page-projects"
+
+echo "--- 18. Projects create form ---"
+HTML=$(curl_get "$BASE/module/projects/new")
+assert_contains "new project form" "$HTML" 'name="name"'
+
+echo "--- 19. Payroll create form ---"
+curl_get "$BASE/tenant/switch/1" > /dev/null
+HTML=$(curl_get "$BASE/module/payroll/employees/new")
+assert_contains "new employee form" "$HTML" 'name="base_salary"'
+
+echo "--- 20. Settings page ---"
+HTML=$(curl_get "$BASE/module/settings")
+assert_contains "settings page" "$HTML" "page-settings"
+
+echo "--- 21. Logout ---"
 curl_get "$BASE/logout" > /dev/null
 CODE=$(curl_code "$BASE/dashboard")
 assert_code "dashboard requires auth" "302" "$CODE"
 
-echo "--- 14. Root redirect ---"
+echo "--- 22. Root redirect ---"
 CODE=$(curl_code "$BASE/")
 assert_code "home redirect" "302" "$CODE"
+
+echo "--- 23. Reinstall: installer accessible ---"
+HTML=$(curl_get "$BASE/install")
+assert_contains "reinstall accessible" "$HTML" "requirements-list"
+
+echo "--- 24. Reinstall: full install cycle ---"
+rm -f /workspace/writable/installed.lock
+HTML=$(curl_get "$BASE/install/database")
+CSRF=$(get_csrf "$HTML")
+curl_post "$BASE/install/database" "csrf_test_name=${CSRF}&hostname=localhost&port=3306&database=bizpanel_test&username=bizpanel&password=bizpanel" > /dev/null
+HTML=$(curl_get "$BASE/install/setup")
+CSRF=$(get_csrf "$HTML")
+SITE_URL="$BASE/"
+curl_post "$BASE/install/setup" "csrf_test_name=${CSRF}&baseURL=${SITE_URL}&admin_name=Reinstall+Admin&admin_email=reinstall@test.local&admin_password=password123&admin_password_confirm=password123&seed_demo=1" > /dev/null
+HTML=$(curl_get "$BASE/install/process")
+CSRF=$(get_csrf "$HTML")
+curl_post "$BASE/install/execute" "csrf_test_name=${CSRF}" > /dev/null
+HTML=$(curl_get "$BASE/login")
+assert_contains "reinstall login page" "$HTML" 'name="email"'
+CSRF=$(get_csrf "$HTML")
+curl_post "$BASE/login" "csrf_test_name=${CSRF}&email=reinstall@test.local&password=password123" > /dev/null
+HTML=$(curl_get "$BASE/dashboard")
+assert_contains "reinstall dashboard" "$HTML" "kpi-grid"
 
 echo
 echo "=== Results: $PASS passed, $FAIL failed ==="

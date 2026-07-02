@@ -17,6 +17,7 @@ class Install extends Controller
             'step'         => 1,
             'requirements' => Installer::getRequirements(),
             'canContinue'  => Installer::allRequirementsPassed(),
+            'isReinstall'  => Installer::isInstalled(),
         ]);
     }
 
@@ -85,9 +86,10 @@ class Install extends Controller
         }
 
         return $this->render('setup', [
-            'title'   => lang('Install.step_setup'),
-            'step'    => 3,
-            'baseURL' => Installer::detectBaseUrl(),
+            'title'       => lang('Install.step_setup'),
+            'step'        => 3,
+            'baseURL'     => Installer::detectBaseUrl(),
+            'isReinstall' => Installer::isInstalled(),
         ]);
     }
 
@@ -112,6 +114,7 @@ class Install extends Controller
         }
 
         $baseURL = rtrim((string) $this->request->getPost('baseURL'), '/') . '/';
+        $baseURL = Installer::normalizeBaseUrl($baseURL);
 
         session()->set('install_app', [
             'baseURL'    => $baseURL,
@@ -154,6 +157,15 @@ class Install extends Controller
         }
 
         $appConfig = session('install_app');
+
+        Installer::clearInstallLock();
+        Installer::clearAuthSession();
+
+        $resetError = Installer::resetDatabase();
+
+        if ($resetError !== null) {
+            return redirect()->to('/install/setup')->with('error', lang('Install.reset_failed') . ' ' . $resetError);
+        }
 
         $migrationError = Installer::runMigrations();
 

@@ -1,0 +1,26 @@
+<?php
+
+return [
+    'title'           => 'Insurance',
+    'policies'        => 'Policies',
+    'active_policies' => 'Active policies',
+    'monthly_premium' => 'Monthly premium',
+    'policy_number'   => 'Policy number',
+    'provider'        => 'Provider',
+    'type'            => 'Type',
+    'premium'         => 'Premium',
+    'valid_until'     => 'Valid until',
+    'no_policies'     => 'No policies yet.',
+    'type_social'     => 'Social',
+    'type_health'     => 'Health',
+    'type_liability'  => 'Liability',
+    'type_other'      => 'Other',
+    'new_policy'      => 'New policy',
+    'edit_policy'     => 'Edit policy',
+    'start_date'      => 'Start date',
+    'status_active'   => 'Active',
+    'status_pending'  => 'Pending',
+    'status_expired'  => 'Expired',
+    'saved'           => 'Policy saved.',
+    'updated'         => 'Policy updated.',
+];

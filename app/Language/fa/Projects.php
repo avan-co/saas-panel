@@ -1,0 +1,26 @@
+<?php
+
+return [
+    'title'            => 'مدیریت پروژه',
+    'active_projects'  => 'پروژه‌های فعال',
+    'total_budget'     => 'بودجه کل',
+    'avg_progress'     => 'میانگین پیشرفت',
+    'project_name'     => 'نام پروژه',
+    'client'           => 'کارفرما',
+    'budget'           => 'بودجه',
+    'progress'         => 'پیشرفت',
+    'timeline'         => 'بازه زمانی',
+    'no_projects'      => 'پروژه‌ای ثبت نشده است.',
+    'new_project'      => 'پروژه جدید',
+    'edit_project'     => 'ویرایش پروژه',
+    'code'             => 'کد پروژه',
+    'start_date'       => 'تاریخ شروع',
+    'end_date'         => 'تاریخ پایان',
+    'saved'            => 'پروژه با موفقیت ثبت شد.',
+    'updated'          => 'پروژه به‌روزرسانی شد.',
+    'not_found'        => 'پروژه یافت نشد.',
+    'status_planning'  => 'برنامه‌ریزی',
+    'status_active'    => 'در حال اجرا',
+    'status_on_hold'   => 'متوقف',
+    'status_completed' => 'تکمیل شده',
+];

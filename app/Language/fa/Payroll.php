@@ -1,0 +1,27 @@
+<?php
+
+return [
+    'title'          => 'حقوق و دستمزد',
+    'employees'      => 'پرسنل',
+    'payroll_runs'   => 'فیش‌های حقوقی',
+    'active_staff'   => 'پرسنل فعال',
+    'monthly_total'  => 'جمع حقوق ماهانه',
+    'name'           => 'نام',
+    'job_title'      => 'سمت',
+    'base_salary'    => 'حقوق پایه',
+    'period'         => 'دوره',
+    'amount'         => 'مبلغ',
+    'status'         => 'وضعیت',
+    'status_paid'    => 'پرداخت شده',
+    'status_draft'   => 'پیش‌نویس',
+    'no_employees'   => 'پرسنلی ثبت نشده است.',
+    'no_runs'        => 'فیش حقوقی ثبت نشده است.',
+    'new_employee'   => 'پرسنل جدید',
+    'edit_employee'  => 'ویرایش پرسنل',
+    'hired_at'       => 'تاریخ استخدام',
+    'status_active'  => 'فعال',
+    'status_inactive'=> 'غیرفعال',
+    'saved'          => 'پرسنل با موفقیت ثبت شد.',
+    'updated'        => 'اطلاعات پرسنل به‌روزرسانی شد.',
+    'not_found'      => 'پرسنل یافت نشد.',
+];

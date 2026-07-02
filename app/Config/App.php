@@ -11,6 +11,8 @@ class App extends BaseConfig
     {
         parent::__construct();
 
+        $this->baseURL = Installer::normalizeBaseUrl($this->baseURL);
+
         if (Installer::shouldOverrideBaseUrl($this->baseURL)) {
             $this->baseURL = Installer::detectBaseUrl();
         }

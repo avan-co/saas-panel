@@ -1,12 +1,18 @@
 <?php
 
 return [
-    'title'       => 'Dashboard',
-    'welcome'     => 'Welcome, {name}',
-    'kpi_revenue' => 'Revenue this month',
-    'kpi_expense' => 'Expenses this month',
-    'kpi_payroll' => 'Payroll paid',
-    'kpi_tax'     => 'Tax due',
-    'recent'      => 'Recent activity',
-    'no_activity' => 'No activity recorded yet.',
+    'title'            => 'Dashboard',
+    'welcome'          => 'Hello, {name}',
+    'kpi_revenue'      => 'Monthly revenue',
+    'kpi_expense'      => 'Monthly expenses',
+    'kpi_payroll'      => 'Payroll',
+    'kpi_tax'          => 'Tax',
+    'recent'           => 'Recent activity',
+    'no_activity'      => 'No activity yet.',
+    'quick_actions'    => 'Quick actions',
+    'modules_overview' => 'Active modules',
+    'open_module'      => 'Open module',
+    'kpi_this_month'   => 'This month',
+    'kpi_monthly_payroll' => 'Active staff total',
+    'kpi_pending_tax'  => 'Pending / unfiled',
 ];
