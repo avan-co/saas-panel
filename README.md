@@ -12,7 +12,78 @@
 - دو زبانه فارسی و انگلیسی
 - RTL خودکار برای فارسی
 
-## نصب روی cPanel — ۳ مرحله ساده
+## نصب با Git در cPanel (پیشنهادی)
+
+اگر **Git Version Control** را در cPanel تنظیم کرده‌اید:
+
+### ساختار پیشنهادی
+
+```
+/home/username/
+└── saas-panel/          ← ریپو کلون می‌شود اینجا
+    ├── app/
+    ├── public/          ← Document Root دامنه
+    ├── vendor/          ← بعد از composer ساخته می‌شود
+    └── writable/
+```
+
+### مراحل بعد از Clone
+
+#### ۱. Document Root
+
+cPanel → **Domains** → دامنه یا ساب‌دامین → **Document Root**:
+
+```
+/home/username/saas-panel/public
+```
+
+> اگر Document Root را نمی‌توانید عوض کنید، در Git Deployment مسیر `public/` را به `public_html` deploy کنید.
+
+#### ۲. نصب وابستگی‌ها (فقط یک‌بار)
+
+`vendor/` داخل Git نیست — باید روی سرور نصب شود.
+
+**روش A — دکمه Deploy در cPanel Git** (اگر `.cpanel.yml` موجود است):
+- Git Version Control → Manage → **Deploy HEAD Commit**
+
+**روش B — Terminal cPanel:**
+```bash
+cd ~/saas-panel
+chmod +x deploy.sh
+./deploy.sh
+```
+
+**روش C — دستی:**
+```bash
+cd ~/saas-panel
+composer install --no-dev --optimize-autoloader
+chmod -R 755 writable/
+```
+
+#### ۳. دیتابیس MySQL
+
+cPanel → **MySQL Databases**:
+- دیتابیس **خالی** بسازید
+- کاربر MySQL بسازید و به دیتابیس وصل کنید
+
+#### ۴. اجرای نصاب وب
+
+```
+https://yourdomain.com/install
+```
+
+| مرحله نصاب | کار |
+|------------|-----|
+| ۱ | بررسی PHP و افزونه‌ها |
+| ۲ | hostname=`localhost` + نام DB + کاربر + رمز |
+| ۳ | آدرس سایت + ایمیل/رمز مدیر |
+| ۴ | نصب خودکار |
+
+بعد از نصب → `/install` بسته می‌شود و به `/login` می‌روید.
+
+---
+
+## نصب دستی (بدون Git)
 
 ### ۱. آپلود فایل‌ها
 

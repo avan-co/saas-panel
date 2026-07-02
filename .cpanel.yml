@@ -1,0 +1,12 @@
+---
+# cPanel Git — Deploy Hook
+# مسیر DEPLOYPATH را در cPanel → Git Version Control → Manage → Deployment تنظیم کنید.
+# پیشنهاد: Document Root دامنه را مستقیم روی .../saas-panel/public بگذارید
+# و DEPLOYPATH را ریشه ریپو قرار دهید (نه public_html).
+
+deployment:
+  tasks:
+    - export COMPOSER_ALLOW_SUPERUSER=1
+    - composer install --no-dev --optimize-autoloader 2>&1 || echo "composer failed — run deploy.sh manually"
+    - chmod -R 755 writable 2>&1 || true
+    - chmod -R 755 public 2>&1 || true
