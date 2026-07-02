@@ -15,9 +15,12 @@ class Settings extends BaseController
         }
 
         return $this->render('settings/index', [
-            'title'       => lang('Settings.title'),
-            'tenant'      => $tenant,
-            'breadcrumbs' => [
+            'title'          => lang('Settings.title'),
+            'moduleNav'      => 'general',
+            'moduleNavItems' => config('ModuleMenus')->settings,
+            'tenant'         => $tenant,
+            'canManageUsers' => $this->canManageUsers(),
+            'breadcrumbs'    => [
                 ['label' => lang('App.menu.dashboard'), 'url' => site_url('dashboard')],
                 ['label' => lang('Settings.title')],
             ],
@@ -51,5 +54,22 @@ class Settings extends BaseController
         ]);
 
         return redirect()->to('/module/settings')->with('success', lang('Settings.saved'));
+    }
+
+    protected function canManageUsers(): bool
+    {
+        $tenantId = (int) (service('tenantContext')->getTenant()['id'] ?? 0);
+        $userId   = (int) session('user_id');
+
+        if (session('is_platform_admin')) {
+            return true;
+        }
+
+        $row = model(\App\Models\TenantMembershipModel::class)
+            ->where('tenant_id', $tenantId)
+            ->where('user_id', $userId)
+            ->first();
+
+        return $row !== null && in_array($row['role'], ['owner', 'admin'], true);
     }
 }

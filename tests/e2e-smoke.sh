@@ -177,39 +177,58 @@ assert_contains "tax module" "$HTML" "page-tax"
 echo "--- 16. Finance transactions form ---"
 HTML=$(curl_get "$BASE/module/finance/transactions/new")
 assert_contains "new transaction form" "$HTML" 'name="amount"'
+assert_contains "jalali date input" "$HTML" 'jalali-date'
 
-echo "--- 17. Projects module (agency tenant) ---"
+echo "--- 17. Finance sub-modules ---"
+CODE=$(curl_code "$BASE/module/finance/accounts")
+assert_code "finance accounts" "200" "$CODE"
+CODE=$(curl_code "$BASE/module/finance/categories")
+assert_code "finance categories" "200" "$CODE"
+CODE=$(curl_code "$BASE/module/finance/budgets")
+assert_code "finance budgets" "200" "$CODE"
+CODE=$(curl_code "$BASE/module/finance/reminders")
+assert_code "finance reminders" "200" "$CODE"
+CODE=$(curl_code "$BASE/module/finance/reports")
+assert_code "finance reports" "200" "$CODE"
+HTML=$(curl_get "$BASE/module/finance")
+assert_contains "ceo dashboard" "$HTML" "ceo-kpi-grid"
+
+echo "--- 18. Settings users ---"
+HTML=$(curl_get "$BASE/module/settings/users")
+assert_contains "settings users" "$HTML" "page-settings"
+
+echo "--- 19. Projects module (agency tenant) ---"
 curl_get "$BASE/tenant/switch/3" > /dev/null
 HTML=$(curl_get "$BASE/module/projects")
 assert_contains "projects module" "$HTML" "page-projects"
 
-echo "--- 18. Projects create form ---"
+echo "--- 20. Projects create form ---"
 HTML=$(curl_get "$BASE/module/projects/new")
 assert_contains "new project form" "$HTML" 'name="name"'
 
-echo "--- 19. Payroll create form ---"
+echo "--- 21. Payroll create form ---"
 curl_get "$BASE/tenant/switch/1" > /dev/null
 HTML=$(curl_get "$BASE/module/payroll/employees/new")
 assert_contains "new employee form" "$HTML" 'name="base_salary"'
 
-echo "--- 20. Settings page ---"
+echo "--- 22. Settings page ---"
 HTML=$(curl_get "$BASE/module/settings")
 assert_contains "settings page" "$HTML" "page-settings"
 
-echo "--- 21. Logout ---"
+echo "--- 23. Logout ---"
 curl_get "$BASE/logout" > /dev/null
 CODE=$(curl_code "$BASE/dashboard")
 assert_code "dashboard requires auth" "302" "$CODE"
 
-echo "--- 22. Root redirect ---"
+echo "--- 24. Root redirect ---"
 CODE=$(curl_code "$BASE/")
 assert_code "home redirect" "302" "$CODE"
 
-echo "--- 23. Reinstall: installer accessible ---"
+echo "--- 25. Reinstall: installer accessible ---"
 HTML=$(curl_get "$BASE/install")
 assert_contains "reinstall accessible" "$HTML" "requirements-list"
 
-echo "--- 24. Reinstall: full install cycle ---"
+echo "--- 26. Reinstall: full install cycle ---"
 rm -f /workspace/writable/installed.lock
 HTML=$(curl_get "$BASE/install/database")
 CSRF=$(get_csrf "$HTML")

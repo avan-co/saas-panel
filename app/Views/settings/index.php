@@ -2,13 +2,16 @@
 
 <?= $this->section('content') ?>
 <div class="page-module page-settings">
-<?= $this->include('partials/breadcrumb') ?>
+<?= $this->include('partials/module_subnav') ?>
 
 <div class="page-header">
     <div class="page-header-text">
         <h2 class="page-heading"><?= esc(lang('Settings.title')) ?></h2>
         <p class="page-subheading"><?= esc(lang('Settings.subtitle')) ?></p>
     </div>
+    <?php if (! empty($canManageUsers)): ?>
+        <a href="<?= site_url('module/settings/users') ?>" class="btn btn-secondary"><?= esc(lang('Settings.manage_users')) ?></a>
+    <?php endif; ?>
 </div>
 
 <div class="card card-elevated form-card">
